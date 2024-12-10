@@ -21,6 +21,9 @@ deps:
   - tags: get,python
     names:
       - get-python
+  - tags: get,generic-python-lib,_package.igb,_url.git+https://github.com/IllinoisGraphBenchmark/IGB-Datasets.git
+  - tags: get,generic-python-lib,_package.colorama
+
 prehook_deps:
   #paper  
   - env:
@@ -35,6 +38,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-node-feat
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -51,6 +55,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-node-label19
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -67,6 +72,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-node-label2k
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -83,6 +89,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-id-index-mapping
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -100,6 +107,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - edge-index
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -117,6 +125,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - author-id-index-mapping
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -133,6 +142,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - author-node-feat
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -150,6 +160,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - conference-id-index-mapping
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -166,6 +177,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - conference-node-feat
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -183,6 +195,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - institute-id-index-mapping
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -199,6 +212,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - institute-node-feat
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -216,6 +230,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - journal-id-index-mapping
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -232,6 +247,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - journal-node-feat
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -249,6 +265,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - fos-id-index-mapping
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -265,6 +282,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - fos-node-feat
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -282,6 +300,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - author-to-institute-edge-index
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -299,6 +318,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-published-journal-edge-index
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -316,6 +336,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-topic-fos-edge-index
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -333,6 +354,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-venue-conference-edge-index
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
@@ -350,6 +372,7 @@ prehook_deps:
       - 'full'
     names:
     - dae
+    - paper-written-by-author-edge-index
     tags: download-and-extract,_wget
     update_tags_from_env_with_prefix:
       _url.:
