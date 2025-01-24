@@ -61,7 +61,7 @@ jobs:
     - name: Push Results
       env:
         PAT1: ${{ secrets.PAT1 }}
-      if: github.repository_owner == 'mlcommons'
+      if: github.repository_owner == 'gateoverflow'
       run: |
         git config --global user.name mlcommons-bot
         git config --global user.email "mlcommons-bot@users.noreply.github.com"
