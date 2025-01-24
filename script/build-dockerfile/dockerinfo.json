@@ -1,9 +1,9 @@
 {
   "python-packages": [
-    "wheel", "cmind", "requests", "giturlparse", "tabulate"
+    "wheel", "mlcflow", "requests", "giturlparse", "tabulate"
   ],
   "ARGS": [
-    "CM_GH_TOKEN"
+    "MLC_GH_TOKEN"
   ],
   "ARGS_DEFAULT": {
     "UID" : "1000",
@@ -11,25 +11,26 @@
   },
   "ENTRYPOINT": "[\"/bin/bash\", \"-c\"]",
   "ENV": {
-    "TZ": "US/Pacific",
-    "PATH": "${PATH}:/home/cmuser/.local/bin"
+    "TZ": "US/Pacific"
   },
   "RUN_CMDS": [
     "ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ >/etc/timezone"
   ],
   "PYTHON": "python3",
   "UID": "",
-  "USER": "cmuser",
+  "USER": "mlcuser",
   "GID": "",
-  "GROUP": "cm",
+  "GROUP": "mlc",
   "SHELL": "[\"/bin/bash\", \"-c\"]",
-  "WORKDIR": "/home/cmuser",
+  "WORKDIR": "/home/mlcuser",
   "distros": {
     "ubuntu": {
+      "USER": "ubuntu",
+      "WORKDIR": "/home/ubuntu",
       "package-manager-update-cmd": "apt-get update -y",
       "package-manager-get-cmd": "apt-get install -y", 
       "packages": [
-        "python3", "python3-pip", "git", "sudo", "wget", "python3-venv"
+        "python3", "python3-pip", "git", "sudo", "wget", "python3-venv", "systemctl", "unzip"
       ],
       "versions": {
         "18.04": {
@@ -65,7 +66,7 @@
             "python39", "python39-pip", "git", "wget", "sudo", "binutils"
           ],
           "python-packages": [
-            "cmind", "requests", "giturlparse", "tabulate"
+            "mlcflow", "requests", "giturlparse", "tabulate"
           ],
           "PYTHON": "python3.9"
         }

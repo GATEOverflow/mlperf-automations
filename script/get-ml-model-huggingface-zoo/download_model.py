@@ -1,10 +1,10 @@
 from huggingface_hub import hf_hub_download
 import os
 
-model_stub = os.environ.get('CM_MODEL_ZOO_STUB', '')
-model_task = os.environ.get('CM_MODEL_TASK', '')
+model_stub = os.environ.get('MLC_MODEL_ZOO_STUB', '')
+model_task = os.environ.get('MLC_MODEL_TASK', '')
 
-revision = os.environ.get('CM_HF_REVISION', '')
+revision = os.environ.get('MLC_HF_REVISION', '')
 
 if model_task == "prune":
     print("Downloading model: " + model_stub)
@@ -16,13 +16,13 @@ if model_task == "prune":
                                                 cache_dir=os.getcwd())
 
     with open('tmp-run-env.out', 'w') as f:
-        f.write(f"CM_ML_MODEL_FILE_WITH_PATH={os.path.join(os.getcwd(),'')}")
+        f.write(f"MLC_ML_MODEL_FILE_WITH_PATH={os.path.join(os.getcwd(),'')}")
 
 else:
-    subfolder = os.environ.get('CM_HF_SUBFOLDER', '')
-    full_subfolder = os.environ.get('CM_HF_FULL_SUBFOLDER', '')
+    subfolder = os.environ.get('MLC_HF_SUBFOLDER', '')
+    full_subfolder = os.environ.get('MLC_HF_FULL_SUBFOLDER', '')
 
-    model_filename = os.environ.get('CM_MODEL_ZOO_FILENAME', '')
+    model_filename = os.environ.get('MLC_MODEL_ZOO_FILENAME', '')
     if model_filename == '':
         model_filename = 'model.onnx'
 
@@ -102,4 +102,4 @@ else:
     print('')
 
     with open('tmp-run-env.out', 'w') as f:
-        f.write(f"CM_ML_MODEL_FILE_WITH_PATH={base_model_filepath}")
+        f.write(f"MLC_ML_MODEL_FILE_WITH_PATH={base_model_filepath}")

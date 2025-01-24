@@ -4,21 +4,21 @@ echo "************************************************"
 echo "Installing some system dependencies via sudo dnf"
 
 
-if [[ "$CM_QUIET" != "yes" ]]; then 
+if [[ "$MLC_QUIET" != "yes" ]]; then 
  echo "Enter skip to skip this step or press enter to continue:"
  read DUMMY
 
  if [[ "$DUMMY" == "skip" ]]; then exit 0; fi
 fi
 
-if [[ "$CM_HOST_OS_FLAVOR" == "amzn" ]]; then
-  ${CM_SUDO} yum groupinstall "Development Tools"
+if [[ "$MLC_HOST_OS_FLAVOR" == "amzn" ]]; then
+  ${MLC_SUDO} yum groupinstall "Development Tools"
 fi
 
-CM_PACKAGE_TOOL=${CM_PACKAGE_TOOL:-dnf}
+MLC_PACKAGE_TOOL=${MLC_PACKAGE_TOOL:-dnf}
 
-${CM_SUDO} ${CM_PACKAGE_TOOL} update && \
-    ${CM_SUDO} ${CM_PACKAGE_TOOL} --skip-broken install -y \
+${MLC_SUDO} ${MLC_PACKAGE_TOOL} update && \
+    ${MLC_SUDO} ${MLC_PACKAGE_TOOL} --skip-broken install -y \
            acl autoconf \
            bzip2-devel bzip2 \
            ca-certificates curl  cmake \
@@ -39,8 +39,8 @@ ${CM_SUDO} ${CM_PACKAGE_TOOL} update && \
            zip 
 
 # Install Python deps though preference is to install them 
-# via cmr "get generic-python-lib _package.{Python PIP package name}"
-if [[ "${CM_SKIP_PYTHON_DEPS}" != "yes" ]]; then
- . ${CM_TMP_CURRENT_SCRIPT_PATH}/do_pip_installs.sh
+# via mlcr "get generic-python-lib _package.{Python PIP package name}"
+if [[ "${MLC_SKIP_PYTHON_DEPS}" != "yes" ]]; then
+ . ${MLC_TMP_CURRENT_SCRIPT_PATH}/do_pip_installs.sh
  test $? -eq 0 || exit $?
 fi

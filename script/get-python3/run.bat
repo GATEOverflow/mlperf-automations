@@ -1,2 +1,2 @@
-%CM_PYTHON_BIN_WITH_PATH% --version > tmp-ver.out
+%MLC_PYTHON_BIN_WITH_PATH% --version > tmp-ver.out
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%

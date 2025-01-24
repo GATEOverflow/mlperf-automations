@@ -8,14 +8,14 @@ wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | \
     gpg --dearmor | sudo tee /etc/apt/keyrings/rocm.gpg > /dev/null
 
 ubuntuflavor="jammy"
-if [[ ${CM_HOST_OS_VERSION} == "22.04" ]]; then
+if [[ ${MLC_HOST_OS_VERSION} == "22.04" ]]; then
   ubuntuflavor="jammy"
-elif [[ ${CM_HOST_OS_VERSION} == "20.04" ]]; then
+elif [[ ${MLC_HOST_OS_VERSION} == "20.04" ]]; then
   ubuntuflavor="focal"
 fi
 
 # Kernel driver repository
-deb1="deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/${CM_VERSION}/ubuntu ${ubuntuflavor} main"
+deb1="deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/${MLC_VERSION}/ubuntu ${ubuntuflavor} main"
 echo $deb1 | sudo tee /etc/apt/sources.list.d/amdgpu.list
 
 # ROCm repository

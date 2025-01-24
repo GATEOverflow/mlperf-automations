@@ -1,23 +1,24 @@
 #!/bin/bash
 
-# Check if CM_GIT_REPO_CHECKOUT_PATH is set
-if [ -z "${CM_GIT_REPO_CHECKOUT_PATH}" ]; then
-    echo "Error: CM_GIT_REPO_CHECKOUT_PATH is not set."
+# Check if MLC_GIT_REPO_CHECKOUT_PATH is set
+if [ -z "${MLC_GIT_REPO_CHECKOUT_PATH}" ]; then
+    echo "Error: MLC_GIT_REPO_CHECKOUT_PATH is not set."
     exit 1
 fi
 
-cd "${CM_GIT_REPO_CHECKOUT_PATH}"
+cd "${MLC_GIT_REPO_CHECKOUT_PATH}"
 git pull
 git add *
-if [[ -n ${CM_MLPERF_INFERENCE_SUBMISSION_DIR} ]]; then
-    rsync -avz "${CM_MLPERF_INFERENCE_SUBMISSION_DIR}/" "${CM_GIT_REPO_CHECKOUT_PATH}/"
+
+if [[ -n ${MLC_MLPERF_INFERENCE_SUBMISSION_DIR} ]]; then
+    rsync -avz "${MLC_MLPERF_INFERENCE_SUBMISSION_DIR}/" "${MLC_GIT_REPO_CHECKOUT_PATH}/"
     git add *
 fi
 test $? -eq 0 || exit $?
 
-git commit -a -m "${CM_MLPERF_RESULTS_REPO_COMMIT_MESSAGE}"
+git commit -a -m "${MLC_MLPERF_RESULTS_REPO_COMMIT_MESSAGE}"
 
-echo ${CM_GIT_PUSH_CMD}
-${CM_GIT_PUSH_CMD}
+echo ${MLC_GIT_PUSH_CMD}
+${MLC_GIT_PUSH_CMD}
 
 test $? -eq 0 || exit $?

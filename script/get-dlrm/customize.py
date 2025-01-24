@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import shutil
 
@@ -13,17 +13,17 @@ def preprocess(i):
     env = i['env']
     meta = i['meta']
 
-    if 'CM_GIT_DEPTH' not in env:
-        env['CM_GIT_DEPTH'] = ''
+    if 'MLC_GIT_DEPTH' not in env:
+        env['MLC_GIT_DEPTH'] = ''
 
-    if 'CM_GIT_RECURSE_SUBMODULES' not in env:
-        env['CM_GIT_RECURSE_SUBMODULES'] = ''
+    if 'MLC_GIT_RECURSE_SUBMODULES' not in env:
+        env['MLC_GIT_RECURSE_SUBMODULES'] = ''
 
-    need_version = env.get('CM_VERSION', '')
+    need_version = env.get('MLC_VERSION', '')
     versions = meta['versions']
 
     if need_version != '' and not need_version in versions:
-        env['CM_GIT_CHECKOUT'] = need_version
+        env['MLC_GIT_CHECKOUT'] = need_version
 
     return {'return': 0}
 

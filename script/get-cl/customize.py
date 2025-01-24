@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -17,13 +17,13 @@ def preprocess(i):
 
     file_name = 'cl.exe'
 
-    # Will check env['CM_TMP_PATH'] if comes from installation script
+    # Will check env['MLC_TMP_PATH'] if comes from installation script
     ii = {'file_name': file_name,
           'env': env,
           'os_info': os_info,
           'default_path_env_key': 'PATH',
           'detect_version': True,
-          'env_path_key': 'CM_CL_BIN_WITH_PATH',
+          'env_path_key': 'MLC_CL_BIN_WITH_PATH',
           'run_script_input': i['run_script_input'],
           'recursion_spaces': recursion_spaces}
 
@@ -33,8 +33,8 @@ def preprocess(i):
         if rr['return'] != 16:
             return rr
 
-        if env.get('CM_INPUT', '').strip() == '' and env.get(
-                'CM_TMP_PATH', '').strip() == '':
+        if env.get('MLC_INPUT', '').strip() == '' and env.get(
+                'MLC_TMP_PATH', '').strip() == '':
 
             print(
                 i['recursion_spaces'] +
@@ -59,8 +59,8 @@ def preprocess(i):
 
             tmp_paths = ';'.join(found_paths)
 
-            env['CM_TMP_PATH'] = tmp_paths
-            env['CM_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
+            env['MLC_TMP_PATH'] = tmp_paths
+            env['MLC_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
 
             ii['env'] = env
 
@@ -96,19 +96,19 @@ def preprocess(i):
 
         state['script_prefix'] = script_prefix
 
-    env['CM_CL_BIN'] = file_name
-    env['CM_CL_BIN_WITH_PATH'] = os.path.join(found_path, file_name)
+    env['MLC_CL_BIN'] = file_name
+    env['MLC_CL_BIN_WITH_PATH'] = os.path.join(found_path, file_name)
 
     # General compiler for general program compilation
-    env['CM_C_COMPILER_BIN'] = file_name
-    env['CM_C_COMPILER_WITH_PATH'] = os.path.join(found_path, file_name)
-    env['CM_C_COMPILER_FLAG_OUTPUT'] = '/Fe:'
-    env['CM_C_COMPILER_FLAG_VERSION'] = ''
+    env['MLC_C_COMPILER_BIN'] = file_name
+    env['MLC_C_COMPILER_WITH_PATH'] = os.path.join(found_path, file_name)
+    env['MLC_C_COMPILER_FLAG_OUTPUT'] = '/Fe:'
+    env['MLC_C_COMPILER_FLAG_VERSION'] = ''
 
-    env['CM_CXX_COMPILER_BIN'] = env['CM_C_COMPILER_BIN']
-    env['CM_CXX_COMPILER_WITH_PATH'] = env['CM_C_COMPILER_WITH_PATH']
-    env['CM_CXX_COMPILER_FLAG_OUTPUT'] = '/Fe:'
-    env['CM_CXX_COMPILER_FLAG_VERSION'] = ''
+    env['MLC_CXX_COMPILER_BIN'] = env['MLC_C_COMPILER_BIN']
+    env['MLC_CXX_COMPILER_WITH_PATH'] = env['MLC_C_COMPILER_WITH_PATH']
+    env['MLC_CXX_COMPILER_FLAG_OUTPUT'] = '/Fe:'
+    env['MLC_CXX_COMPILER_FLAG_VERSION'] = ''
 
     return {'return': 0}
 
@@ -116,7 +116,7 @@ def preprocess(i):
 def detect_version(i):
     r = i['automation'].parse_version({'match_text': r'Version\s*([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_CL_VERSION',
+                                       'env_key': 'MLC_CL_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r
@@ -139,9 +139,9 @@ def postprocess(i):
 
     version = r['version']
 
-    env['CM_CL_CACHE_TAGS'] = 'version-' + version
-    env['CM_COMPILER_CACHE_TAGS'] = 'version-' + version + ',family-msvc'
-    env['CM_COMPILER_FAMILY'] = 'MSVC'
-    env['CM_COMPILER_VERSION'] = env['CM_CL_VERSION']
+    env['MLC_CL_CACHE_TAGS'] = 'version-' + version
+    env['MLC_COMPILER_CACHE_TAGS'] = 'version-' + version + ',family-msvc'
+    env['MLC_COMPILER_FAMILY'] = 'MSVC'
+    env['MLC_COMPILER_VERSION'] = env['MLC_CL_VERSION']
 
     return {'return': 0, 'version': version}

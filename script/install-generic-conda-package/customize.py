@@ -1,6 +1,5 @@
-from cmind import utils
+from mlc import utils
 import os
-import cmind as cm
 
 
 def preprocess(i):
@@ -11,17 +10,17 @@ def preprocess(i):
     automation = i['automation']
     run_script_input = i['run_script_input']
 
-    version_string = env.get('CM_TMP_PIP_VERSION_STRING', '').strip()
-    package_name = env['CM_CONDA_PKG_NAME'].strip()
+    version_string = env.get('MLC_TMP_PIP_VERSION_STRING', '').strip()
+    package_name = env['MLC_CONDA_PKG_NAME'].strip()
 
-    install_cmd = env['CM_CONDA_BIN_WITH_PATH'] + " install -y "
-    if env.get('CM_CONDA_PKG_SRC', '') != '':
-        install_cmd += " -c " + env['CM_CONDA_PKG_SRC'] + " "
+    install_cmd = env['MLC_CONDA_BIN_WITH_PATH'] + " install -y "
+    if env.get('MLC_CONDA_PKG_SRC', '') != '':
+        install_cmd += " -c " + env['MLC_CONDA_PKG_SRC'] + " "
 
     install_cmd += package_name
     install_cmd += version_string
 
-    env['CM_CONDA_PKG_INSTALL_CMD'] = install_cmd
+    env['MLC_CONDA_PKG_INSTALL_CMD'] = install_cmd
 
     return {'return': 0}
 
@@ -37,10 +36,10 @@ def detect_version(i):
 def postprocess(i):
 
     env = i['env']
-    version = env.get('CM_VERSION', '')
+    version = env.get('MLC_VERSION', '')
 
-    if env['CM_CONDA_PKG_NAME'] == "python":
-        env['CM_PYTHON_BIN_WITH_PATH'] = os.path.join(
-            os.path.dirname(env['CM_CONDA_BIN_WITH_PATH']), "python")
+    if env['MLC_CONDA_PKG_NAME'] == "python":
+        env['MLC_PYTHON_BIN_WITH_PATH'] = os.path.join(
+            os.path.dirname(env['MLC_CONDA_BIN_WITH_PATH']), "python")
 
     return {'return': 0, 'version': version}

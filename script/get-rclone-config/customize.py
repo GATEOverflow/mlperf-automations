@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,10 +12,10 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    if env.get('CM_RCLONE_CONFIG_CMD', '') != '':
-        env['CM_RUN_CMD'] = env['CM_RCLONE_CONFIG_CMD']
+    if env.get('MLC_RCLONE_CONFIG_CMD', '') != '':
+        env['MLC_RUN_CMD'] = env['MLC_RCLONE_CONFIG_CMD']
 
     return {'return': 0}
 

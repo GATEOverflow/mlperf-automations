@@ -3,15 +3,15 @@
 CUR_DIR=$PWD
 
 echo "***********************************************************"
-CM_MAKE_CORES=${CM_MAKE_CORES:-${CM_HOST_CPU_TOTAL_CORES}}
-CM_MAKE_CORES=${CM_MAKE_CORES:-2}
-CM_WGET_URL=https://www.openssl.org/source/openssl-${CM_VERSION}g.tar.gz
-wget -nc ${CM_WGET_URL}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-${MLC_HOST_CPU_TOTAL_CORES}}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-2}
+MLC_WGET_URL=https://www.openssl.org/source/openssl-${MLC_VERSION}g.tar.gz
+wget -nc ${MLC_WGET_URL}
 test $? -eq 0 || exit 1
-tar -xzf openssl-${CM_VERSION}g.tar.gz && cd openssl-${CM_VERSION}g
+tar -xzf openssl-${MLC_VERSION}g.tar.gz && cd openssl-${MLC_VERSION}g
 test $? -eq 0 || exit 1
 mkdir -p install
 ./config --prefix=`pwd`/install
-make -j${CM_MAKE_CORES}
+make -j${MLC_MAKE_CORES}
 test $? -eq 0 || exit 1
 make install

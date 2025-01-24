@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import tarfile
 
@@ -12,8 +12,8 @@ def preprocess(i):
     env = i['env']
 
     # Not enforcing dev requirement for now
-    if env.get('CM_TENSORRT_TAR_FILE_PATH', '') == '' and env.get(
-            'CM_TENSORRT_REQUIRE_DEV1', '') != 'yes' and env.get('CM_HOST_PLATFORM_FLAVOR_', '') != 'aarch64':
+    if env.get('MLC_TENSORRT_TAR_FILE_PATH', '') == '' and env.get(
+            'MLC_TENSORRT_REQUIRE_DEV1', '') != 'yes' and env.get('MLC_HOST_PLATFORM_FLAVOR_', '') != 'aarch64':
 
         if os_info['platform'] == 'windows':
             extra_pre = ''
@@ -23,20 +23,20 @@ def preprocess(i):
             extra_ext = 'so'
 
         libfilename = extra_pre + 'nvinfer.' + extra_ext
-        env['CM_TENSORRT_VERSION'] = 'vdetected'
+        env['MLC_TENSORRT_VERSION'] = 'vdetected'
 
-        if env.get('CM_TMP_PATH', '').strip() != '':
-            path = env.get('CM_TMP_PATH')
+        if env.get('MLC_TMP_PATH', '').strip() != '':
+            path = env.get('MLC_TMP_PATH')
             if os.path.exists(os.path.join(path, libfilename)):
-                env['CM_TENSORRT_LIB_PATH'] = path
+                env['MLC_TENSORRT_LIB_PATH'] = path
                 return {'return': 0}
 
-        if not env.get('CM_TMP_PATH'):
-            env['CM_TMP_PATH'] = ''
+        if not env.get('MLC_TMP_PATH'):
+            env['MLC_TMP_PATH'] = ''
 
         if os_info['platform'] == 'windows':
-            if env.get('CM_INPUT', '').strip() == '' and env.get(
-                    'CM_TMP_PATH', '').strip() == '':
+            if env.get('MLC_INPUT', '').strip() == '' and env.get(
+                    'MLC_TMP_PATH', '').strip() == '':
                 # Check in "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA"
                 paths = []
                 for path in ["C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA",
@@ -52,30 +52,30 @@ def preprocess(i):
                     tmp_paths = ';'.join(paths)
                     tmp_paths += ';' + os.environ.get('PATH', '')
 
-                    env['CM_TMP_PATH'] = tmp_paths
-                    env['CM_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
+                    env['MLC_TMP_PATH'] = tmp_paths
+                    env['MLC_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
 
         else:
             # paths to cuda are not always in PATH - add a few typical locations to search for
             # (unless forced by a user)
 
-            if env.get('CM_INPUT', '').strip() == '':
-                if env.get('CM_TMP_PATH', '').strip() != '':
-                    env['CM_TMP_PATH'] += ':'
+            if env.get('MLC_INPUT', '').strip() == '':
+                if env.get('MLC_TMP_PATH', '').strip() != '':
+                    env['MLC_TMP_PATH'] += ':'
 
-                env['CM_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
+                env['MLC_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
 
                 for lib_path in env.get(
-                        '+CM_HOST_OS_DEFAULT_LIBRARY_PATH', []):
+                        '+MLC_HOST_OS_DEFAULT_LIBRARY_PATH', []):
                     if (os.path.exists(lib_path)):
-                        env['CM_TMP_PATH'] += ':' + lib_path
+                        env['MLC_TMP_PATH'] += ':' + lib_path
 
         r = i['automation'].find_artifact({'file_name': libfilename,
                                            'env': env,
                                            'os_info': os_info,
                                            'default_path_env_key': 'LD_LIBRARY_PATH',
                                            'detect_version': False,
-                                           'env_path_key': 'CM_TENSORRT_LIB_WITH_PATH',
+                                           'env_path_key': 'MLC_TENSORRT_LIB_WITH_PATH',
                                            'run_script_input': i['run_script_input'],
                                            'recursion_spaces': recursion_spaces})
         if r['return'] > 0:
@@ -87,17 +87,19 @@ def preprocess(i):
     if os_info['platform'] == 'windows':
         return {'return': 1, 'error': 'Windows is currently not supported!'}
 
-    if env.get('CM_TENSORRT_TAR_FILE_PATH', '') == '':
+    if env.get('MLC_TENSORRT_TAR_FILE_PATH', '') == '':
         tags = ["get", "tensorrt"]
-        if env.get('CM_TENSORRT_REQUIRE_DEV', '') != 'yes':
+        if env.get('MLC_TENSORRT_REQUIRE_DEV', '') != 'yes':
             tags.append("_dev")
-        return {'return': 1, 'error': 'Please envoke cmr "' +
+        return {'return': 1, 'error': 'Please envoke mlcr "' +
                 " ".join(tags) + '" --tar_file={full path to the TensorRT tar file}'}
 
     print('Untaring file - can take some time ...')
 
     file_name = "trtexec"
-    my_tar = tarfile.open(os.path.expanduser(env['CM_TENSORRT_TAR_FILE_PATH']))
+    my_tar = tarfile.open(
+        os.path.expanduser(
+            env['MLC_TENSORRT_TAR_FILE_PATH']))
     folder_name = my_tar.getnames()[0]
     if not os.path.exists(os.path.join(os.getcwd(), folder_name)):
         my_tar.extractall()
@@ -109,10 +111,11 @@ def preprocess(i):
         return {'return': 1, 'error': 'Extracted TensorRT folder does not seem proper - Version information missing'}
     version = version_match.group(1)
 
-    env['CM_TENSORRT_VERSION'] = version
-    env['CM_TENSORRT_INSTALL_PATH'] = os.path.join(os.getcwd(), folder_name)
-    env['CM_TENSORRT_LIB_PATH'] = os.path.join(os.getcwd(), folder_name, "lib")
-    env['CM_TMP_PATH'] = os.path.join(os.getcwd(), folder_name, "bin")
+    env['MLC_TENSORRT_VERSION'] = version
+    env['MLC_TENSORRT_INSTALL_PATH'] = os.path.join(os.getcwd(), folder_name)
+    env['MLC_TENSORRT_LIB_PATH'] = os.path.join(
+        os.getcwd(), folder_name, "lib")
+    env['MLC_TMP_PATH'] = os.path.join(os.getcwd(), folder_name, "bin")
     env['+CPLUS_INCLUDE_PATH'] = [
         os.path.join(
             os.getcwd(),
@@ -143,13 +146,13 @@ def postprocess(i):
     if '+ LDFLAGS' not in env:
         env['+ LDFLAGS'] = []
 
-    # if 'CM_TENSORRT_LIB_WITH_PATH' in env:
-    #    tensorrt_lib_path = os.path.dirname(env['CM_TENSORRT_LIB_WITH_PATH'])
-    if 'CM_TENSORRT_LIB_PATH' in env:
-        env['+LD_LIBRARY_PATH'].append(env['CM_TENSORRT_LIB_PATH'])
-        env['+PATH'].append(env['CM_TENSORRT_LIB_PATH'])  # for cmake
-        env['+ LDFLAGS'].append("-L" + env['CM_TENSORRT_LIB_PATH'])
+    # if 'MLC_TENSORRT_LIB_WITH_PATH' in env:
+    #    tensorrt_lib_path = os.path.dirname(env['MLC_TENSORRT_LIB_WITH_PATH'])
+    if 'MLC_TENSORRT_LIB_PATH' in env:
+        env['+LD_LIBRARY_PATH'].append(env['MLC_TENSORRT_LIB_PATH'])
+        env['+PATH'].append(env['MLC_TENSORRT_LIB_PATH'])  # for cmake
+        env['+ LDFLAGS'].append("-L" + env['MLC_TENSORRT_LIB_PATH'])
 
-    version = env['CM_TENSORRT_VERSION']
+    version = env['MLC_TENSORRT_VERSION']
 
     return {'return': 0, 'version': version}

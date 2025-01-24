@@ -1,5 +1,5 @@
 #!/bin/bash
-export PATH=${CM_CONDA_BIN_PATH}:$PATH
+export PATH=${MLC_CONDA_BIN_PATH}:$PATH
 
 export KMP_BLOCKTIME=1
 export KMP_AFFINITY=granularity=fine,compact,1,0
@@ -7,7 +7,7 @@ export LD_PRELOAD=${LD_PRELOAD}:${CONDA_PREFIX}/lib/libiomp5.so
 # export LD_PRELOAD=${LD_PRELOAD}:${CONDA_PREFIX}/lib/libtcmalloc.so
 #
 
-BATCH_SIZE=${CM_MLPERF_LOADGEN_BATCH_SIZE}
+BATCH_SIZE=${MLC_MLPERF_LOADGEN_BATCH_SIZE}
 
 DIR_SCRIPT=$(dirname "${BASH_SOURCE[0]}")
 [ -z $DIR_NS ] && DIR_NS="$DIR_SCRIPT/gpt-j-env/neural-speed"
@@ -36,10 +36,10 @@ CPUS_PER_PROC=$((num_physical_cores / num_numa))
 [ -z $BATCH_SIZE ] && BATCH_SIZE=12
 [ -z $BEAM_SIZE ] && BEAM_SIZE=4
 
-OUTPUT_DIR="${CM_MLPERF_OUTPUT_DIR}"
-MODEL_PATH="${CM_ML_MODEL_FILE_WITH_PATH}"
-cd ${CM_HARNESS_CODE_ROOT}
-export WORKLOAD_DATA=${CM_HARNESS_CODE_ROOT}/data
+OUTPUT_DIR="${MLC_MLPERF_OUTPUT_DIR}"
+MODEL_PATH="${MLC_ML_MODEL_FILE_WITH_PATH}"
+cd ${MLC_HARNESS_CODE_ROOT}
+export WORKLOAD_DATA=${MLC_HARNESS_CODE_ROOT}/data
 export VALIDATION_DATA_JSON=${WORKLOAD_DATA}/validation-data/cnn_dailymail_validation.json
 
 
@@ -49,7 +49,7 @@ done
 
 echo "Start time: $(date)"
 cmd="python runner.py --workload-name gptj \
-        --scenario ${CM_MLPERF_LOADGEN_SCENARIO} \
+        --scenario ${MLC_MLPERF_LOADGEN_SCENARIO} \
         --mode ${LOADGEN_MODE} \
 	--num-proc ${NUM_PROC} \
 	--cpus-per-proc ${CPUS_PER_PROC} \
@@ -58,8 +58,8 @@ cmd="python runner.py --workload-name gptj \
 	--model-checkpoint ${CHECKPOINT_DIR} \
 	--batch-size ${BATCH_SIZE} \
 	--beam-size ${BEAM_SIZE} \
-	--mlperf-conf ${CM_MLPERF_CONF} \
-	--user-conf ${CM_MLPERF_USER_CONF} \
+	--mlperf-conf ${MLC_MLPERF_CONF} \
+	--user-conf ${MLC_MLPERF_USER_CONF} \
 	--workers-per-proc ${WORKERS_PER_PROC} \
 	--total-sample-count ${TOTAL_SAMPLE_COUNT} \
 	--output-dir ${OUTPUT_DIR} \

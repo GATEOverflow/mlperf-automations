@@ -11,4 +11,4 @@ test $? -eq 0 || exit 1
 tar -C install -xzf ${FILENAME}
 test $? -eq 0 || exit 1
 
-echo "CM_TMP_INSTALL_FOLDER=$FOLDER" > tmp-run-env.out
+echo "MLC_TMP_INSTALL_FOLDER=$FOLDER" > tmp-run-env.out

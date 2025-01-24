@@ -1,0 +1,39 @@
+alias: get-mlperf-automotive-scratch-space
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: true
+category: MLPerf benchmark support
+deps: []
+docker:
+  run: false
+input_description: {}
+input_mapping:
+  scratch_path: MLC_ABTF_SCRATCH_PATH
+new_env_keys:
+- MLC_ABTF_SCRATCH_PATH
+- MLC_ABTF_SCRATCH_PATH_MODELS
+- MLC_ABTF_SCRATCH_PATH_DATASETS
+- MLC_ABTF_SCRATCH_VERSION
+new_state_keys: []
+post_deps: []
+posthook_deps: []
+prehook_deps: []
+tags:
+- get
+- abtf
+- inference
+- scratch
+- space
+uid: c384b7604e5c47d5
+variations:
+  version.#:
+    env:
+      MLC_ABTF_SCRATCH_VERSION: '#'
+    group: version
+  version.4_0:
+    default: true
+    env:
+      MLC_ABTF_SCRATCH_VERSION: '4_0'
+    group: version
+versions: {}
+

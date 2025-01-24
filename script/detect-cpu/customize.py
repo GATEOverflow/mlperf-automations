@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 lscpu_out = 'tmp-lscpu.out'
@@ -21,7 +21,7 @@ def postprocess(i):
     os_info = i['os_info']
 
     automation = i['automation']
-    logger = automation.cmind.logger
+    logger = automation.action_object.logger
 
     if os_info['platform'] == 'windows':
         sys = []
@@ -119,36 +119,36 @@ def postprocess(i):
 
     # Unifying some CPU info across different platforms
     unified_env = {
-        'CM_CPUINFO_CPUs': 'CM_HOST_CPU_TOTAL_CORES',
-        'CM_CPUINFO_L1d_cache': 'CM_HOST_CPU_L1D_CACHE_SIZE',
-        'CM_CPUINFO_L1i_cache': 'CM_HOST_CPU_L1I_CACHE_SIZE',
-        'CM_CPUINFO_L2_cache': 'CM_HOST_CPU_L2_CACHE_SIZE',
-        'CM_CPUINFO_L3_cache': 'CM_HOST_CPU_L3_CACHE_SIZE',
-        'CM_CPUINFO_Sockets': 'CM_HOST_CPU_SOCKETS',
-        'CM_CPUINFO_NUMA_nodes': 'CM_HOST_CPU_NUMA_NODES',
-        'CM_CPUINFO_Cores_per_socket': 'CM_HOST_CPU_PHYSICAL_CORES_PER_SOCKET',
-        'CM_CPUINFO_Cores_per_cluster': 'CM_HOST_CPU_PHYSICAL_CORES_PER_SOCKET',
-        'CM_CPUINFO_Threads_per_core': 'CM_HOST_CPU_THREADS_PER_CORE',
-        'CM_CPUINFO_Architecture': 'CM_HOST_CPU_ARCHITECTURE',
-        'CM_CPUINFO_CPU_family': 'CM_HOST_CPU_FAMILY',
-        'CM_CPUINFO_CPU_max_MHz': 'CM_HOST_CPU_MAX_MHZ',
-        'CM_CPUINFO_Model_name': 'CM_HOST_CPU_MODEL_NAME',
-        'CM_CPUINFO_On_line_CPUs_list': 'CM_HOST_CPU_ON_LINE_CPUS_LIST',
-        'CM_CPUINFO_Vendor_ID': 'CM_HOST_CPU_VENDOR_ID',
-        'CM_CPUINFO_hw_physicalcpu': 'CM_HOST_CPU_TOTAL_PHYSICAL_CORES',
-        'CM_CPUINFO_hw_logicalcpu': 'CM_HOST_CPU_TOTAL_CORES',
-        'CM_CPUINFO_hw_packages': 'CM_HOST_CPU_SOCKETS',
-        'CM_CPUINFO_hw_memsize': 'CM_HOST_CPU_MEMSIZE',
-        'CM_CPUINFO_hw_l1icachesize': 'CM_HOST_CPU_L1I_CACHE_SIZE',
-        'CM_CPUINFO_hw_l1dcachesize': 'CM_HOST_CPU_L1D_CACHE_SIZE',
-        'CM_CPUINFO_hw_l2cachesize': 'CM_HOST_CPU_L2_CACHE_SIZE'
+        'MLC_CPUINFO_CPUs': 'MLC_HOST_CPU_TOTAL_CORES',
+        'MLC_CPUINFO_L1d_cache': 'MLC_HOST_CPU_L1D_CACHE_SIZE',
+        'MLC_CPUINFO_L1i_cache': 'MLC_HOST_CPU_L1I_CACHE_SIZE',
+        'MLC_CPUINFO_L2_cache': 'MLC_HOST_CPU_L2_CACHE_SIZE',
+        'MLC_CPUINFO_L3_cache': 'MLC_HOST_CPU_L3_CACHE_SIZE',
+        'MLC_CPUINFO_Sockets': 'MLC_HOST_CPU_SOCKETS',
+        'MLC_CPUINFO_NUMA_nodes': 'MLC_HOST_CPU_NUMA_NODES',
+        'MLC_CPUINFO_Cores_per_socket': 'MLC_HOST_CPU_PHYSICAL_CORES_PER_SOCKET',
+        'MLC_CPUINFO_Cores_per_cluster': 'MLC_HOST_CPU_PHYSICAL_CORES_PER_SOCKET',
+        'MLC_CPUINFO_Threads_per_core': 'MLC_HOST_CPU_THREADS_PER_CORE',
+        'MLC_CPUINFO_Architecture': 'MLC_HOST_CPU_ARCHITECTURE',
+        'MLC_CPUINFO_CPU_family': 'MLC_HOST_CPU_FAMILY',
+        'MLC_CPUINFO_CPU_max_MHz': 'MLC_HOST_CPU_MAX_MHZ',
+        'MLC_CPUINFO_Model_name': 'MLC_HOST_CPU_MODEL_NAME',
+        'MLC_CPUINFO_On_line_CPUs_list': 'MLC_HOST_CPU_ON_LINE_CPUS_LIST',
+        'MLC_CPUINFO_Vendor_ID': 'MLC_HOST_CPU_VENDOR_ID',
+        'MLC_CPUINFO_hw_physicalcpu': 'MLC_HOST_CPU_TOTAL_PHYSICAL_CORES',
+        'MLC_CPUINFO_hw_logicalcpu': 'MLC_HOST_CPU_TOTAL_CORES',
+        'MLC_CPUINFO_hw_packages': 'MLC_HOST_CPU_SOCKETS',
+        'MLC_CPUINFO_hw_memsize': 'MLC_HOST_CPU_MEMSIZE',
+        'MLC_CPUINFO_hw_l1icachesize': 'MLC_HOST_CPU_L1I_CACHE_SIZE',
+        'MLC_CPUINFO_hw_l1dcachesize': 'MLC_HOST_CPU_L1D_CACHE_SIZE',
+        'MLC_CPUINFO_hw_l2cachesize': 'MLC_HOST_CPU_L2_CACHE_SIZE'
     }
 
-    if env['CM_HOST_OS_TYPE'] == 'linux':
+    if env['MLC_HOST_OS_TYPE'] == 'linux':
         vkeys = ['Architecture', 'Model name', 'Vendor ID', 'CPU family', 'NUMA node(s)', 'CPU(s)',
                  'On-line CPU(s) list', 'Socket(s)', 'Core(s) per socket', 'Core(s) per cluster', 'Thread(s) per core', 'L1d cache', 'L1i cache', 'L2 cache',
                  'L3 cache', 'CPU max MHz']
-    elif env['CM_HOST_OS_FLAVOR'] == 'macos':
+    elif env['MLC_HOST_OS_FLAVOR'] == 'macos':
         vkeys = ['hw.physicalcpu', 'hw.logicalcpu', 'hw.packages', 'hw.ncpu', 'hw.memsize', 'hw.l1icachesize',
                  'hw.l2cachesize']
     if vkeys:
@@ -156,7 +156,7 @@ def postprocess(i):
             v = s.split(':')
             key = v[0]
             if key in vkeys:
-                env_key = 'CM_CPUINFO_' + key.replace(
+                env_key = 'MLC_CPUINFO_' + key.replace(
                     " ",
                     "_").replace(
                     '(',
@@ -172,21 +172,21 @@ def postprocess(i):
                 else:
                     env[env_key] = v[1].strip()
 
-    if env.get('CM_HOST_CPU_SOCKETS', '') == '-':  # assume as 1
-        env['CM_HOST_CPU_SOCKETS'] = '1'
+    if env.get('MLC_HOST_CPU_SOCKETS', '') == '-':  # assume as 1
+        env['MLC_HOST_CPU_SOCKETS'] = '1'
 
-    if env.get('CM_HOST_CPU_TOTAL_CORES', '') != '' and env.get(
-            'CM_HOST_CPU_TOTAL_LOGICAL_CORES', '') == '':
-        env['CM_HOST_CPU_TOTAL_LOGICAL_CORES'] = env['CM_HOST_CPU_TOTAL_CORES']
+    if env.get('MLC_HOST_CPU_TOTAL_CORES', '') != '' and env.get(
+            'MLC_HOST_CPU_TOTAL_LOGICAL_CORES', '') == '':
+        env['MLC_HOST_CPU_TOTAL_LOGICAL_CORES'] = env['MLC_HOST_CPU_TOTAL_CORES']
 
-    if env.get('CM_HOST_CPU_TOTAL_LOGICAL_CORES', '') != '' and env.get(
-            'CM_HOST_CPU_TOTAL_PHYSICAL_CORES', '') != '' and env.get('CM_HOST_CPU_THREADS_PER_CORE', '') == '':
-        env['CM_HOST_CPU_THREADS_PER_CORE'] = str(int(int(env['CM_HOST_CPU_TOTAL_LOGICAL_CORES']) //
-                                                      int(env['CM_HOST_CPU_TOTAL_PHYSICAL_CORES'])))
+    if env.get('MLC_HOST_CPU_TOTAL_LOGICAL_CORES', '') != '' and env.get(
+            'MLC_HOST_CPU_TOTAL_PHYSICAL_CORES', '') != '' and env.get('MLC_HOST_CPU_THREADS_PER_CORE', '') == '':
+        env['MLC_HOST_CPU_THREADS_PER_CORE'] = str(int(int(env['MLC_HOST_CPU_TOTAL_LOGICAL_CORES']) //
+                                                       int(env['MLC_HOST_CPU_TOTAL_PHYSICAL_CORES'])))
 
-    if env.get('CM_HOST_CPU_SOCKETS', '') != '' and env.get('CM_HOST_CPU_TOTAL_PHYSICAL_CORES',
-                                                            '') != '' and env.get('CM_HOST_CPU_PHYSICAL_CORES_PER_SOCKET', '') == '':
-        env['CM_HOST_CPU_PHYSICAL_CORES_PER_SOCKET'] = str(
-            int(env['CM_HOST_CPU_TOTAL_PHYSICAL_CORES']) // int(env['CM_HOST_CPU_SOCKETS']))
+    if env.get('MLC_HOST_CPU_SOCKETS', '') != '' and env.get('MLC_HOST_CPU_TOTAL_PHYSICAL_CORES',
+                                                             '') != '' and env.get('MLC_HOST_CPU_PHYSICAL_CORES_PER_SOCKET', '') == '':
+        env['MLC_HOST_CPU_PHYSICAL_CORES_PER_SOCKET'] = str(
+            int(env['MLC_HOST_CPU_TOTAL_PHYSICAL_CORES']) // int(env['MLC_HOST_CPU_SOCKETS']))
 
     return {'return': 0}

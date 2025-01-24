@@ -1,427 +1,77 @@
-*This README is automatically generated - don't edit! See [extra README](README-extra.md) for extra notes!*
-
-### Automation actions
-
-#### run
-
-  * CM CLI: ```cm run script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L77))
-  * CM CLI with UID: ```cm run script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L77))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'run'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L77)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### version
-
-  * CM CLI: ```cm version script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2199))
-  * CM CLI with UID: ```cm version script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2199))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'version'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2199)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### search
-
-  * CM CLI: ```cm search script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2227))
-  * CM CLI with UID: ```cm search script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2227))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'search'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2227)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### test
-
-  * CM CLI: ```cm test script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2346))
-  * CM CLI with UID: ```cm test script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2346))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'test'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2346)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### native_run
-
-  * CM CLI: ```cm native_run script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2412))
-  * CM CLI with UID: ```cm native_run script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2412))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'native_run'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2412)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### add
-
-  * CM CLI: ```cm add script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2485))
-  * CM CLI with UID: ```cm add script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2485))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'add'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L2485)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### run_native_script
-
-  * CM CLI: ```cm run_native_script script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3270))
-  * CM CLI with UID: ```cm run_native_script script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3270))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'run_native_script'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3270)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### find_file_in_paths
-
-  * CM CLI: ```cm find_file_in_paths script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3314))
-  * CM CLI with UID: ```cm find_file_in_paths script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3314))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'find_file_in_paths'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3314)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### detect_version_using_script
-
-  * CM CLI: ```cm detect_version_using_script script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3533))
-  * CM CLI with UID: ```cm detect_version_using_script script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3533))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'detect_version_using_script'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3533)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### find_artifact
-
-  * CM CLI: ```cm find_artifact script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3606))
-  * CM CLI with UID: ```cm find_artifact script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3606))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'find_artifact'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3606)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### find_file_deep
-
-  * CM CLI: ```cm find_file_deep script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3764))
-  * CM CLI with UID: ```cm find_file_deep script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3764))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'find_file_deep'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3764)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### find_file_back
-
-  * CM CLI: ```cm find_file_back script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3822))
-  * CM CLI with UID: ```cm find_file_back script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3822))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'find_file_back'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3822)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### parse_version
-
-  * CM CLI: ```cm parse_version script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3863))
-  * CM CLI with UID: ```cm parse_version script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3863))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'parse_version'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3863)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### update_deps
-
-  * CM CLI: ```cm update_deps script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3917))
-  * CM CLI with UID: ```cm update_deps script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3917))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'update_deps'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3917)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### get_default_path_list
-
-  * CM CLI: ```cm get_default_path_list script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3937))
-  * CM CLI with UID: ```cm get_default_path_list script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3937))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'get_default_path_list'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3937)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### doc
-
-  * CM CLI: ```cm doc script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3948))
-  * CM CLI with UID: ```cm doc script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3948))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'doc'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3948)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### gui
-
-  * CM CLI: ```cm gui script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3976))
-  * CM CLI with UID: ```cm gui script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3976))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'gui'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L3976)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### dockerfile
-
-  * CM CLI: ```cm dockerfile script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4013))
-  * CM CLI with UID: ```cm dockerfile script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4013))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'dockerfile'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4013)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### docker
-
-  * CM CLI: ```cm docker script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4041))
-  * CM CLI with UID: ```cm docker script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4041))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'docker'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4041)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### prepare
-
-  * CM CLI: ```cm prepare script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4095))
-  * CM CLI with UID: ```cm prepare script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4095))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'prepare'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4095)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-#### clean_some_tmp_files
-
-  * CM CLI: ```cm clean_some_tmp_files script``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4106))
-  * CM CLI with UID: ```cm clean_some_tmp_files script,5b4e0237da074764``` ([add flags (dict keys) from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4106))
-  * CM Python API:
-    ```python
-    import cmind
-
-    r=cm.access({
-                 'action':'clean_some_tmp_files'
-                 'automation':'script,5b4e0237da074764'
-                 'out':'con'
-    ```
-    [add keys from this API](https://github.com/mlcommons/cm4mlops/tree/master/automation/script/module.py#L4106)
-    ```python
-                })
-    if r['return']>0:
-        print(r['error'])
-    ```
-
-### Maintainers
-
-* [Open MLCommons taskforce on automation and reproducibility](https://cKnowledge.org/mlcommons-taskforce)
+# CM "script" automation specification
+
+Please check the [CM documentation](https://github.com/mlcommons/ck/tree/master/docs#collective-mind-language-cm)
+for more details about the CM automation language.
+
+
+
+## Getting started with CM scripts
+
+* A CM script is identified by a set of tags and by unique ID. 
+* Further each CM script can have multiple variations and they are identified by variation tags which are treated in the same way as tags and identified by a `_` prefix.
+
+### CM script execution flow
+* When a CM script is invoked (either by tags or by unique ID), its `_cm.json` is processed first which will check for any `deps` script and if there are, then they are executed in order.
+* Once all the `deps` scripts are executed, `customize.py` file is checked and if existing `preprocess` function inside it is executed if present. 
+* Then any `prehook_deps` CM scripts mentioned in `_cm.json` are executed similar to `deps`
+* After this, keys in `env` dictionary is exported as `ENV` variables and `run` file if exists is executed.
+* Once run file execution is done, any `posthook_deps` CM scripts mentioned in `_cm.json` are executed similar to `deps`
+* Then `postprocess` function inside customize.py is executed if present.
+* After this stage any `post_deps` CM scripts mentioned in `_cm.json` is executed.
+
+** If a script is already cached, then the `preprocess`, `run file` and `postprocess` executions won't happen and only the dependencies marked as `dynamic` will be executed from `deps`, `prehook_deps`, `posthook_deps` and `postdeps`.
+
+### Input flags
+When we run a CM script we can also pass inputs to it and any input added in `input_mapping` dictionary inside `_cm.json` gets converted to the corresponding `ENV` variable.
+
+### Conditional execution of any `deps`, `post_deps`
+We can use `skip_if_env` dictionary inside any `deps`, `prehook_deps`, `posthook_deps` or `post_deps` to make its execution conditional
+
+### Versions
+We can specify any specific version of a script using `version`. `version_max` and `version_min` are also possible options. 
+* When `version_min` is given, any version above this if present in the cache or detected in the system can be chosen. If nothing is detected `default_version` if present and if above `version_min` will be used for installation. Otherwise `version_min` will be used as `version`.
+* When `version_max` is given, any version below this if present in the cache or detected in the system can be chosen. If nothing is detected `default_version` if present and if below `version_max` will be used for installation. Otherwise `version_max_usable` (additional needed input for `version_max`) will be used as `version`.
+
+### Variations
+* Variations are used to customize CM script and each unique combination of variations uses a unique cache entry. Each variation can turn on `env` keys also any other meta including dependencies specific to it. Variations are turned on like tags but with a `_` prefix. For example, if a script is having tags `"get,myscript"`, to call the variation `"test"` inside it, we have to use tags `"get,myscript,_test"`. 
+ 
+#### Variation groups
+`group` is a key to map variations into a group and at any time only one variation from a group can be used in the variation tags. For example, both `cpu` and `cuda` can be two variations under the `device` group, but user can at any time use either `cpu` or `cuda` as variation tags but not both.
+
+#### Dynamic variations
+Sometimes it is difficult to add all variations needed for a script like say `batch_size` which can take many different values. To handle this case, we support dynamic variations using '#' where '#' can be dynamically replaced by any string. For example, `"_batch_size.8"` can be used as a tag to turn on the dynamic variation `"_batch_size.#"`.
+
+### ENV flow during CM script execution
+* [TBD] Issue added [here](https://github.com/mlcommons/ck/issues/382)
+* During a given script execution incoming `env` dictionary is saved `(saved_env)` and all the updates happens on a copy of it.
+* Once a script execution is over (which includes all the dependent script executions as well), newly created keys and any updated keys are merged with the `saved_env` provided the keys are mentioned in `new_env_keys`
+* Same behaviour applies to `state` dictionary.
+
+#### Special env keys
+* Any env key with a prefix `MLC_TMP_*` and `MLC_GIT_*` are not passed by default to any dependency. These can be force passed by adding the key(s) to the `force_env_keys` list of the concerned dependency. 
+* Similarly we can avoid any env key from being passed to a given dependency by adding the prefix of the key in the `clean_env_keys` list of the concerned dependency.
+* `--input` is automatically converted to `MLC_INPUT` env key
+* `version` is converted to `MLC_VERSION`, ``version_min` to `MLC_VERSION_MIN` and `version_max` to `MLC_VERSION_MAX`
+* If `env['MLC_GH_TOKEN']=TOKEN_VALUE` is set then git URLs (specified by `MLC_GIT_URL`) are changed to add this token.
+* If `env['MLC_GIT_SSH']=yes`, then git URLs are changed to SSH from HTTPS.
+
+### Script Meta
+#### Special keys in script meta
+* TBD: `reuse_version`, `inherit_variation_tags`, `update_env_tags_from_env`
+
+### How cache works?
+* If `cache=true` is set in a script meta, the result of the script execution is cached for further use. 
+* For a cached script, `env` and `state` updates are done using `new_env` and `new_state` dictionaries which are stored in the `mlc-cached.json` file inside the cached folder.
+* By using `--new` input, a new cache entry can be forced even when an old one exist. 
+* By default no depndencies are run for a cached entry unless `dynamic` key is set for it. 
+
+### Updating ENV from inside the run script
+* [TBD]
+
+
+### Script workflow (env, deps, native scripts)
+
+<img src="https://github.com/mlcommons/cm4mlops/raw/mlperf-inference/automation/script/assets/scripts-workflow.png" width="248">
+
+
+&copy; 2022-25 [MLCommons](https://mlcommons.org)<br>

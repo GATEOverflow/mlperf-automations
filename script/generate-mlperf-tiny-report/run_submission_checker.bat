@@ -1,10 +1,10 @@
-﻿cd %CM_TINYMLPERF_REPO_PATH%
+﻿cd %MLC_TINYMLPERF_REPO_PATH%
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%
 
 echo.
-%CM_PYTHON_BIN_WITH_PATH% submission_checker.py --input .
+%MLC_PYTHON_BIN_WITH_PATH% submission_checker.py --input .
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%
 
 echo.
-%CM_PYTHON_BIN_WITH_PATH% generate_final_report.py --input summary.csv 
+%MLC_PYTHON_BIN_WITH_PATH% generate_final_report.py --input summary.csv 
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%

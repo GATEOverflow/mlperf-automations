@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#CM Script location: ${CM_TMP_CURRENT_SCRIPT_PATH}
+#CM Script location: ${MLC_TMP_CURRENT_SCRIPT_PATH}
 
 #To export any variable
 #echo "VARIABLE_NAME=VARIABLE_VALUE" >>tmp-run-env.out
 
-#${CM_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
+#${MLC_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
 
 
 
@@ -17,16 +17,16 @@ function run() {
   echo "Running: "
   echo "$1"
   echo ""
-  if [[ ${CM_FAKE_RUN} != 'yes' ]]; then
+  if [[ ${MLC_FAKE_RUN} != 'yes' ]]; then
     eval "$1"
     exit_if_error
   fi
 }
 
 #Add your run commands here...
-# run "$CM_RUN_CMD"
+# run "$MLC_RUN_CMD"
 
-scratch_path=${CM_NVIDIA_MLPERF_SCRATCH_PATH}
+scratch_path=${MLC_NVIDIA_MLPERF_SCRATCH_PATH}
 mkdir -p ${scratch_path}/data
 mkdir -p ${scratch_path}/preprocessed_data
 mkdir -p ${scratch_path}/models

@@ -58,4 +58,4 @@ with open("meminfo.out", "r") as f:
 
     meminfo_string = ",   ".join(meminfo)
     with open("tmp-run-env.out", "w") as f:
-        f.write(f"CM_HOST_MEM_INFO={meminfo_string}")
+        f.write(f"MLC_HOST_MEM_INFO={meminfo_string}")

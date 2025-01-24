@@ -15,9 +15,9 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    print('  ENV CM_VAR1: {}'.format(env.get('CM_VAR1', '')))
+    print('  ENV MLC_VAR1: {}'.format(env.get('MLC_VAR1', '')))
 
     return {'return': 0}
 

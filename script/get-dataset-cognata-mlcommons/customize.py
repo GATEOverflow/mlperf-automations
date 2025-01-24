@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import json
 
@@ -7,46 +7,51 @@ def preprocess(i):
 
     env = i['env']
 
-    cm_cache_dataset_path = env.get(
-        'CM_CUSTOM_CACHE_ENTRY_DATASET_MLCOMMONS_COGNATA_PATH', '').strip()
-    cfg = utils.safe_load_json(cm_cache_dataset_path, 'cfg.json')['meta']
+    mlc_cache_dataset_path = env.get(
+        'MLC_CUSTOM_CACHE_ENTRY_DATASET_MLCOMMONS_COGNATA_PATH', '').strip()
+
+    res = utils.load_json(
+        os.path.join(
+            mlc_cache_dataset_path,
+            'cfg.json'))
+    cfg = res.get('meta', {})
     if cfg.get('imported', False):
-        env['CM_DATASET_MLCOMMONS_COGNATA_IMPORTED'] = 'yes'
+        env['MLC_DATASET_MLCOMMONS_COGNATA_IMPORTED'] = 'yes'
 
-    if env.get('CM_ABTF_SCRATCH_PATH_DATASETS', '') != '':
-        env['CM_ABTF_SCRATCH_PATH_DATASET_COGNATA'] = os.path.join(
-            env['CM_ABTF_SCRATCH_PATH_DATASETS'], "cognata")
-        env['CM_ABTF_SCRATCH_PATH_DATASET_COGNATA_TMP'] = os.path.join(
-            env['CM_ABTF_SCRATCH_PATH_DATASETS'], "cognata_tmp")
+    if env.get('MLC_ABTF_SCRATCH_PATH_DATASETS', '') != '':
+        env['MLC_ABTF_SCRATCH_PATH_DATASET_COGNATA'] = os.path.join(
+            env['MLC_ABTF_SCRATCH_PATH_DATASETS'], "cognata")
+        env['MLC_ABTF_SCRATCH_PATH_DATASET_COGNATA_TMP'] = os.path.join(
+            env['MLC_ABTF_SCRATCH_PATH_DATASETS'], "cognata_tmp")
 
-    env['CM_DATASET_COGNATA_POC_TEXT_MD5_FILE_PATH'] = os.path.join(
+    env['MLC_DATASET_COGNATA_POC_TEXT_MD5_FILE_PATH'] = os.path.join(
         i['run_script_input']['path'], 'checksums', 'cognata_poc.txt')
 
     # Check if user requests path not in CM cache
     #
-    # --path (env CM_TMP_PATH) shows where to store Cognata data set instead of CM cahe
+    # --path (env MLC_TMP_PATH) shows where to store Cognata data set instead of CM cahe
     # --import tells CM to import existing Cognata from a given path and skip further download/processing
     #
     import_path = env.get(
-        'CM_DATASET_MLCOMMONS_COGNATA_IMPORT_PATH',
+        'MLC_DATASET_MLCOMMONS_COGNATA_IMPORT_PATH',
         '').strip()
     if import_path != '':
         if not os.path.isdir(import_path):
             return {'return': 1, 'error': 'directory to import this dataset doesn\'t exist: {}'.format(
                 import_path)}
 
-        env['CM_DATASET_MLCOMMONS_COGNATA_IMPORTED'] = 'yes'
-        env['CM_DATASET_MLCOMMONS_COGNATA_PATH'] = import_path
+        env['MLC_DATASET_MLCOMMONS_COGNATA_IMPORTED'] = 'yes'
+        env['MLC_DATASET_MLCOMMONS_COGNATA_PATH'] = import_path
 
     else:
-        path = env.get('CM_TMP_PATH', '')
+        path = env.get('MLC_TMP_PATH', '')
         if path != '':
-            env['CM_DATASET_MLCOMMONS_COGNATA_IMPORTED'] = 'no'
+            env['MLC_DATASET_MLCOMMONS_COGNATA_IMPORTED'] = 'no'
 
             if not os.path.isdir(path):
                 os.makedirs(path)
 
-            env['CM_DATASET_MLCOMMONS_COGNATA_PATH'] = path
+            env['MLC_DATASET_MLCOMMONS_COGNATA_PATH'] = path
 
     return {'return': 0}
 
@@ -56,37 +61,39 @@ def postprocess(i):
     env = i['env']
 
     automation = i['automation']
-    cm = automation.cmind
+    mlc = automation.action_object
 
     cur_dir = os.getcwd()
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    cm_cache_dataset_path = env.get(
-        'CM_CUSTOM_CACHE_ENTRY_DATASET_MLCOMMONS_COGNATA_PATH', '').strip()
+    mlc_cache_dataset_path = env.get(
+        'MLC_CUSTOM_CACHE_ENTRY_DATASET_MLCOMMONS_COGNATA_PATH', '').strip()
 
-    if not os.path.isdir(cm_cache_dataset_path):
+    if not os.path.isdir(mlc_cache_dataset_path):
         return {
-            'return': 1, 'error': 'Dataset corrupted - CM cache path not found: {}'.format(cm_cache_dataset_path)}
+            'return': 1, 'error': 'Dataset corrupted - CM cache path not found: {}'.format(mlc_cache_dataset_path)}
 
-    if env.get('CM_DATASET_MLCOMMONS_COGNATA_FILE_NAMES', '') == '':
-        env['CM_DATASET_MLCOMMONS_COGNATA_PATH'] = os.path.dirname(
-            env['CM_CUSTOM_CACHE_ENTRY_DATASET_MLCOMMONS_COGNATA_PATH'])
-        env['CM_GET_DEPENDENT_CACHED_PATH'] = env['CM_DATASET_MLCOMMONS_COGNATA_PATH']
+    if env.get('MLC_DATASET_MLCOMMONS_COGNATA_FILE_NAMES', '') == '':
+        env['MLC_DATASET_MLCOMMONS_COGNATA_PATH'] = os.path.dirname(
+            env['MLC_CUSTOM_CACHE_ENTRY_DATASET_MLCOMMONS_COGNATA_PATH'])
+        env['MLC_GET_DEPENDENT_CACHED_PATH'] = env['MLC_DATASET_MLCOMMONS_COGNATA_PATH']
         return {'return': 0}
 
-    cm_cache_dataset_cfg_file = os.path.join(cm_cache_dataset_path, 'cfg.json')
-    env['CM_DATASET_MLCOMMONS_COGNATA_CFG_FILE'] = cm_cache_dataset_cfg_file
+    mlc_cache_dataset_cfg_file = os.path.join(
+        mlc_cache_dataset_path, 'cfg.json')
+    env['MLC_DATASET_MLCOMMONS_COGNATA_CFG_FILE'] = mlc_cache_dataset_cfg_file
 
-    cfg = utils.safe_load_json('', cm_cache_dataset_cfg_file)['meta']
+    res = utils.load_json(mlc_cache_dataset_cfg_file)
+    cfg = res.get('meta', {})
 
     dataset_path = cfg.get('real_path', '')
-    dataset_path_requested = env.get('CM_DATASET_MLCOMMONS_COGNATA_PATH', '')
+    dataset_path_requested = env.get('MLC_DATASET_MLCOMMONS_COGNATA_PATH', '')
     if dataset_path == '':
         if dataset_path_requested != '':
             dataset_path = dataset_path_requested
         else:
-            dataset_path = os.path.join(cm_cache_dataset_path, 'cognata')
+            dataset_path = os.path.join(mlc_cache_dataset_path, 'cognata')
     else:
         if dataset_path_requested != '':
             dataset_path = dataset_path_requested
@@ -96,15 +103,15 @@ def postprocess(i):
     print('')
     print('Used dataset path: {}'.format(dataset_path))
 
-    env['CM_DATASET_MLCOMMONS_COGNATA_PATH'] = dataset_path
+    env['MLC_DATASET_MLCOMMONS_COGNATA_PATH'] = dataset_path
 
     # If imported, don't process further
-    if env.get('CM_DATASET_MLCOMMONS_COGNATA_IMPORTED', '') == 'yes':
+    if env.get('MLC_DATASET_MLCOMMONS_COGNATA_IMPORTED', '') == 'yes':
         cfg['imported'] = True
     else:
         cfg['imported'] = False
 
-    utils.save_json(cm_cache_dataset_cfg_file, cfg)
+    utils.save_json(mlc_cache_dataset_cfg_file, cfg)
 
     if cfg.get('imported', False):
         return {'return': 0}
@@ -112,7 +119,7 @@ def postprocess(i):
     # If processed once, don't process unless forced
     if cfg.get('processed', False):
         if not utils.check_if_true_yes_on(
-                env, 'CM_DATASET_MLCOMMONS_COGNATA_UPDATE'):
+                env, 'MLC_DATASET_MLCOMMONS_COGNATA_UPDATE'):
             print('')
             print('Already processed: use --update to update this dataset')
 
@@ -140,7 +147,7 @@ def postprocess(i):
         first_url = dataset_meta.get('first_url', '').strip()
 
     if first_url == '':
-        x = env.get('CM_DATASET_MLCOMMONS_COGNATA_PRIVATE_URL', '').strip()
+        x = env.get('MLC_DATASET_MLCOMMONS_COGNATA_PRIVATE_URL', '').strip()
         if x != '':
             first_url = x
         else:
@@ -172,13 +179,13 @@ def postprocess(i):
             return {
                 'return': 1, 'error': 'can\'t parse URL for export: {}'.format(first_url)}
 
-        r = cm.access({'action': 'run',
+        r = mlc.access({'action': 'run',
                        'automation': 'script',
-                       'tags': 'download,file,_wget',
-                       'verify': 'no',
-                       'url': first_url_export,
-                       'output_file': file_first_xlsx,
-                       'store': dataset_path1})
+                        'tags': 'download,file,_wget',
+                        'verify': 'no',
+                        'url': first_url_export,
+                        'output_file': file_first_xlsx,
+                        'store': dataset_path1})
         if r['return'] > 0:
             return r
 
@@ -190,12 +197,12 @@ def postprocess(i):
     # Parse XLSX and check serial number
     serial_numbers = []
     for s in env.get(
-            'CM_DATASET_MLCOMMONS_COGNATA_SERIAL_NUMBERS', '').strip().split(','):
+            'MLC_DATASET_MLCOMMONS_COGNATA_SERIAL_NUMBERS', '').strip().split(','):
         s = s.strip()
         if s != '' and s not in serial_numbers:
             serial_numbers.append(s)
 
-    dataset_key = env['CM_DATASET_MLCOMMONS_COGNATA_KEY1']
+    dataset_key = env['MLC_DATASET_MLCOMMONS_COGNATA_KEY1']
     url_key = 'Link to Excel File (Download Links)'
     serial_key = 'Serial Number'
 
@@ -248,13 +255,13 @@ def postprocess(i):
             print('')
             print('Downloading {} ...'.format(url_export))
 
-            r = cm.access({'action': 'run',
+            r = mlc.access({'action': 'run',
                            'automation': 'script',
-                           'tags': 'download,file,_wget',
-                           'verify': 'no',
-                           'url': url_export,
-                           'output_file': serial_file,
-                           'store': dataset_path1})
+                            'tags': 'download,file,_wget',
+                            'verify': 'no',
+                            'url': url_export,
+                            'output_file': serial_file,
+                            'store': dataset_path1})
             if r['return'] > 0:
                 return r
 
@@ -263,14 +270,14 @@ def postprocess(i):
     print('Processing subsets ...')
 
     group_names = []
-    for s in env.get('CM_DATASET_MLCOMMONS_COGNATA_GROUP_NAMES',
+    for s in env.get('MLC_DATASET_MLCOMMONS_COGNATA_GROUP_NAMES',
                      '').strip().split(','):
         s = s.strip()
         if s != '' and s not in group_names:
             group_names.append(s)
 
     # Check if force some filenames
-    x = env.get('CM_DATASET_MLCOMMONS_COGNATA_FILE_NAMES', '').strip()
+    x = env.get('MLC_DATASET_MLCOMMONS_COGNATA_FILE_NAMES', '').strip()
     file_names = []
     if x != '':
         file_names = x.strip(';') if ';' in x else [x]
@@ -333,7 +340,7 @@ def postprocess(i):
                 continue
 
             if os.name == 'nt':
-                aria2_tool = env['CM_ARIA2_BIN_WITH_PATH']
+                aria2_tool = env['MLC_ARIA2_BIN_WITH_PATH']
             else:
                 aria2_tool = 'aria2c'
 
@@ -386,9 +393,9 @@ def postprocess(i):
 
     # Mark that processed this dataset once correctly
     cfg['processed'] = True
-    utils.save_json(cm_cache_dataset_cfg_file, cfg)
+    utils.save_json(mlc_cache_dataset_cfg_file, cfg)
 
-    env['CM_GET_DEPENDENT_CACHED_PATH'] = env['CM_DATASET_MLCOMMONS_COGNATA_PATH']
+    env['MLC_GET_DEPENDENT_CACHED_PATH'] = env['MLC_DATASET_MLCOMMONS_COGNATA_PATH']
 
     return {'return': 0}
 

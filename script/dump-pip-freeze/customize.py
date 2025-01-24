@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,11 +12,11 @@ def preprocess(i):
 
     automation = i['automation']
 
-    if env.get('CM_DUMP_RAW_PIP_FREEZE_FILE_PATH', '') == '':
-        env['CM_DUMP_RAW_PIP_FREEZE_FILE_PATH'] = os.path.join(
+    if env.get('MLC_DUMP_RAW_PIP_FREEZE_FILE_PATH', '') == '':
+        env['MLC_DUMP_RAW_PIP_FREEZE_FILE_PATH'] = os.path.join(
             os.getcwd(), "tmp-pip-freeze")
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     return {'return': 0}
 
@@ -31,15 +31,15 @@ def postprocess(i):
     automation = i['automation']
 
     pip_freeze = {}
-    pip_freeze_file = env['CM_DUMP_RAW_PIP_FREEZE_FILE_PATH']
+    pip_freeze_file = env['MLC_DUMP_RAW_PIP_FREEZE_FILE_PATH']
     if not os.path.isfile(pip_freeze_file):
         # If was not created, sometimes issues on Windows
         # There is another workaround
         if os_info['platform'] == 'windows':
-            r = automation.cmind.access({'action': 'system',
-                                         'automation': 'utils',
-                                         'cmd': 'py -m pip freeze',
-                                         'stdout': pip_freeze_file})
+            r = automation.action_object.access({'action': 'system',
+                                                 'automation': 'utils',
+                                                 'cmd': 'py -m pip freeze',
+                                                 'stdout': pip_freeze_file})
             # skip output
 
     if os.path.isfile(pip_freeze_file):

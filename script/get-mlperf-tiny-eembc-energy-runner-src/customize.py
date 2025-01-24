@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import shutil
 
@@ -14,8 +14,8 @@ def preprocess(i):
     env = i['env']
     meta = i['meta']
 
-    if 'CM_GIT_DEPTH' not in env:
-        env['CM_GIT_DEPTH'] = ''
+    if 'MLC_GIT_DEPTH' not in env:
+        env['MLC_GIT_DEPTH'] = ''
 
     return {'return': 0}
 
@@ -25,9 +25,9 @@ def postprocess(i):
     env = i['env']
     state = i['state']
 
-    env['CM_EEMBC_ENERGY_RUNNER_SRC'] = os.path.join(os.getcwd(), 'src')
+    env['MLC_EEMBC_ENERGY_RUNNER_SRC'] = os.path.join(os.getcwd(), 'src')
     datasets_src_path = os.path.join(os.getcwd(), 'src', 'datasets')
-    env['CM_EEMBC_ENERGY_RUNNER_SRC_DATASETS'] = datasets_src_path
+    env['MLC_EEMBC_ENERGY_RUNNER_SRC_DATASETS'] = datasets_src_path
 
     # Get user directory for EEMBC runner path
     home_directory = os.path.expanduser('~')
@@ -37,7 +37,7 @@ def postprocess(i):
     print('')
     print('Path to EEMBC runner sessions: {}'.format(sessions_path))
 
-    env['CM_EEMBC_ENERGY_RUNNER_SESSIONS'] = sessions_path
+    env['MLC_EEMBC_ENERGY_RUNNER_SESSIONS'] = sessions_path
 
     if not os.path.isdir(sessions_path):
         os.makedirs(sessions_path)
@@ -56,7 +56,7 @@ def postprocess(i):
     if not os.path.isdir(datasets_path):
         os.makedirs(datasets_path)
 
-    env['CM_EEMBC_ENERGY_RUNNER_DATASETS'] = datasets_path
+    env['MLC_EEMBC_ENERGY_RUNNER_DATASETS'] = datasets_path
 
     print('')
     print('Copying datasets to EEMBC user space ...')

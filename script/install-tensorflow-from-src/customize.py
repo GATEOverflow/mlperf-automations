@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -9,7 +9,7 @@ def preprocess(i):
 
     env = i['env']
 
-    env['CC'] = env['CM_C_COMPILER_WITH_PATH']
+    env['CC'] = env['MLC_C_COMPILER_WITH_PATH']
 
     return {'return': 0}
 
@@ -60,7 +60,7 @@ def postprocess(i):
     env['+C_INCLUDE_PATH'] = inc_paths
     env['+CPLUS_INCLUDE_PATH'] = inc_paths
 
-    tflite_lib = env.get("CM_TFLITE", "")
+    tflite_lib = env.get("MLC_TFLITE", "")
     if tflite_lib == "on":
         lib_path = os.path.join(bazel_install_bin, 'tensorflow', 'lite')
     else:

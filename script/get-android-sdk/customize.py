@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -24,7 +24,7 @@ def preprocess(i):
     if android_home == '':
         android_home = cur_dir
 
-    env['CM_ANDROID_HOME'] = android_home
+    env['MLC_ANDROID_HOME'] = android_home
     env['ANDROID_HOME'] = android_home
 
     paths = []
@@ -61,24 +61,25 @@ def preprocess(i):
 
         os.chdir(new_path)
 
-        cmdline_tools_version = env.get('CM_ANDROID_CMDLINE_TOOLS_VERSION', '')
+        cmdline_tools_version = env.get(
+            'MLC_ANDROID_CMDLINE_TOOLS_VERSION', '')
 
-        env['CM_ANDROID_CMDLINE_TOOLS_VERSION'] = cmdline_tools_version
+        env['MLC_ANDROID_CMDLINE_TOOLS_VERSION'] = cmdline_tools_version
 
-        package_url = env['CM_ANDROID_CMDLINE_TOOLS_URL']
+        package_url = env['MLC_ANDROID_CMDLINE_TOOLS_URL']
         package_url = package_url.replace(
-            '${CM_ANDROID_CMDLINE_TOOLS_OS}',
+            '${MLC_ANDROID_CMDLINE_TOOLS_OS}',
             host_os_for_android)
         package_url = package_url.replace(
-            '${CM_ANDROID_CMDLINE_TOOLS_VERSION}',
+            '${MLC_ANDROID_CMDLINE_TOOLS_VERSION}',
             cmdline_tools_version)
 
-        env['CM_ANDROID_CMDLINE_TOOLS_URL'] = package_url
+        env['MLC_ANDROID_CMDLINE_TOOLS_URL'] = package_url
 
         print('')
         print('Downloading from {} ...'.format(package_url))
 
-        cm = automation.cmind
+        cm = automation.action_object
 
         r = cm.access({'action': 'download_file',
                        'automation': 'utils,dc2743f8450541e3',
@@ -114,10 +115,10 @@ def preprocess(i):
 
     sdk_manager_dir = os.path.dirname(sdk_manager_path)
 
-    env['CM_ANDROID_SDK_MANAGER_BIN'] = sdk_manager_file
-    env['CM_ANDROID_SDK_MANAGER_BIN_WITH_PATH'] = sdk_manager_path
+    env['MLC_ANDROID_SDK_MANAGER_BIN'] = sdk_manager_file
+    env['MLC_ANDROID_SDK_MANAGER_BIN_WITH_PATH'] = sdk_manager_path
 
-    env['CM_GET_DEPENDENT_CACHED_PATH'] = cur_dir
+    env['MLC_GET_DEPENDENT_CACHED_PATH'] = cur_dir
 
     paths.append(sdk_manager_dir)
 
@@ -129,41 +130,41 @@ def preprocess(i):
     if r['return'] > 0:
         return r
 
-    build_tools_version = env['CM_ANDROID_BUILD_TOOLS_VERSION']
+    build_tools_version = env['MLC_ANDROID_BUILD_TOOLS_VERSION']
 
     path_build_tools = os.path.join(
         android_home, 'build-tools', build_tools_version)
-    env['CM_ANDROID_BUILD_TOOLS_PATH'] = path_build_tools
+    env['MLC_ANDROID_BUILD_TOOLS_PATH'] = path_build_tools
     paths.append(path_build_tools)
 
-    cmake_version = env['CM_ANDROID_CMAKE_VERSION']
+    cmake_version = env['MLC_ANDROID_CMAKE_VERSION']
 
     path_cmake = os.path.join(android_home, 'cmake', cmake_version, 'bin')
-    env['CM_ANDROID_CMAKE_PATH'] = path_cmake
+    env['MLC_ANDROID_CMAKE_PATH'] = path_cmake
     paths.append(path_cmake)
 
     path_emulator = os.path.join(android_home, 'emulator')
-    env['CM_ANDROID_EMULATOR_PATH'] = path_emulator
+    env['MLC_ANDROID_EMULATOR_PATH'] = path_emulator
     paths.append(path_emulator)
 
     path_platform_tools = os.path.join(android_home, 'platform-tools')
-    env['CM_ANDROID_PLATFORM_TOOLS_PATH'] = path_platform_tools
+    env['MLC_ANDROID_PLATFORM_TOOLS_PATH'] = path_platform_tools
     paths.append(path_platform_tools)
 
-    android_version = env['CM_ANDROID_VERSION']
+    android_version = env['MLC_ANDROID_VERSION']
 
     path_platforms = os.path.join(android_home, 'platforms', android_version)
-    env['CM_ANDROID_PLATFORMS_PATH'] = path_platforms
+    env['MLC_ANDROID_PLATFORMS_PATH'] = path_platforms
 
     path_tools = os.path.join(android_home, 'tools')
-    env['CM_ANDROID_TOOLS_PATH'] = path_tools
+    env['MLC_ANDROID_TOOLS_PATH'] = path_tools
     paths.append(path_tools)
 
-    android_ndk_version = env['CM_ANDROID_NDK_VERSION']
+    android_ndk_version = env['MLC_ANDROID_NDK_VERSION']
 
     # Check Android NDK
     path_ndk = os.path.join(android_home, 'ndk', android_ndk_version)
-    env['CM_ANDROID_NDK_PATH'] = path_ndk
+    env['MLC_ANDROID_NDK_PATH'] = path_ndk
     env['ANDROID_NDK_HOME'] = path_ndk
 
     path_ndk_compiler = os.path.join(
@@ -173,8 +174,8 @@ def preprocess(i):
         'prebuilt',
         host_os_for_ndk,
         'bin')
-    env['CM_ANDROID_LLVM_PATH'] = path_ndk_compiler
-    env['CM_ANDROID_LLVM_CLANG_BIN_WITH_PATH'] = os.path.join(
+    env['MLC_ANDROID_LLVM_PATH'] = path_ndk_compiler
+    env['MLC_ANDROID_LLVM_CLANG_BIN_WITH_PATH'] = os.path.join(
         path_ndk_compiler, 'clang.exe')
     paths.append(path_ndk_compiler)
 

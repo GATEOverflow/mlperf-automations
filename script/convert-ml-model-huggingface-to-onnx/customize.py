@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -8,12 +8,12 @@ def preprocess(i):
 
     env = i['env']
 
-    if env.get("CM_MODEL_HUGG_PATH", "") == "":
-        return {'return': 1, 'error': 'CM_MODEL_HUGG_PATH is not set'}
+    if env.get("MLC_MODEL_HUGG_PATH", "") == "":
+        return {'return': 1, 'error': 'MLC_MODEL_HUGG_PATH is not set'}
 
     automation = i['automation']
 
-    cm = automation.cmind
+    cm = automation.action_object
 
     path = os.getcwd()
 

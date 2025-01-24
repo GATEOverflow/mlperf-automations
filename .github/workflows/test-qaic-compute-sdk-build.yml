@@ -26,9 +26,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        CM_PULL_DEFAULT_MLOPS_REPO=no pip install cm4mlops
-        cm run script --tags=get,sys-utils-cm --quiet
+        MLC_PULL_DEFAULT_MLOPS_REPO=no pip install cm4mlops
+        mlcr --tags=get,sys-utils-cm --quiet
   
     - name: Test QAIC Compute SDK for compilation
       run: |
-        cm run script --tags=get,qaic,compute,sdk --adr.llvm.version=${{ matrix.llvm-version }} --quiet
+        mlcr --tags=get,qaic,compute,sdk --adr.llvm.version=${{ matrix.llvm-version }} --quiet

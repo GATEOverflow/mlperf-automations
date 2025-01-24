@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -14,8 +14,8 @@ def postprocess(i):
 
     env = i['env']
     installed_path = "/opt/rocm/bin"
-    env['CM_ROCM_INSTALLED_PATH'] = installed_path
-    env['CM_ROCM_BIN_WITH_PATH'] = os.path.join(installed_path, "rocminfo")
+    env['MLC_ROMLC_INSTALLED_PATH'] = installed_path
+    env['MLC_ROMLC_BIN_WITH_PATH'] = os.path.join(installed_path, "rocminfo")
     env['+PATH'] = [installed_path]
 
     return {'return': 0}

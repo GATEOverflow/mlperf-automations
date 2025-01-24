@@ -1,9 +1,9 @@
 #!/bin/bash
 
-CM_TMP_CURRENT_SCRIPT_PATH=${CM_TMP_CURRENT_SCRIPT_PATH:-$PWD}
+MLC_TMP_CURRENT_SCRIPT_PATH=${MLC_TMP_CURRENT_SCRIPT_PATH:-$PWD}
 
-cd ${CM_TMP_CURRENT_SCRIPT_PATH}
-if [ ${CM_ENABLE_NUMACTL} == "1" ]; then 
+cd ${MLC_TMP_CURRENT_SCRIPT_PATH}
+if [ ${MLC_ENABLE_NUMACTL} == "1" ]; then 
   sudo apt-get install numactl
 fi
 

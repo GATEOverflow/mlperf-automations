@@ -1,8 +1,8 @@
 echo Running command:
 echo.
-echo %CM_RUN_CMDS%
+echo %MLC_RUN_CMDS%
 echo.
 
-%CM_RUN_CMDS%
+%MLC_RUN_CMDS%
 
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%

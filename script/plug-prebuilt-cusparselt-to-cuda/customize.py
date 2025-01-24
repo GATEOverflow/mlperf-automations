@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -13,11 +13,11 @@ def preprocess(i):
     env = i['env']
 
     if str(env.get('CUDA_SKIP_SUDO', '')).lower() == 'true':
-        env['CM_SUDO'] = ''
+        env['MLC_SUDO'] = ''
 
     meta = i['meta']
     automation = i['automation']
-    version = env.get('CM_VERSION')
+    version = env.get('MLC_VERSION')
 
     supported_versions = list(meta['versions'].keys())
 
@@ -25,17 +25,17 @@ def preprocess(i):
         return {'return': 1, 'error': "Only CUSPARSELT versions {} are supported now".format(
             ', '.join(supported_versions))}
 
-    env['CM_CUSPARSELT_VERSION'] = version
+    env['MLC_CUSPARSELT_VERSION'] = version
 
-    filename = env['CM_CUSPARSELT_TAR_FILE_NAME_TEMPLATE']
-    cusparselt_md5sum = env.get('CM_CUSPARSELT_TAR_MD5SUM', '')
+    filename = env['MLC_CUSPARSELT_TAR_FILE_NAME_TEMPLATE']
+    cusparselt_md5sum = env.get('MLC_CUSPARSELT_TAR_MD5SUM', '')
 
-    cuda_version_split = env['CM_CUDA_VERSION'].split('.')
+    cuda_version_split = env['MLC_CUDA_VERSION'].split('.')
     cuda_version_major = cuda_version_split[0]
 
     filename = filename.replace('{{CUDA_MAJOR_VERSION}}', cuda_version_major)
 
-    env['CM_CUSPARSELT_TAR_FILE_NAME'] = filename
+    env['MLC_CUSPARSELT_TAR_FILE_NAME'] = filename
 
     cusparselt_dir = filename[:-7]
 
@@ -44,9 +44,9 @@ def preprocess(i):
     print('')
     print(f'URL to download CUSPARSELT: {cusparselt_url}')
 
-    env['CM_CUSPARSELT_TAR_DIR'] = cusparselt_dir
-    env['CM_CUSPARSELT_UNTAR_PATH'] = os.path.join(cur_dir, cusparselt_dir)
+    env['MLC_CUSPARSELT_TAR_DIR'] = cusparselt_dir
+    env['MLC_CUSPARSELT_UNTAR_PATH'] = os.path.join(cur_dir, cusparselt_dir)
     env['WGET_URL'] = cusparselt_url
-    env['CM_DOWNLOAD_CHECKSUM'] = cusparselt_md5sum
+    env['MLC_DOWNLOAD_CHECKSUM'] = cusparselt_md5sum
 
     return {'return': 0}

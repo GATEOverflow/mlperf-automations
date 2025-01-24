@@ -1,0 +1,189 @@
+alias: get-mlperf-inference-src
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: true
+category: MLPerf benchmark support
+default_env:
+  MLC_GIT_CHECKOUT_FOLDER: inference
+  MLC_GIT_DEPTH: --depth 4
+  MLC_GIT_PATCH: 'no'
+  MLC_GIT_RECURSE_SUBMODULES: ''
+default_version: master
+deps:
+- tags: detect,os
+- names:
+  - python
+  - python3
+  tags: get,python3
+new_env_keys:
+- MLC_MLPERF_INFERENCE_3DUNET_PATH
+- MLC_MLPERF_INFERENCE_BERT_PATH
+- MLC_MLPERF_INFERENCE_CLASSIFICATION_AND_DETECTION_PATH
+- MLC_MLPERF_INFERENCE_CONF_PATH
+- MLC_MLPERF_INFERENCE_DLRM_PATH
+- MLC_MLPERF_INFERENCE_DLRM_V2_PATH
+- MLC_MLPERF_INFERENCE_GPTJ_PATH
+- MLC_MLPERF_INFERENCE_RNNT_PATH
+- MLC_MLPERF_INFERENCE_RGAT_PATH
+- MLC_MLPERF_INFERENCE_SOURCE
+- MLC_MLPERF_INFERENCE_SOURCE_VERSION
+- MLC_MLPERF_INFERENCE_VERSION
+- MLC_MLPERF_INFERENCE_VISION_PATH
+- MLC_MLPERF_LAST_RELEASE
+- +PYTHONPATH
+prehook_deps:
+- env:
+    MLC_GIT_CHECKOUT_PATH_ENV_NAME: MLC_MLPERF_INFERENCE_SOURCE
+  extra_cache_tags: inference,src
+  force_env_keys:
+  - MLC_GIT_*
+  names:
+  - inference-git-repo
+  tags: get,git,repo
+  update_tags_from_env_with_prefix:
+    _branch.:
+    - MLC_GIT_CHECKOUT
+    _repo.:
+    - MLC_GIT_URL
+    _sha.:
+    - MLC_GIT_SHA
+    _submodules.:
+    - MLC_GIT_SUBMODULES
+print_env_at_the_end_disabled:
+  MLC_MLPERF_INFERENCE_SOURCE: Path to MLPerf inference benchmark sources
+tags:
+- get
+- src
+- source
+- inference
+- inference-src
+- inference-source
+- mlperf
+- mlcommons
+uid: 4b57186581024797
+variations:
+  3d-unet:
+    env:
+      MLC_SUBMODULE_3D_UNET: 'yes'
+  branch.#:
+    default_version: custom
+    env:
+      MLC_GIT_CHECKOUT: '#'
+    group: checkout
+  deeplearningexamples:
+    env:
+      MLC_SUBMODULE_DEEPLEARNINGEXAMPLES: 'yes'
+  deepsparse:
+    base:
+    - _branch.deepsparse
+    - _repo.https://github.com/neuralmagic/inference
+  full-history:
+    env:
+      MLC_GIT_DEPTH: ''
+    group: git-history
+  gn:
+    env:
+      MLC_SUBMODULE_GN: 'yes'
+  no-recurse-submodules:
+    env:
+      MLC_GIT_RECURSE_SUBMODULES: ''
+  nvidia-pycocotools:
+    base:
+    - patch
+    env:
+      MLC_GIT_PATCH_FILENAME: coco.patch
+  octoml:
+    base:
+    - short-history
+    - _repo.https://github.com/octoml/inference
+    env:
+      MLC_GIT_URL: https://github.com/octoml/inference
+  openimages-nvidia-pycocotools:
+    base:
+    - patch
+    env:
+      MLC_GIT_PATCH_FILENAME: openimages-pycocotools.patch
+  patch:
+    ad:
+      inference-git-repo:
+        tags: _patch
+    env:
+      MLC_GIT_PATCH: 'yes'
+  pybind:
+    env:
+      MLC_SUBMODULE_PYBIND: 'yes'
+  recurse-submodules:
+    env:
+      MLC_GIT_RECURSE_SUBMODULES: ' --recurse-submodules'
+  repo.#:
+    env:
+      MLC_GIT_URL: '#'
+  sha.#:
+    env:
+      MLC_GIT_SHA: '#'
+    group: checkout
+  short-history:
+    default: true
+    env:
+      MLC_GIT_DEPTH: --depth 10
+    group: git-history
+  submodules.#:
+    env:
+      MLC_GIT_SUBMODULES: '#'
+versions:
+  custom:
+    env:
+      MLC_MLPERF_LAST_RELEASE: v5.0
+  deepsparse:
+    env:
+      MLC_MLPERF_LAST_RELEASE: v5.0
+      MLC_TMP_GIT_CHECKOUT: deepsparse
+      MLC_TMP_GIT_URL: https://github.com/neuralmagic/inference
+  main:
+    env:
+      MLC_MLPERF_LAST_RELEASE: v5.0
+      MLC_TMP_GIT_CHECKOUT: main
+  master:
+    env:
+      MLC_MLPERF_LAST_RELEASE: v5.0
+      MLC_TMP_GIT_CHECKOUT: master
+  r2.1:
+    env:
+      MLC_MLPERF_LAST_RELEASE: v2.1
+      MLC_TMP_GIT_CHECKOUT: v2.1
+  r3.0:
+    ad:
+      inference-git-repo:
+        tags: _tag.v3.0
+    env:
+      MLC_MLPERF_LAST_RELEASE: v3.0
+      MLC_TMP_GIT_CHECKOUT: ''
+  r3.1:
+    ad:
+      inference-git-repo:
+        tags: _tag.v3.1
+    env:
+      MLC_MLPERF_LAST_RELEASE: v3.1
+      MLC_GIT_CHECKOUT_TAG: 'v3.1'
+  r4.0:
+    ad:
+      inference-git-repo:
+        tags: _tag.v4.0
+    env:
+      MLC_MLPERF_LAST_RELEASE: v4.0
+      MLC_GIT_CHECKOUT_TAG: 'v4.0'
+  r4.1:
+    ad:
+      inference-git-repo:
+        tags: _tag.v4.1
+    env:
+      MLC_MLPERF_LAST_RELEASE: v4.1
+      MLC_GIT_CHECKOUT_TAG: 'v4.1'
+  r5.0:
+    env:
+      MLC_MLPERF_LAST_RELEASE: v5.0
+  tvm:
+    env:
+      MLC_MLPERF_LAST_RELEASE: v3.1
+      MLC_TMP_GIT_CHECKOUT: tvm
+      MLC_TMP_GIT_URL: https://github.com/mlcommons/inference

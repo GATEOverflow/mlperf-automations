@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd ${CM_RUN_DIR}
-echo "${CM_RUN_CMD}"
-eval "${CM_RUN_CMD}"
+cd ${MLC_RUN_DIR}
+echo "${MLC_RUN_CMD}"
+eval "${MLC_RUN_CMD}"

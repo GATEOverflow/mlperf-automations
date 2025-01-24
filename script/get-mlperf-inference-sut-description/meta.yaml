@@ -1,0 +1,55 @@
+alias: get-mlperf-inference-sut-description
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: false
+category: MLPerf benchmark support
+default_env:
+  MLC_SUT_DESC_CACHE: 'no'
+deps:
+- tags: detect,os
+- tags: detect,cpu
+- names:
+  - python3
+  - python
+  tags: get,python3
+- names:
+  - compiler
+  skip_if_env:
+    MLC_MLPERF_INFERENCE_LOADGEN_INSTALL_FROM_PIP:
+    - 'yes'
+  tags: get,compiler
+- enable_if_env:
+    MLC_MLPERF_DEVICE:
+    - gpu
+    - cuda
+  tags: get,cuda-devices,_with-pycuda
+- enable_if_env:
+    MLC_DETERMINE_MEMORY_CONFIGURATION:
+    - 'yes'
+    MLC_HOST_OS_TYPE:
+    - linux
+  tags: detect,sudo
+- tags: get,generic-python-lib,_package.dmiparser
+- env:
+    MLC_CACHE_DIR_ENV_NAME: MLC_MLPERF_INFERENCE_SUT_DESC_PATH
+  extra_cache_tags: mlperf,inference,sut,descriptions
+  tags: get,cache,dir,_name.mlperf-inference-sut-descriptions
+docker:
+  run: false
+input_mapping:
+  name: MLC_HW_NAME
+  submitter: MLC_MLPERF_SUBMITTER
+new_env_keys:
+- MLC_HW_*
+- MLC_SUT_*
+new_state_keys:
+- MLC_SUT_*
+- MLC_HW_*
+tags:
+- get
+- mlperf
+- sut
+- description
+- system-under-test
+- system-description
+uid: e49a3f758b2d4e7b

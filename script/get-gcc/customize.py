@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -11,26 +11,26 @@ def preprocess(i):
     recursion_spaces = i['recursion_spaces']
     file_name_c = 'gcc.exe' if os_info['platform'] == 'windows' else 'gcc'
 
-    if env.get('CM_HOST_OS_FLAVOR', '') == 'rhel':
-        if "12" in env.get('CM_VERSION', '') or "12" in env.get(
-                'CM_VERSION_MIN', ''):
-            if env.get('CM_TMP_PATH', '') == '':
-                env['CM_TMP_PATH'] = ''
-            env['CM_TMP_PATH'] += "/opt/rh/gcc-toolset-12/root/usr/bin"
-            env['CM_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
+    if env.get('MLC_HOST_OS_FLAVOR', '') == 'rhel':
+        if "12" in env.get('MLC_VERSION', '') or "12" in env.get(
+                'MLC_VERSION_MIN', ''):
+            if env.get('MLC_TMP_PATH', '') == '':
+                env['MLC_TMP_PATH'] = ''
+            env['MLC_TMP_PATH'] += "/opt/rh/gcc-toolset-12/root/usr/bin"
+            env['MLC_TMP_PATH_IGNORE_NON_EXISTANT'] = 'yes'
 
-    if 'CM_GCC_BIN_WITH_PATH' not in env:
+    if 'MLC_GCC_BIN_WITH_PATH' not in env:
         r = i['automation'].find_artifact({'file_name': file_name_c,
                                            'env': env,
                                            'os_info': os_info,
                                            'default_path_env_key': 'PATH',
                                            'detect_version': True,
-                                           'env_path_key': 'CM_GCC_BIN_WITH_PATH',
+                                           'env_path_key': 'MLC_GCC_BIN_WITH_PATH',
                                            'run_script_input': i['run_script_input'],
                                            'recursion_spaces': recursion_spaces})
         if r['return'] > 0:
             #           if r['return'] == 16:
-            #               if env.get('CM_TMP_FAIL_IF_NOT_FOUND','').lower() == 'yes':
+            #               if env.get('MLC_TMP_FAIL_IF_NOT_FOUND','').lower() == 'yes':
             #                   return r
             #
             #               print (recursion_spaces+'    # {}'.format(r['error']))
@@ -44,9 +44,9 @@ def preprocess(i):
 
 
 def detect_version(i):
-    r = i['automation'].parse_version({'match_text': r' \(.*\)\s*([\d.]+)',
+    r = i['automation'].parse_version({'match_text': r'\s+([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_GCC_VERSION',
+                                       'env_key': 'MLC_GCC_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         if 'clang' in r['error']:
@@ -66,41 +66,41 @@ def postprocess(i):
     if r['return'] > 0:
         return r
 
-    env['CM_COMPILER_FAMILY'] = 'GCC'
+    env['MLC_COMPILER_FAMILY'] = 'GCC'
     version = r['version']
-    env['CM_COMPILER_VERSION'] = env['CM_GCC_VERSION']
-    env['CM_GCC_CACHE_TAGS'] = 'version-' + version
-    env['CM_COMPILER_CACHE_TAGS'] = 'version-' + version + ',family-gcc'
+    env['MLC_COMPILER_VERSION'] = env['MLC_GCC_VERSION']
+    env['MLC_GCC_CACHE_TAGS'] = 'version-' + version
+    env['MLC_COMPILER_CACHE_TAGS'] = 'version-' + version + ',family-gcc'
 
-    found_file_path = env['CM_GCC_BIN_WITH_PATH']
+    found_file_path = env['MLC_GCC_BIN_WITH_PATH']
 
     found_path = os.path.dirname(found_file_path)
 
-    env['CM_GCC_INSTALLED_PATH'] = found_path
+    env['MLC_GCC_INSTALLED_PATH'] = found_path
 
     file_name_c = os.path.basename(found_file_path)
     # G: changed next line to handle cases like gcc-8
     file_name_cpp = file_name_c.replace('gcc', 'g++')
     env['FILE_NAME_CPP'] = file_name_cpp
 
-    env['CM_GCC_BIN'] = file_name_c
+    env['MLC_GCC_BIN'] = file_name_c
 
     # General compiler for general program compilation
-    env['CM_C_COMPILER_BIN'] = file_name_c
-    env['CM_C_COMPILER_FLAG_OUTPUT'] = '-o '
-    env['CM_C_COMPILER_WITH_PATH'] = found_file_path
-    env['CM_C_COMPILER_FLAG_VERSION'] = '--version'
+    env['MLC_C_COMPILER_BIN'] = file_name_c
+    env['MLC_C_COMPILER_FLAG_OUTPUT'] = '-o '
+    env['MLC_C_COMPILER_WITH_PATH'] = found_file_path
+    env['MLC_C_COMPILER_FLAG_VERSION'] = '--version'
 
-    env['CM_CXX_COMPILER_BIN'] = file_name_cpp
-    env['CM_CXX_COMPILER_WITH_PATH'] = os.path.join(found_path, file_name_cpp)
-    env['CM_CXX_COMPILER_FLAG_OUTPUT'] = '-o '
-    env['CM_CXX_COMPILER_FLAG_VERSION'] = '--version'
+    env['MLC_CXX_COMPILER_BIN'] = file_name_cpp
+    env['MLC_CXX_COMPILER_WITH_PATH'] = os.path.join(found_path, file_name_cpp)
+    env['MLC_CXX_COMPILER_FLAG_OUTPUT'] = '-o '
+    env['MLC_CXX_COMPILER_FLAG_VERSION'] = '--version'
 
-    env['CM_COMPILER_FLAGS_FAST'] = "-O3"
-    env['CM_LINKER_FLAGS_FAST'] = "-O3"
-    env['CM_COMPILER_FLAGS_DEBUG'] = "-O0"
-    env['CM_LINKER_FLAGS_DEBUG'] = "-O0"
-    env['CM_COMPILER_FLAGS_DEFAULT'] = "-O2"
-    env['CM_LINKER_FLAGS_DEFAULT'] = "-O2"
+    env['MLC_COMPILER_FLAGS_FAST'] = "-O3"
+    env['MLC_LINKER_FLAGS_FAST'] = "-O3"
+    env['MLC_COMPILER_FLAGS_DEBUG'] = "-O0"
+    env['MLC_LINKER_FLAGS_DEBUG'] = "-O0"
+    env['MLC_COMPILER_FLAGS_DEFAULT'] = "-O2"
+    env['MLC_LINKER_FLAGS_DEFAULT'] = "-O2"
 
     return {'return': 0, 'version': version}

@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import shutil
 
@@ -10,11 +10,11 @@ def preprocess(i):
     automation = i['automation']
     env = i['env']
     meta = i['meta']
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     # Check if path is there to detect existing data set
     detected = False
-    path = env.get('CM_TMP_PATH', '')
+    path = env.get('MLC_TMP_PATH', '')
     if path != '':
         if not os.path.isdir(path):
             return {'return': 1,
@@ -40,14 +40,14 @@ def preprocess(i):
         print('')
         print('Detected COCO dataset {} {}'.format(tp, ver))
 
-        env['CM_DATASET_COCO_DETECTED'] = 'yes'
-        env['CM_DATASET_COCO_PATH'] = path
+        env['MLC_DATASET_COCO_DETECTED'] = 'yes'
+        env['MLC_DATASET_COCO_PATH'] = path
     else:
-        ver = env['CM_DATASET_COCO_VERSION']
-        tp = env['CM_DATASET_COCO_TYPE']
+        ver = env['MLC_DATASET_COCO_VERSION']
+        tp = env['MLC_DATASET_COCO_TYPE']
 
     # Prepare URL
-    size = env.get('CM_DATASET_COCO_SIZE', '')
+    size = env.get('MLC_DATASET_COCO_SIZE', '')
     if size == 'small' and tp == 'val' and ver == '2017':
         # We prepared a small version with 50 images for val 2017
 
@@ -60,8 +60,8 @@ def preprocess(i):
             filename_annotation)
 
     else:
-        url_data = env['CM_DATASET_COCO_URL_DATA']
-        url_ann = env['CM_DATASET_COCO_URL_ANNOTATIONS']
+        url_data = env['MLC_DATASET_COCO_URL_DATA']
+        url_ann = env['MLC_DATASET_COCO_URL_ANNOTATIONS']
 
         filename_data = tp + ver + '.zip'
         filename_annotation = 'annotations_trainval' + ver + '.zip'
@@ -80,7 +80,7 @@ def preprocess(i):
         'extra_cache_tags': download_extra_cache_tags
     }
 
-    path_from = env.get('CM_FROM', '')
+    path_from = env.get('MLC_FROM', '')
     if path_from != '':
         path_from_data = os.path.join(path_from, filename_data)
         if not os.path.isfile(path_from_data):
@@ -94,12 +94,12 @@ def preprocess(i):
                 path_from_annotation)}
         dae_input_annotation['local_path'] = path_from_annotation
 
-    path_to = env.get('CM_TO', '')
+    path_to = env.get('MLC_TO', '')
     if path_to != '':
         dae_input_data['extract_path'] = path_to
         dae_input_annotation['extract_path'] = path_to
 
-    path_store = env.get('CM_STORE', '')
+    path_store = env.get('MLC_STORE', '')
     if path_store != '':
         dae_input_data['download_path'] = path_store
         dae_input_data['tags'] = '_keep'
@@ -116,11 +116,11 @@ def preprocess(i):
         return r
 
     # Prepare environment variables
-    env['CM_DATASET_COCO_VERSION'] = ver
-    env['CM_DATASET_COCO_TYPE'] = tp
-    env['CM_DATASET_COCO_TYPE_AND_VERSION'] = tp + ver
-    env['CM_DATASET_COCO_URL_DATA_FULL'] = url_data_full
-    env['CM_DATASET_COCO_URL_ANNOTATIONS_FULL'] = url_ann_full
+    env['MLC_DATASET_COCO_VERSION'] = ver
+    env['MLC_DATASET_COCO_TYPE'] = tp
+    env['MLC_DATASET_COCO_TYPE_AND_VERSION'] = tp + ver
+    env['MLC_DATASET_COCO_URL_DATA_FULL'] = url_data_full
+    env['MLC_DATASET_COCO_URL_ANNOTATIONS_FULL'] = url_ann_full
 
     # Check MD5SUM
     md5sum_data = ''
@@ -136,9 +136,9 @@ def preprocess(i):
                 md5sum_ann = 'f4bbac642086de4f52a3fdda2de5fa2c'
 
     if md5sum_data != '':
-        env['CM_DATASET_COCO_MD5SUM_DATA'] = md5sum_data
+        env['MLC_DATASET_COCO_MD5SUM_DATA'] = md5sum_data
     if md5sum_ann != '':
-        env['CM_DATASET_COCO_MD5SUM_ANN'] = md5sum_ann
+        env['MLC_DATASET_COCO_MD5SUM_ANN'] = md5sum_ann
 
     if not detected:
         print('')
@@ -160,25 +160,25 @@ def postprocess(i):
 
     env = i['env']
 
-    tp_ver = env['CM_DATASET_COCO_TYPE_AND_VERSION']
+    tp_ver = env['MLC_DATASET_COCO_TYPE_AND_VERSION']
 
-    path_to = env.get('CM_TO', '')
+    path_to = env.get('MLC_TO', '')
 
     # Check if detected or downloaded
-    if env.get('CM_DATASET_COCO_DETECTED',
+    if env.get('MLC_DATASET_COCO_DETECTED',
                '').lower() == 'yes' or path_to != '':
-        path_all = env['CM_DATASET_COCO_PATH'] if path_to == '' else path_to
+        path_all = env['MLC_DATASET_COCO_PATH'] if path_to == '' else path_to
 
-        env['CM_DATASET_COCO_DATA_PATH'] = os.path.join(path_all, tp_ver)
-        env['CM_DATASET_COCO_ANNOTATIONS_PATH'] = os.path.join(
+        env['MLC_DATASET_COCO_DATA_PATH'] = os.path.join(path_all, tp_ver)
+        env['MLC_DATASET_COCO_ANNOTATIONS_PATH'] = os.path.join(
             path_all, 'annotations')
     else:
         path_all = os.getcwd()
 
         # Moving 2 directories to 1 place
 
-        path_data = env['CM_DATASET_COCO_DATA_PATH']
-        path_ann = env['CM_DATASET_COCO_ANNOTATIONS_PATH']
+        path_data = env['MLC_DATASET_COCO_DATA_PATH']
+        path_ann = env['MLC_DATASET_COCO_ANNOTATIONS_PATH']
 
         print('')
         print(path_all)
@@ -192,8 +192,8 @@ def postprocess(i):
             command1 = '  move /y ' + path_data_full + ' ' + tp_ver
             command2 = '  move /y ' + path_ann_full + ' annotations'
 
-            env['CM_DATASET_COCO_DATA_PATH'] = os.path.join(path_all, tp_ver)
-            env['CM_DATASET_COCO_ANNOTATIONS_PATH'] = os.path.join(
+            env['MLC_DATASET_COCO_DATA_PATH'] = os.path.join(path_all, tp_ver)
+            env['MLC_DATASET_COCO_ANNOTATIONS_PATH'] = os.path.join(
                 path_all, 'annotations')
         else:
             # Make soft links from data and annotations into 1 directory
@@ -206,8 +206,8 @@ def postprocess(i):
             print(command)
             os.system(command)
 
-    env['CM_DATASET_COCO_PATH'] = path_all
-    env['CM_DATASET_PATH'] = path_all
-    env['CM_DATASET_PATH_ROOT'] = path_all
+    env['MLC_DATASET_COCO_PATH'] = path_all
+    env['MLC_DATASET_PATH'] = path_all
+    env['MLC_DATASET_PATH_ROOT'] = path_all
 
     return {'return': 0}

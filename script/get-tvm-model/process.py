@@ -2,7 +2,7 @@ import os
 import tempfile
 from typing import Dict, Tuple, Optional, List, Any, Union
 
-if os.environ.get("CM_TVM_FRONTEND_FRAMEWORK", None) == "pytorch":
+if os.environ.get("MLC_TVM_FRONTEND_FRAMEWORK", None) == "pytorch":
     import torch
     import torchvision
 
@@ -200,7 +200,7 @@ def serialize_vm(
 
 
 def main() -> None:
-    model_path = os.environ.get('CM_ML_MODEL_FILE_WITH_PATH', None)
+    model_path = os.environ.get('MLC_ML_MODEL_FILE_WITH_PATH', None)
     compiled_model = os.path.join(os.getcwd(), 'model-tvm.so')
     print('TVM model: ' + model_path)
     if model_path.endswith('.so') or model_path.endswith('.dylib'):
@@ -212,35 +212,35 @@ def main() -> None:
             )
     else:
         mod, params = get_mod_params(
-            model_path=os.environ.get('CM_ML_MODEL_FILE_WITH_PATH', None),
-            model_name=os.environ.get('CM_ML_MODEL', '').strip().lower(),
-            batch_size=int(os.environ.get('CM_ML_MODEL_MAX_BATCH_SIZE', 1)),
-            frontend=os.environ.get("CM_TVM_FRONTEND_FRAMEWORK", None),
-            input_shapes_str=os.environ.get('CM_ML_MODEL_INPUT_SHAPES', None),
+            model_path=os.environ.get('MLC_ML_MODEL_FILE_WITH_PATH', None),
+            model_name=os.environ.get('MLC_ML_MODEL', '').strip().lower(),
+            batch_size=int(os.environ.get('MLC_ML_MODEL_MAX_BATCH_SIZE', 1)),
+            frontend=os.environ.get("MLC_TVM_FRONTEND_FRAMEWORK", None),
+            input_shapes_str=os.environ.get('MLC_ML_MODEL_INPUT_SHAPES', None),
             input_layer_name=os.environ.get(
-                'CM_ML_MODEL_INPUT_LAYER_NAME', None),
+                'MLC_ML_MODEL_INPUT_LAYER_NAME', None),
             num_channels=int(
                 os.environ.get(
-                    'CM_ML_MODEL_IMAGE_NUM_CHANNELS',
+                    'MLC_ML_MODEL_IMAGE_NUM_CHANNELS',
                     3)),
-            image_width=int(os.environ.get('CM_ML_MODEL_IMAGE_WIDTH', 0)),
-            image_height=int(os.environ.get('CM_ML_MODEL_IMAGE_HEIGHT', 0)),
+            image_width=int(os.environ.get('MLC_ML_MODEL_IMAGE_WIDTH', 0)),
+            image_height=int(os.environ.get('MLC_ML_MODEL_IMAGE_HEIGHT', 0)),
             max_seq_length=int(
                 os.environ.get(
-                    'CM_ML_MODEL_MAX_SEQ_LENGTH', 0)),
+                    'MLC_ML_MODEL_MAX_SEQ_LENGTH', 0)),
         )
-        opt_level = int(os.environ.get('CM_MLPERF_TVM_OPT_LEVEL', 3))
+        opt_level = int(os.environ.get('MLC_MLPERF_TVM_OPT_LEVEL', 3))
         target = os.environ.get(
-            'CM_MLPERF_TVM_TARGET',
-            f"llvm -num-cores {os.environ.get('CM_HOST_CPU_TOTAL_CORES', '1')}"
+            'MLC_MLPERF_TVM_TARGET',
+            f"llvm -num-cores {os.environ.get('MLC_HOST_CPU_TOTAL_CORES', '1')}"
         )
         build_conf = {}
         target_host = None
         tvm_target = tvm.target.Target(target, host=target_host)
-        tune_model_flag = os.environ.get('CM_TUNE_TVM_MODEL', 'no') == 'yes'
+        tune_model_flag = os.environ.get('MLC_TUNE_TVM_MODEL', 'no') == 'yes'
         work_dir = ''
         database = None
-        use_vm = os.environ.get('CM_TVM_USE_VM', 'no') == 'yes'
+        use_vm = os.environ.get('MLC_TVM_USE_VM', 'no') == 'yes'
         if tune_model_flag:
             work_dir, database = tune_model(
                 mod=mod,
@@ -251,7 +251,7 @@ def main() -> None:
             mod=mod,
             params=params,
             work_dir=work_dir if work_dir != '' else os.environ.get(
-                'CM_TUNE_TVM_MODEL_WORKDIR', ''),
+                'MLC_TUNE_TVM_MODEL_WORKDIR', ''),
             target=tvm_target,
             opt_level=opt_level,
             build_conf=build_conf,

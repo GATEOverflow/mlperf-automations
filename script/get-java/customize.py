@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -21,9 +21,9 @@ def preprocess(i):
     meta = i['meta']
 
     found = False
-    install = env.get('CM_JAVA_PREBUILT_INSTALL', '') in ['on', 'True', True]
+    install = env.get('MLC_JAVA_PREBUILT_INSTALL', '') in ['on', 'True', True]
 
-    env_path_key = 'CM_JAVA_BIN_WITH_PATH'
+    env_path_key = 'MLC_JAVA_BIN_WITH_PATH'
 
     # If not force install, search for artifact
     if not install:
@@ -45,27 +45,27 @@ def preprocess(i):
     if not found or install:
 
         if os_info['platform'] == 'windows':
-            env['CM_JAVA_PREBUILT_HOST_OS'] = 'windows'
-            env['CM_JAVA_PREBUILT_EXT'] = '.zip'
+            env['MLC_JAVA_PREBUILT_HOST_OS'] = 'windows'
+            env['MLC_JAVA_PREBUILT_EXT'] = '.zip'
         else:
-            env['CM_JAVA_PREBUILT_HOST_OS'] = 'linux'
-            env['CM_JAVA_PREBUILT_EXT'] = '.tar.gz'
+            env['MLC_JAVA_PREBUILT_HOST_OS'] = 'linux'
+            env['MLC_JAVA_PREBUILT_EXT'] = '.tar.gz'
 
-        url = env['CM_JAVA_PREBUILT_URL']
-        filename = env['CM_JAVA_PREBUILT_FILENAME']
+        url = env['MLC_JAVA_PREBUILT_URL']
+        filename = env['MLC_JAVA_PREBUILT_FILENAME']
 
-        java_prebuilt_version = env['CM_JAVA_PREBUILT_VERSION']
-        java_prebuilt_build = env['CM_JAVA_PREBUILT_BUILD']
+        java_prebuilt_version = env['MLC_JAVA_PREBUILT_VERSION']
+        java_prebuilt_build = env['MLC_JAVA_PREBUILT_BUILD']
 
-        for key in ['CM_JAVA_PREBUILT_VERSION',
-                    'CM_JAVA_PREBUILT_BUILD',
-                    'CM_JAVA_PREBUILT_HOST_OS',
-                    'CM_JAVA_PREBUILT_EXT']:
+        for key in ['MLC_JAVA_PREBUILT_VERSION',
+                    'MLC_JAVA_PREBUILT_BUILD',
+                    'MLC_JAVA_PREBUILT_HOST_OS',
+                    'MLC_JAVA_PREBUILT_EXT']:
             url = url.replace('${' + key + '}', env[key])
             filename = filename.replace('${' + key + '}', env[key])
 
-        env['CM_JAVA_PREBUILT_URL'] = url
-        env['CM_JAVA_PREBUILT_FILENAME'] = filename
+        env['MLC_JAVA_PREBUILT_URL'] = url
+        env['MLC_JAVA_PREBUILT_FILENAME'] = filename
 
         print('')
         print(
@@ -118,7 +118,7 @@ def detect_version(i):
 
     r = i['automation'].parse_version({'match_text': r'\s*"(.*?)"',
                                        'group_number': 1,
-                                       'env_key': 'CM_JAVA_VERSION',
+                                       'env_key': 'MLC_JAVA_VERSION',
                                        'which_env': i['env'],
                                        'debug': True})
     if r['return'] > 0:
@@ -138,13 +138,13 @@ def postprocess(i):
     if r['return'] > 0:
         return r
 
-    version = env['CM_JAVA_VERSION']
-    env['CM_JAVA_CACHE_TAGS'] = 'version-' + version
+    version = env['MLC_JAVA_VERSION']
+    env['MLC_JAVA_CACHE_TAGS'] = 'version-' + version
 
-    found_file_path = env['CM_JAVA_BIN_WITH_PATH']
+    found_file_path = env['MLC_JAVA_BIN_WITH_PATH']
     file_name = os.path.basename(found_file_path)
 
-    env['CM_JAVA_BIN'] = file_name
+    env['MLC_JAVA_BIN'] = file_name
 
     found_path = os.path.dirname(found_file_path)
     java_home_path = os.path.dirname(found_path)

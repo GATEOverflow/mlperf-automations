@@ -19,7 +19,7 @@ sorted_image_data = sorted(
     data['images'],
     key=lambda x: x['num_boxes'],
     reverse=os.environ.get(
-        'CM_CALIBRATION_FILTER_ORDER_BY_NUM_BOXES_ASC',
+        'MLC_CALIBRATION_FILTER_ORDER_BY_NUM_BOXES_ASC',
         '') == "yes")
 for image in data['images']:
     print(image['file_name'])

@@ -1,5 +1,4 @@
-from cmind import utils
-import cmind as cm
+from mlc import utils
 import os
 import configparser
 
@@ -12,11 +11,11 @@ def preprocess(i):
     # Initialize ConfigParser
     config = configparser.ConfigParser()
 
-    if env.get('CM_MLPERF_POWER_SERVER_CONF_FILE', '') != '':
-        server_config_file = env['CM_MLPERF_POWER_SERVER_CONF_FILE']
+    if env.get('MLC_MLPERF_POWER_SERVER_CONF_FILE', '') != '':
+        server_config_file = env['MLC_MLPERF_POWER_SERVER_CONF_FILE']
     else:
         server_config_file = os.path.join(
-            env.get('CM_MLPERF_POWER_SOURCE', ''),
+            env.get('MLC_MLPERF_POWER_SOURCE', ''),
             'ptd_client_server',
             'server.template.conf'
         )
@@ -29,23 +28,23 @@ def preprocess(i):
     config.read(server_config_file)
     # Update the server section
     try:
-        config['server']['ntpServer'] = env['CM_MLPERF_POWER_NTP_SERVER']
-        config['server']['listen'] = f"{env['CM_MLPERF_POWER_SERVER_ADDRESS']} {env['CM_MLPERF_POWER_SERVER_PORT']}"
+        config['server']['ntpServer'] = env['MLC_MLPERF_POWER_NTP_SERVER']
+        config['server']['listen'] = f"{env['MLC_MLPERF_POWER_SERVER_ADDRESS']} {env['MLC_MLPERF_POWER_SERVER_PORT']}"
     except KeyError as e:
         raise KeyError(f"Missing required environment variable: {e}")
 
     # Define number of analyzers and network port start
-    num_analyzers = int(env.get('CM_MLPERF_POWER_NUM_ANALYZERS', 1))
+    num_analyzers = int(env.get('MLC_MLPERF_POWER_NUM_ANALYZERS', 1))
     network_port_start = int(
         env.get(
-            'CM_MLPERF_POWER_NETWORK_PORT_START',
+            'MLC_MLPERF_POWER_NETWORK_PORT_START',
             8888))
 
     # Ensure 'ptd' section exists
     if 'ptd' not in config:
         config.add_section('ptd')
 
-    config['ptd']['ptd'] = str(env.get('CM_MLPERF_PTD_PATH', ''))
+    config['ptd']['ptd'] = str(env.get('MLC_MLPERF_PTD_PATH', ''))
     config['ptd']['analyzercount'] = str(num_analyzers)
 
     # Add analyzers to the configuration
@@ -56,11 +55,11 @@ def preprocess(i):
 
             # Add the analyzer subsection as keys under the 'ptd' section
             config[f'{analyzer_section}']['interfaceFlag'] = str(
-                env.get('CM_MLPERF_POWER_INTERFACE_FLAG', ''))
+                env.get('MLC_MLPERF_POWER_INTERFACE_FLAG', ''))
             config[f'{analyzer_section}']['deviceType'] = str(
-                env.get('CM_MLPERF_POWER_DEVICE_TYPE', ''))
+                env.get('MLC_MLPERF_POWER_DEVICE_TYPE', ''))
             config[f'{analyzer_section}']['devicePort'] = str(
-                env.get('CM_MLPERF_POWER_DEVICE_PORT', ''))
+                env.get('MLC_MLPERF_POWER_DEVICE_PORT', ''))
             config[f'{analyzer_section}']['networkPort'] = str(
                 network_port_start + aid - 1)
 
@@ -69,16 +68,16 @@ def preprocess(i):
 
     print({section: dict(config[section]) for section in config.sections()})
 
-    if env['CM_HOST_OS_TYPE'] == "windows":
+    if env['MLC_HOST_OS_TYPE'] == "windows":
         cmd_prefix = ""
     else:
         cmd_prefix = "sudo "
 
-    cmd = env['CM_PYTHON_BIN_WITH_PATH'] + ' ' + os.path.join(
-        env['CM_MLPERF_POWER_SOURCE'],
+    cmd = env['MLC_PYTHON_BIN_WITH_PATH'] + ' ' + os.path.join(
+        env['MLC_MLPERF_POWER_SOURCE'],
         'ptd_client_server',
         'server.py') + ' -c tmp-power-server.conf'
-    if env.get('CM_MLPERF_POWER_SERVER_USE_SCREEN', 'no') == 'yes':
+    if env.get('MLC_MLPERF_POWER_SERVER_USE_SCREEN', 'no') == 'yes':
         cmd = cmd_prefix + ' screen -d -m ' + cmd + ' '
     else:
         cmd = cmd_prefix + cmd

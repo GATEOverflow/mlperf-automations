@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import subprocess
 
@@ -7,7 +7,7 @@ def preprocess(i):
 
     env = i['env']
 
-    if str(env.get('CM_DETECT_USING_PYCUDA', '')
+    if str(env.get('MLC_DETECT_USING_PYCUDA', '')
            ).lower() in ["1", "yes", "true"]:
         i['run_script_input']['script_name'] = 'detect'
 
@@ -54,13 +54,13 @@ def postprocess(i):
             gpu[gpu_id][key] = val
             p[key] = val
 
-            key_env = 'CM_CUDA_DEVICE_PROP_' + key.upper().replace(' ', '_')
+            key_env = 'MLC_CUDA_DEVICE_PROP_' + key.upper().replace(' ', '_')
             env[key_env] = val
 
-    state['cm_cuda_num_devices'] = gpu_id + 1
-    env['CM_CUDA_NUM_DEVICES'] = gpu_id + 1
+    state['mlc_cuda_num_devices'] = gpu_id + 1
+    env['MLC_CUDA_NUM_DEVICES'] = gpu_id + 1
 
-    state['cm_cuda_device_prop'] = p
-    state['cm_cuda_devices_prop'] = gpu
+    state['mlc_cuda_device_prop'] = p
+    state['mlc_cuda_devices_prop'] = gpu
 
     return {'return': 0}

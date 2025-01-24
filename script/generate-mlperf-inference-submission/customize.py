@@ -1,8 +1,8 @@
-from cmind import utils
+from mlc import utils
 import os
 import json
 import shutil
-import cmind
+import mlc
 import sys
 from tabulate import tabulate
 import mlperf_utils
@@ -60,39 +60,39 @@ def generate_submission(env, state, inp, submission_division):
     # Save current user directory
     cur_dir = os.getcwd()
 
-    if env.get('CM_MLPERF_INFERENCE_RESULTS_DIR_', '') == '':
+    if env.get('MLC_MLPERF_INFERENCE_RESULTS_DIR_', '') == '':
         results_dir = os.path.join(
-            env['CM_MLPERF_INFERENCE_RESULTS_DIR'],
-            f"{env['CM_MLPERF_RUN_STYLE']}_results")
+            env['MLC_MLPERF_INFERENCE_RESULTS_DIR'],
+            f"{env['MLC_MLPERF_RUN_STYLE']}_results")
     else:
-        results_dir = env['CM_MLPERF_INFERENCE_RESULTS_DIR_']
+        results_dir = env['MLC_MLPERF_INFERENCE_RESULTS_DIR_']
 
-    mlperf_path = env['CM_MLPERF_INFERENCE_SOURCE']
+    mlperf_path = env['MLC_MLPERF_INFERENCE_SOURCE']
     submission_checker_dir = os.path.join(mlperf_path, "tools", "submission")
     sys.path.append(submission_checker_dir)
 
-    if env.get('CM_MLPERF_INFERENCE_SUBMISSION_DIR', '') == '':
+    if env.get('MLC_MLPERF_INFERENCE_SUBMISSION_DIR', '') == '':
         from pathlib import Path
         user_home = str(Path.home())
-        env['CM_MLPERF_INFERENCE_SUBMISSION_DIR'] = os.path.join(
+        env['MLC_MLPERF_INFERENCE_SUBMISSION_DIR'] = os.path.join(
             user_home, "mlperf_submission")
 
-    submission_dir = env.get('CM_MLPERF_INFERENCE_SUBMISSION_DIR', '')
+    submission_dir = env.get('MLC_MLPERF_INFERENCE_SUBMISSION_DIR', '')
     if submission_dir == '':
         submission_base_dir = env.get(
-            'CM_MLPERF_INFERENCE_SUBMISSION_BASE_DIR', '')
+            'MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR', '')
         if submission_base_dir == '':
-            return {'return': 1, 'error': f"Both CM_MLPERF_INFERENCE_SUBMISSION_DIR and CM_MLPERF_INFERENCE_SUBMISSION_BASE_DIR can not be empty!"}
+            return {'return': 1, 'error': f"Both MLC_MLPERF_INFERENCE_SUBMISSION_DIR and MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR can not be empty!"}
         else:
             submission_dir = os.path.join(
                 submission_base_dir, "mlperf_inference_submission")
-            env['CM_MLPERF_INFERENCE_SUBMISSION_DIR'] = submission_dir
+            env['MLC_MLPERF_INFERENCE_SUBMISSION_DIR'] = submission_dir
 
-    if env.get('CM_MLPERF_CLEAN_SUBMISSION_DIR', '') != '':
+    if env.get('MLC_MLPERF_CLEAN_SUBMISSION_DIR', '') != '':
         print('=================================================')
         print(
             'Cleaning {} ...'.format(
-                env['CM_MLPERF_INFERENCE_SUBMISSION_DIR']))
+                env['MLC_MLPERF_INFERENCE_SUBMISSION_DIR']))
         if os.path.exists(submission_dir):
             shutil.rmtree(submission_dir)
         print('=================================================')
@@ -100,7 +100,7 @@ def generate_submission(env, state, inp, submission_division):
     if not os.path.isdir(submission_dir):
         os.makedirs(submission_dir)
 
-    if str(env.get('CM_MLPERF_SUBMISSION_DIR_SHARED', '')
+    if str(env.get('MLC_MLPERF_SUBMISSION_DIR_SHARED', '')
            ).lower() in ["yes", "true", "1"]:
         os.chmod(submission_dir, 0o2775)
 
@@ -112,15 +112,15 @@ def generate_submission(env, state, inp, submission_division):
                 results_dir,
                 f))]
 
-    system_meta_default = state['CM_SUT_META']
+    system_meta_default = state['MLC_SUT_META']
 
     # set pytorch as the default framework
     if system_meta_default['framework'] == '':
         system_meta_default['framework'] = "pytorch"
 
     system_meta_tmp = {}
-    if 'CM_MLPERF_SUBMISSION_SYSTEM_TYPE' in env:
-        system_meta_tmp['system_type'] = env['CM_MLPERF_SUBMISSION_SYSTEM_TYPE']
+    if 'MLC_MLPERF_SUBMISSION_SYSTEM_TYPE' in env:
+        system_meta_tmp['system_type'] = env['MLC_MLPERF_SUBMISSION_SYSTEM_TYPE']
 
     if submission_division != "":
         system_meta_tmp['division'] = submission_division
@@ -128,13 +128,13 @@ def generate_submission(env, state, inp, submission_division):
     else:
         division = system_meta_default['division']
 
-    if 'CM_MLPERF_SUBMISSION_CATEGORY' in env:
-        system_meta_tmp['system_type'] = env['CM_MLPERF_SUBMISSION_CATEGORY'].replace(
+    if 'MLC_MLPERF_SUBMISSION_CATEGORY' in env:
+        system_meta_tmp['system_type'] = env['MLC_MLPERF_SUBMISSION_CATEGORY'].replace(
             "-", ",")
 
     duplicate = (
         env.get(
-            'CM_MLPERF_DUPLICATE_SCENARIO_RESULTS',
+            'MLC_MLPERF_DUPLICATE_SCENARIO_RESULTS',
             'no') in [
             "yes",
             "True"])
@@ -150,25 +150,25 @@ def generate_submission(env, state, inp, submission_division):
         os.makedirs(path_submission_division)
 
     # Check submitter
-    if env.get('CM_MLPERF_SUBMITTER'):
-        submitter = env['CM_MLPERF_SUBMITTER']
+    if env.get('MLC_MLPERF_SUBMITTER'):
+        submitter = env['MLC_MLPERF_SUBMITTER']
         system_meta_tmp['submitter'] = submitter
     else:
         submitter = system_meta_default['submitter']
-        env['CM_MLPERF_SUBMITTER'] = submitter
+        env['MLC_MLPERF_SUBMITTER'] = submitter
 
     print('* MLPerf inference submitter: {}'.format(submitter))
 
-    if env.get('CM_MLPERF_SUT_SW_NOTES_EXTRA', '') != '':
+    if env.get('MLC_MLPERF_SUT_SW_NOTES_EXTRA', '') != '':
         sw_notes = f"""{
             system_meta_tmp['sw_notes']} {
-            env['CM_MLPERF_SUT_SW_NOTES_EXTRA']}"""
+            env['MLC_MLPERF_SUT_SW_NOTES_EXTRA']}"""
         system_meta_tmp['sw_notes'] = sw_notes
 
-    if env.get('CM_MLPERF_SUT_HW_NOTES_EXTRA', '') != '':
+    if env.get('MLC_MLPERF_SUT_HW_NOTES_EXTRA', '') != '':
         hw_notes = f"""{
             system_meta_tmp['hw_notes']} {
-            env['CM_MLPERF_SUT_HW_NOTES_EXTRA']}"""
+            env['MLC_MLPERF_SUT_HW_NOTES_EXTRA']}"""
         system_meta_tmp['hw_notes'] = hw_notes
 
     path_submission = os.path.join(path_submission_division, submitter)
@@ -176,7 +176,7 @@ def generate_submission(env, state, inp, submission_division):
         os.makedirs(path_submission)
 
     # SUT base
-    system = env.get('CM_HW_NAME', 'default').replace(' ', '_')
+    system = env.get('MLC_HW_NAME', 'default').replace(' ', '_')
 
     code_path = os.path.join(path_submission, "code")
 
@@ -203,19 +203,19 @@ def generate_submission(env, state, inp, submission_division):
         # check whether the root folder contains the sut infos
         # if yes then there is no need to check for meta files inside
         # individual model folders
-        if "cm-sut-info.json" in os.listdir(result_path):
+        if "mlc-sut-info.json" in os.listdir(result_path):
             sut_info = fill_from_json(
                 os.path.join(
                     result_path,
-                    "cm-sut-info.json"),
+                    "mlc-sut-info.json"),
                 sut_info.keys(),
                 sut_info)
             if sut_info == -1:
                 return {
-                    'return': 1, 'error': f"key value mismatch. Refer the populating dictionary:\n{sut_info}\n and file {os.path.join(result_path, 'cm-sut-info.json')}"}
+                    'return': 1, 'error': f"key value mismatch. Refer the populating dictionary:\n{sut_info}\n and file {os.path.join(result_path, 'mlc-sut-info.json')}"}
             if check_dict_filled(sut_info.keys(), sut_info):
                 print(
-                    f"sut info completely filled from {os.path.join(result_path, 'cm-sut-info.json')}!")
+                    f"sut info completely filled from {os.path.join(result_path, 'mlc-sut-info.json')}!")
 
         # Check whether the root folder contains the model mapping file
         # expects json file in the format:
@@ -237,7 +237,7 @@ def generate_submission(env, state, inp, submission_division):
         if division == "open" and len(model_mapping_combined) == 0:
             for model in models:
                 is_valid, returned_model_name = model_in_valid_models(
-                    model, env.get('CM_MLPERF_LAST_RELEASE', 'v4.1'))
+                    model, env.get('MLC_MLPERF_LAST_RELEASE', 'v4.1'))
                 if not is_valid:
                     result_model_path = os.path.join(result_path, model)
                     scenarios = [
@@ -276,7 +276,7 @@ def generate_submission(env, state, inp, submission_division):
                             {model: returned_model_name})
 
         if check_dict_filled(sut_info.keys(), sut_info):
-            system = env.get('CM_HW_NAME', sut_info["system_name"])
+            system = env.get('MLC_HW_NAME', sut_info["system_name"])
             implementation = sut_info["implementation"]
             device = sut_info["device"]
             framework = sut_info["framework"].replace(" ", "_")
@@ -431,11 +431,11 @@ def generate_submission(env, state, inp, submission_division):
                                         submission_power_path, f))
 
                             analyzer_settings_file = env.get(
-                                'CM_MLPERF_POWER_ANALYZER_SETTINGS_FILE_PATH', os.path.join(
-                                    env['CM_TMP_CURRENT_SCRIPT_PATH'], "default_files", "analyzer_table.md"))
+                                'MLC_MLPERF_POWER_ANALYZER_SETTINGS_FILE_PATH', os.path.join(
+                                    env['MLC_TMP_CURRENT_SCRIPT_PATH'], "default_files", "analyzer_table.md"))
                             power_settings_file = env.get(
-                                'CM_MLPERF_POWER_SETTINGS_FILE_PATH', os.path.join(
-                                    env['CM_TMP_CURRENT_SCRIPT_PATH'], "default_files", "power_settings.md"))
+                                'MLC_MLPERF_POWER_SETTINGS_FILE_PATH', os.path.join(
+                                    env['MLC_TMP_CURRENT_SCRIPT_PATH'], "default_files", "power_settings.md"))
 
                             shutil.copy(
                                 analyzer_settings_file, os.path.join(
@@ -597,7 +597,7 @@ def generate_submission(env, state, inp, submission_division):
                                 files.append(f)
                             elif f == "spl.txt":
                                 files.append(f)
-                            elif f in ["README.md", "README-extra.md", "cm-version-info.json", "os_info.json", "cpu_info.json", "pip_freeze.json", "system_info.txt", "cm-deps.png", "cm-deps.mmd"] and mode == "performance":
+                            elif f in ["README.md", "README-extra.md", "mlc-version-info.json", "os_info.json", "cpu_info.json", "pip_freeze.json", "system_info.txt", "mlc-deps.png", "mlc-deps.mmd"] and mode == "performance":
                                 shutil.copy(
                                     os.path.join(
                                         result_mode_path, f), os.path.join(
@@ -651,7 +651,7 @@ def generate_submission(env, state, inp, submission_division):
 
                 readme_suffix = ""
                 result_string, result = mlperf_utils.get_result_string(
-                    env['CM_MLPERF_LAST_RELEASE'], model, scenario, result_scenario_path, power_run, sub_res, division, system_file, model_precision, env.get('CM_MLPERF_INFERENCE_SOURCE_VERSION'))
+                    env['MLC_MLPERF_LAST_RELEASE'], model, scenario, result_scenario_path, power_run, sub_res, division, system_file, model_precision, env.get('MLC_MLPERF_INFERENCE_SOURCE_VERSION'))
 
                 for key in result:
                     results[model][scenario][key] = result[key]
@@ -693,14 +693,14 @@ def generate_submission(env, state, inp, submission_division):
                     measurement_path,
                     "system_info.txt"))
         else:
-            if env.get('CM_GET_PLATFORM_DETAILS', '') == "yes":
-                cm_input = {'action': 'run',
-                            'automation': 'script',
-                            'tags': 'get,platform,details',
-                            'env': {'CM_PLATFORM_DETAILS_FILE_PATH': os.path.join(measurement_path, "system_info.txt")},
-                            'quiet': True
-                            }
-                r = cmind.access(cm_input)
+            if env.get('MLC_GET_PLATFORM_DETAILS', '') == "yes":
+                mlc_input = {'action': 'run',
+                             'automation': 'script',
+                             'tags': 'get,platform,details',
+                             'env': {'MLC_PLATFORM_DETAILS_FILE_PATH': os.path.join(measurement_path, "system_info.txt")},
+                             'quiet': True
+                             }
+                r = mlc.access(mlc_input)
                 if r['return'] > 0:
                     return r
 
@@ -725,15 +725,15 @@ def postprocess(i):
 
     submission_divisions = []
 
-    if env.get('CM_MLPERF_SUBMISSION_DIVISION', '') in [
+    if env.get('MLC_MLPERF_SUBMISSION_DIVISION', '') in [
             "open-closed", "closed-open"]:
         submission_divisions = ["open", "closed"]
-    elif env.get('CM_MLPERF_SUBMISSION_DIVISION', '') != '':
-        submission_divisions.append(env['CM_MLPERF_SUBMISSION_DIVISION'])
+    elif env.get('MLC_MLPERF_SUBMISSION_DIVISION', '') != '':
+        submission_divisions.append(env['MLC_MLPERF_SUBMISSION_DIVISION'])
 
     # if submission division is not assigned, default value would be taken in
     # submission_generation function
-    if env.get('CM_MLPERF_SUBMISSION_DIVISION', '') == '':
+    if env.get('MLC_MLPERF_SUBMISSION_DIVISION', '') == '':
         r = generate_submission(env, state, inp, submission_division="")
         if r['return'] > 0:
             return r

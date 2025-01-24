@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import shutil
 
@@ -27,12 +27,12 @@ def postprocess(i):
     # Saving predictions to JSON file to current directory
     # Should work with "cm docker script" ?
 
-    data = state.get('cm_app_image_classification_onnx_py', {})
+    data = state.get('mlc_app_image_classification_onnx_py', {})
 
-    fjson = 'cm-image-classification-onnx-py.json'
-    fyaml = 'cm-image-classification-onnx-py.yaml'
+    fjson = 'mlc-image-classification-onnx-py.json'
+    fyaml = 'mlc-image-classification-onnx-py.yaml'
 
-    output = env.get('CM_APP_IMAGE_CLASSIFICATION_ONNX_PY_OUTPUT', '')
+    output = env.get('MLC_APP_IMAGE_CLASSIFICATION_ONNX_PY_OUTPUT', '')
     if output != '':
         if not os.path.exists(output):
             os.makedirs(output)
@@ -56,7 +56,7 @@ def postprocess(i):
 
     top_classification = data.get('top_classification', '')
 
-    if env.get('CM_TMP_SILENT', '') != 'yes':
+    if env.get('MLC_TMP_SILENT', '') != 'yes':
         if top_classification != '':
             print('')
             x = 'Top classification: {}'.format(top_classification)

@@ -55,14 +55,14 @@ G_OPENIMAGE_CALSET_PATH = "build/data/open-images-v6-mlperf/calibration/train/da
 G_OPENIMAGE_CALMAP_PATH = "data_maps/open-images-v6-mlperf/cal_map.txt"
 G_OPENIMAGE_VALSET_PATH = os.path.join(
     os.environ.get(
-        "CM_DATASET_PATH",
+        "MLC_DATASET_PATH",
         "build/data/open-images-v6-mlperf"),
     "validation",
     "data")
 G_OPENIMAGE_VALMAP_PATH = "data_maps/open-images-v6-mlperf/val_map.txt"
 G_OPENIMAGE_ANNO_PATH = os.path.join(
     os.environ.get(
-        "CM_DATASET_PATH",
+        "MLC_DATASET_PATH",
         "build/data/open-images-v6-mlperf"),
     "annotations",
     "openimages-mlperf.json")

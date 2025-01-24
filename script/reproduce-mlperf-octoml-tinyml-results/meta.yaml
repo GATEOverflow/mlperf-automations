@@ -1,0 +1,81 @@
+alias: reproduce-mlperf-octoml-tinyml-results
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: true
+category: Reproduce MLPerf benchmarks
+default_version: r1.0
+deps:
+- tags: detect,os
+- tags: detect,cpu
+- tags: get,sys-utils-cm
+- names:
+  - python3
+  - python
+  tags: get,python3
+- names:
+  - zephyr
+  tags: get,zephyr
+- names:
+  - zephyr-sdk
+  tags: get,zephyr-sdk
+- names:
+  - cmsis
+  tags: get,cmsis
+- names:
+  - microtvm
+  tags: get,microtvm
+- names:
+  - cmake
+  tags: get,cmake
+  version_min: 3.20.0
+- tags: get,gcc
+input_mapping:
+  flash: MLC_FLASH_BOARD
+  recreate_binary: MLC_RECREATE_BINARY
+local_env_keys:
+- MLC_*
+new_env_keys:
+- MLC_TINY_*
+post_deps:
+- enable_if_env:
+    MLC_FLASH_BOARD:
+    - 'True'
+  tags: flash,tiny,mlperf
+tags:
+- reproduce
+- tiny
+- results
+- mlperf
+- octoml
+- mlcommons
+uid: a63803a707d04332
+variations:
+  NRF:
+    env:
+      MLC_TINY_BOARD: NRF5340DK
+  NUCLEO:
+    env:
+      MLC_TINY_BOARD: NUCLEO_L4R5ZI
+  ad:
+    env:
+      MLC_TINY_MODEL: ad
+  cmsis_nn:
+    env:
+      MLC_MICROTVM_VARIANT: microtvm_cmsis_nn
+  ic:
+    env:
+      MLC_TINY_MODEL: ic
+  kws:
+    env:
+      MLC_TINY_MODEL: kws
+  native:
+    env:
+      MLC_MICROTVM_VARIANT: microtvm_native
+  vww:
+    env:
+      MLC_TINY_MODEL: vww
+versions:
+  r1.0:
+    add_deps_recursive:
+      microtvm:
+        version: main

@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -13,7 +13,7 @@ def preprocess(i):
 
     run_cmd = "python setup.py install"
 
-    env['CM_RUN_CMD'] = run_cmd
+    env['MLC_RUN_CMD'] = run_cmd
 
     automation = i['automation']
 

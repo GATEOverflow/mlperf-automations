@@ -24,11 +24,11 @@ deps:
 
 
 input_mapping:
-  var1: CM_VAR1
+  var1: MLC_VAR1
   req: PIP_REQUIREMENTS
 
 default_env:
-  CM_VAR1: 'something'
+  MLC_VAR1: 'something'
 
 variations:
   req:

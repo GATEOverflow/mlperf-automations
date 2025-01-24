@@ -1,0 +1,38 @@
+name: MLC tutorial tvm
+
+on:
+  pull_request:
+    branches: [ "main", "dev" ]
+    paths:
+      - '.github/workflows/test-mlc-tutorial-tvm.yml'
+      - '**'
+      - '!**.md'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9"]
+        extra-options: [ "", " --adr.tvm.tags=_pip-install", " --adr.tvm.tags=_pip-install --adr.tvm-model.tags=_graph-executor"]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip install mlcflow
+    - name: Pull MLOps repository
+      run: |
+        mlc pull repo ${{ github.event.pull_request.head.repo.html_url }} --branch=${{ github.event.pull_request.head.ref }}
+        mlcr --quiet --tags=get,sys-utils-cm
+    - name: Test MLC Tutorial TVM
+      run: |
+        mlcr --tags=run-mlperf,inference,_submission,_short --adr.python.name=mlperf --adr.python.version_min=3.8 --submitter=Community --implementation=python --hw_name=default --model=resnet50 --backend=tvm-onnx --device=cpu --scenario=Offline --mode=accuracy --test_query_count=5 --clean --quiet ${{ matrix.extra-options }}

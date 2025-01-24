@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,17 +12,17 @@ def preprocess(i):
 
     automation = i['automation']
 
-    env['CM_QAIC_SOFTWARE_KIT_PATH'] = env['CM_GIT_CHECKOUT_PATH']
+    env['MLC_QAIC_SOFTWARE_KIT_PATH'] = env['MLC_GIT_CHECKOUT_PATH']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     if env.get('+ CXXFLAGS', []) == []:
         env['+ CXXFLAGS'] = []
     if env.get('+ CFLAGS', []) == []:
         env['+ CFLAGS'] = []
 
-    if env.get('CM_LLVM_CLANG_VERSION', '') != '':
-        clang_version_split = env['CM_LLVM_CLANG_VERSION'].split(".")
+    if env.get('MLC_LLVM_CLANG_VERSION', '') != '':
+        clang_version_split = env['MLC_LLVM_CLANG_VERSION'].split(".")
         clang_major_version = int(clang_version_split[0])
 
         if clang_major_version >= 17:
@@ -53,14 +53,14 @@ def preprocess(i):
 def postprocess(i):
 
     env = i['env']
-    env['CM_QAIC_RUNNER_PATH'] = os.path.join(
-        env['CM_QAIC_SOFTWARE_KIT_PATH'], "build", "utils", "qaic-runner")
+    env['MLC_QAIC_RUNNER_PATH'] = os.path.join(
+        env['MLC_QAIC_SOFTWARE_KIT_PATH'], "build", "utils", "qaic-runner")
 
     if '+PATH' not in env:
         env['+PATH'] = []
 
-    env['+PATH'].append(env['CM_QAIC_RUNNER_PATH'])
-    env['CM_QAIC_RUNNER_PATH'] = os.path.join(
-        env['CM_QAIC_RUNNER_PATH'], "qaic-runner")
+    env['+PATH'].append(env['MLC_QAIC_RUNNER_PATH'])
+    env['MLC_QAIC_RUNNER_PATH'] = os.path.join(
+        env['MLC_QAIC_RUNNER_PATH'], "qaic-runner")
 
     return {'return': 0}

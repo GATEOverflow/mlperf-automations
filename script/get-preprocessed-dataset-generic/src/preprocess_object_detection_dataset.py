@@ -91,41 +91,42 @@ def preprocess_files(selected_filenames, source_dir, destination_dir, square_sid
 
 
 def preprocess():
-    source_directory = os.environ['CM_DATASET_PATH']
-    destination_directory = os.environ['CM_DATASET_PREPROCESSED_PATH']
+    source_directory = os.environ['MLC_DATASET_PATH']
+    destination_directory = os.environ['MLC_DATASET_PREPROCESSED_PATH']
 
     intermediate_data_type = os.environ.get(
-        'CM_DATASET_INTERMEDIATE_DATA_TYPE', np.float32)
-    square_side = int(os.environ['CM_DATASET_INPUT_SQUARE_SIDE'])
-    crop_percentage = float(os.environ['CM_DATASET_CROP_FACTOR'])
-    inter_size = int(os.getenv('CM_DATASET_INTERMEDIATE_SIZE', 0))
-    convert_to_bgr = int(os.getenv('CM_DATASET_CONVERT_TO_BGR', 0))
-    offset = int(os.getenv('CM_DATASET_SUBSET_OFFSET', 0))
-    volume = int(os.environ['CM_DATASET_SIZE'])
-    fof_name = os.getenv('CM_DATASET_SUBSET_FOF', 'files.txt')
-    data_type = os.getenv('CM_DATASET_DATA_TYPE_INPUT', 'float32')
-    input_data_type = os.getenv('CM_DATASET_DATA_TYPE_INPUT', 'float32')
-    data_layout = os.getenv('CM_DATASET_DATA_LAYOUT', '').lower()
-    new_file_extension = os.getenv('CM_DATASET_PREPROCESSED_EXTENSION', '')
-    normalize_data = int(os.getenv('CM_DATASET_NORMALIZE_DATA', '0'))
-    subtract_mean = int(os.getenv('CM_DATASET_SUBTRACT_MEANS', '0'))
-    given_channel_means = os.getenv('CM_DATASET_GIVEN_CHANNEL_MEANS', '')
-    given_channel_stds = os.getenv('CM_DATASET_GIVEN_CHANNEL_STDS', '')
-    quant_scale = float(os.environ['CM_DATASET_QUANT_SCALE'])
-    quant_offset = float(os.environ['CM_DATASET_QUANT_OFFSET'])
-    quantize = int(os.environ['CM_DATASET_QUANTIZE'])  # 1 for quantize to int8
+        'MLC_DATASET_INTERMEDIATE_DATA_TYPE', np.float32)
+    square_side = int(os.environ['MLC_DATASET_INPUT_SQUARE_SIDE'])
+    crop_percentage = float(os.environ['MLC_DATASET_CROP_FACTOR'])
+    inter_size = int(os.getenv('MLC_DATASET_INTERMEDIATE_SIZE', 0))
+    convert_to_bgr = int(os.getenv('MLC_DATASET_CONVERT_TO_BGR', 0))
+    offset = int(os.getenv('MLC_DATASET_SUBSET_OFFSET', 0))
+    volume = int(os.environ['MLC_DATASET_SIZE'])
+    fof_name = os.getenv('MLC_DATASET_SUBSET_FOF', 'files.txt')
+    data_type = os.getenv('MLC_DATASET_DATA_TYPE_INPUT', 'float32')
+    input_data_type = os.getenv('MLC_DATASET_DATA_TYPE_INPUT', 'float32')
+    data_layout = os.getenv('MLC_DATASET_DATA_LAYOUT', '').lower()
+    new_file_extension = os.getenv('MLC_DATASET_PREPROCESSED_EXTENSION', '')
+    normalize_data = int(os.getenv('MLC_DATASET_NORMALIZE_DATA', '0'))
+    subtract_mean = int(os.getenv('MLC_DATASET_SUBTRACT_MEANS', '0'))
+    given_channel_means = os.getenv('MLC_DATASET_GIVEN_CHANNEL_MEANS', '')
+    given_channel_stds = os.getenv('MLC_DATASET_GIVEN_CHANNEL_STDS', '')
+    quant_scale = float(os.environ['MLC_DATASET_QUANT_SCALE'])
+    quant_offset = float(os.environ['MLC_DATASET_QUANT_OFFSET'])
+    # 1 for quantize to int8
+    quantize = int(os.environ['MLC_DATASET_QUANTIZE'])
     convert_to_unsigned = int(
-        os.environ['CM_DATASET_CONVERT_TO_UNSIGNED'])  # 1 for int8 to uint8
+        os.environ['MLC_DATASET_CONVERT_TO_UNSIGNED'])  # 1 for int8 to uint8
 
-    images_list = os.getenv('CM_DATASET_IMAGES_LIST')
-    interpolation_method = os.getenv('CM_DATASET_INTERPOLATION_METHOD', '')
+    images_list = os.getenv('MLC_DATASET_IMAGES_LIST')
+    interpolation_method = os.getenv('MLC_DATASET_INTERPOLATION_METHOD', '')
 
-    annotations_filepath = os.environ['CM_DATASET_ANNOTATIONS_FILE_PATH']
-    is_calibration = os.environ['CM_DATASET_TYPE'] == "calibration"
-    image_file = os.getenv('CM_IMAGE_FILE', '')
+    annotations_filepath = os.environ['MLC_DATASET_ANNOTATIONS_FILE_PATH']
+    is_calibration = os.environ['MLC_DATASET_TYPE'] == "calibration"
+    image_file = os.getenv('MLC_IMAGE_FILE', '')
 
-    normalize_lower = float(os.getenv('CM_DATASET_NORMALIZE_LOWER', -1.0))
-    normalize_upper = float(os.getenv('CM_DATASET_NORMALIZE_UPPER', 1.0))
+    normalize_lower = float(os.getenv('MLC_DATASET_NORMALIZE_LOWER', -1.0))
+    normalize_upper = float(os.getenv('MLC_DATASET_NORMALIZE_UPPER', 1.0))
 
     if given_channel_means:
         given_channel_means = np.fromstring(
@@ -135,7 +136,7 @@ def preprocess():
         if convert_to_bgr:
             given_channel_means = given_channel_means[::-1]
 
-    given_channel_stds = os.getenv('CM_DATASET_GIVEN_CHANNEL_STDS', '')
+    given_channel_stds = os.getenv('MLC_DATASET_GIVEN_CHANNEL_STDS', '')
     if given_channel_stds:
         given_channel_stds = np.fromstring(
             given_channel_stds,

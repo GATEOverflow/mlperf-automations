@@ -19,9 +19,9 @@ from imagenet_helper import (
 
 # Writing the results out:
 #
-RESULTS_DIR = os.getenv('CM_RESULTS_DIR')
+RESULTS_DIR = os.getenv('MLC_RESULTS_DIR')
 FULL_REPORT = os.getenv(
-    'CM_SILENT_MODE',
+    'MLC_SILENT_MODE',
     '0') in (
         'NO',
         'no',
@@ -31,14 +31,14 @@ FULL_REPORT = os.getenv(
 
 # Processing by batches:
 #
-BATCH_COUNT = int(os.getenv('CM_BATCH_COUNT', 1))
+BATCH_COUNT = int(os.getenv('MLC_BATCH_COUNT', 1))
 
 # Enabling GPU if available and not disabled:
 #
 USE_CUDA = (os.getenv('USE_CUDA', '').strip() == 'yes')
 
 
-labels_path = os.environ['CM_CAFFE_IMAGENET_SYNSET_WORDS_TXT']
+labels_path = os.environ['MLC_CAFFE_IMAGENET_SYNSET_WORDS_TXT']
 
 
 def load_labels(labels_filepath):
@@ -69,7 +69,7 @@ def main():
     os.mkdir(RESULTS_DIR)
 
     # Load the [cached] Torch model
-    path_to_model_pth = os.environ['CM_ML_MODEL_FILE_WITH_PATH']
+    path_to_model_pth = os.environ['MLC_ML_MODEL_FILE_WITH_PATH']
 
     model = models.resnet50(pretrained=False)
     model.load_state_dict(torch.load(path_to_model_pth))
@@ -90,7 +90,7 @@ def main():
     first_classification_time = 0
     images_loaded = 0
 
-    image_path = os.environ.get('CM_INPUT', '')
+    image_path = os.environ.get('MLC_INPUT', '')
     if image_path != '':
 
         normalize_data_bool = True

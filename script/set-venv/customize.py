@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,12 +12,12 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     ############################################################
     cur_dir = os.getcwd()
 
-    name = env.get('CM_NAME', '')
+    name = env.get('MLC_NAME', '')
     if name == '':
         artifacts = i.get('input', {}).get('artifacts', [])
         if len(artifacts) > 0:
@@ -33,7 +33,7 @@ def preprocess(i):
     activate_script2 = os.path.join(name, activate_script)
 
     if not os.path.isfile(activate_script2):
-        force_python_path = env.get('CM_SET_VENV_PYTHON', '')
+        force_python_path = env.get('MLC_SET_VENV_PYTHON', '')
 
         if force_python_path != '' and not os.path.isfile(force_python_path):
             return {'return': 1, 'error': 'python executable not found: {}'.format(
@@ -69,17 +69,17 @@ def preprocess(i):
                 os.makedirs(work_dir)
 
             if os_info['platform'] == 'windows':
-                shell = os.environ.get('CM_SET_VENV_SHELL', '')
+                shell = os.environ.get('MLC_SET_VENV_SHELL', '')
                 if shell == '':
-                    shell = env.get('CM_SET_VENV_SHELL', '')
+                    shell = env.get('MLC_SET_VENV_SHELL', '')
                 if shell != '':
-                    shell = shell.replace('CM_SET_VENV_WORK', 'work')
+                    shell = shell.replace('MLC_SET_VENV_WORK', 'work')
                 if shell == '':
                     shell = 'cmd'
-                cmd = 'cd {} & call {} & set CM_REPOS=%CD%\\{}\\CM & {}\n'.format(
+                cmd = 'cd {} & call {} & set MLC_REPOS=%CD%\\{}\\CM & {}\n'.format(
                     name, activate_script, name, shell)
             else:
-                cmd = '#!/bin/bash\n\ncd {} ; source {} ; export CM_REPOS=$PWD/CM ; cd work\n'.format(
+                cmd = '#!/bin/bash\n\ncd {} ; source {} ; export MLC_REPOS=$PWD/CM ; cd work\n'.format(
                     name, activate_script)
 
             with open(script_file, 'w') as f:

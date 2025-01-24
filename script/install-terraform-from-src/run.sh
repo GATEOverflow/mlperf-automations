@@ -2,8 +2,8 @@
 
 CUR_DIR=${PWD}
 if [ ! -d "terraform" ]; then
-  echo "Cloning Terraform from ${CM_GIT_URL} with branch ${CM_GIT_CHECKOUT}..."
-  git clone  -b "${CM_GIT_CHECKOUT}" ${CM_GIT_URL} terraform
+  echo "Cloning Terraform from ${MLC_GIT_URL} with branch ${MLC_GIT_CHECKOUT}..."
+  git clone  -b "${MLC_GIT_CHECKOUT}" ${MLC_GIT_URL} terraform
 fi
 test $? -eq 0 || exit 1
 

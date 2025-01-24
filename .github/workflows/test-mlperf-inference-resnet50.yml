@@ -1,5 +1,3 @@
-# Run MLPerf inference ResNet50
-
 name: MLPerf inference ResNet50
 
 on:
@@ -9,11 +7,12 @@ on:
       - '.github/workflows/test-mlperf-inference-resnet50.yml'
       - '**'
       - '!**.md'
+
 jobs:
-  build:
+  mlc-run-with-results-upload:
     runs-on: ${{ matrix.os }}
     env:
-      CM_INDEX: "on"
+      MLC_INDEX: "on"
     strategy:
       fail-fast: false
       matrix:
@@ -28,8 +27,11 @@ jobs:
             backend: tf
           - os: windows-latest
             implementation: cpp
+  
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -39,27 +41,23 @@ jobs:
       run: |
         git config --system core.longpaths true
 
-    - name: Install cm4mlops on Windows
-      if: matrix.os == 'windows-latest'
+    - name: Install mlcflow
       run: |
-        $env:CM_PULL_DEFAULT_MLOPS_REPO = "no"; pip install cm4mlops
-    - name: Install dependencies on Unix Platforms
-      if: matrix.os != 'windows-latest'
-      run: |
-        CM_PULL_DEFAULT_MLOPS_REPO=no pip install cm4mlops
+        pip install mlcflow
+        pip install tabulate
 
     - name: Pull MLOps repo
       run: |
-        cm pull repo --url=${{ github.event.pull_request.head.repo.html_url }} --checkout=${{ github.event.pull_request.head.ref }}
+        mlc pull repo ${{ github.event.pull_request.head.repo.html_url }} --branch=${{ github.event.pull_request.head.ref }}
 
     - name: Test MLPerf Inference ResNet50 (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        cm run script --tags=run-mlperf,inference,_submission,_short --submitter="MLCommons" --pull_changes=yes --pull_inference_changes=yes --hw_name=gh_${{ matrix.os }}_x86 --model=resnet50 --adr.loadgen.tags=_from-pip --pip_loadgen=yes --implementation=${{ matrix.implementation }} --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=500 --target_qps=1 -v --quiet 
+        mlcr --tags=run-mlperf,inference,_submission,_short --submitter="MLCommons" --pull_changes=yes --pull_inference_changes=yes --hw_name=gh_${{ matrix.os }}_x86 --model=resnet50 --adr.loadgen.tags=_from-pip --pip_loadgen=yes --implementation=${{ matrix.implementation }} --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=500 --target_qps=1 -v --quiet 
     - name: Test MLPerf Inference ResNet50 (Linux/macOS)
       if: matrix.os != 'windows-latest'
       run: |
-        cm run script --tags=run-mlperf,inference,_submission,_short --submitter="MLCommons" --pull_changes=yes --pull_inference_changes=yes --hw_name=gh_${{ matrix.os }}_x86 --model=resnet50 --implementation=${{ matrix.implementation }} --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=500 --target_qps=1 -v --quiet 
+        mlcr --tags=run-mlperf,inference,_submission,_short --submitter="MLCommons" --pull_changes=yes --pull_inference_changes=yes --hw_name=gh_${{ matrix.os }}_x86 --model=resnet50 --implementation=${{ matrix.implementation }} --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=500 --target_qps=1 -v --quiet     
     - name: Push Results
       env:
         PAT1: ${{ secrets.PAT1 }}
@@ -73,3 +71,5 @@ jobs:
         git commit -a -m "Test commit"
         git remote set-url origin https://${PAT1}@github.com/gateoverflow/mlperf_inference_test_submissions_v5.0
         git push
+
+        mlcr --tags=push,github,mlperf,inference,submission --env.MLC_GITHUB_TOKEN=$PAT1 --env.MLC_GIT_AUTH=yes --repo_url=https://github.com/gateoverflow/mlperf_inference_test_submissions_v5.0 --repo_branch=auto-update --commit_message="Results from R50 GH action on ${{ matrix.os }}" --quiet

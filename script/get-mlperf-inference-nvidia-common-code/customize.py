@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -14,8 +14,8 @@ def preprocess(i):
 def postprocess(i):
     env = i['env']
 
-    env['CM_MLPERF_INFERENCE_NVIDIA_CODE_PATH'] = os.path.join(
-        env['CM_MLPERF_INFERENCE_RESULTS_PATH'], "closed", "NVIDIA")
-    env['+PYTHONPATH'] = [env['CM_MLPERF_INFERENCE_NVIDIA_CODE_PATH']]
+    env['MLC_MLPERF_INFERENCE_NVIDIA_CODE_PATH'] = os.path.join(
+        env['MLC_MLPERF_INFERENCE_RESULTS_PATH'], "closed", "NVIDIA")
+    env['+PYTHONPATH'] = [env['MLC_MLPERF_INFERENCE_NVIDIA_CODE_PATH']]
 
     return {'return': 0}

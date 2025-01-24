@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import shutil
 
@@ -19,6 +19,6 @@ def postprocess(i):
 
     env = i['env']
 
-    env['CM_GET_DEPENDENT_CACHED_PATH'] = env['CM_MLPERF_INFERENCE_NVIDIA_CODE_PATH']
+    env['MLC_GET_DEPENDENT_CACHED_PATH'] = env['MLC_MLPERF_INFERENCE_NVIDIA_CODE_PATH']
 
     return {'return': 0}

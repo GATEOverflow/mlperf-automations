@@ -36,15 +36,15 @@ class BackendPytorchNative(backend.Backend):
     def load(self, model_path, inputs=None, outputs=None):
 
         # From ABTF code
-        sys.path.insert(0, os.environ['CM_ML_MODEL_CODE_WITH_PATH'])
+        sys.path.insert(0, os.environ['MLC_ML_MODEL_CODE_WITH_PATH'])
 
         from src.transform import SSDTransformer
         from src.utils import generate_dboxes, Encoder, colors, coco_classes
         from src.model import SSD, ResNet
 
-        abtf_model_config = os.environ.get('CM_ABTF_ML_MODEL_CONFIG', '')
+        abtf_model_config = os.environ.get('MLC_ABTF_ML_MODEL_CONFIG', '')
 
-        num_classes_str = os.environ.get('CM_ABTF_NUM_CLASSES', '').strip()
+        num_classes_str = os.environ.get('MLC_ABTF_NUM_CLASSES', '').strip()
         self.num_classes = int(
             num_classes_str) if num_classes_str != '' else 15
 

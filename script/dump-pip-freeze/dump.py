@@ -2,7 +2,7 @@ import os
 from pip._internal.operations import freeze
 
 pip_freeze_out = os.environ.get(
-    'CM_DUMP_RAW_PIP_FREEZE_FILE_PATH',
+    'MLC_DUMP_RAW_PIP_FREEZE_FILE_PATH',
     'tmp-pip-freeze')
 
 if os.path.isfile(pip_freeze_out):

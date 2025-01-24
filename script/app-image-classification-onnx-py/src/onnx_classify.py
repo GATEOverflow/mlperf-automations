@@ -156,8 +156,8 @@ for batch_idx in range(batch_count):
             i) for i in range(batch_size)]
 
     # Grigori: trick to test models:
-    if os.environ.get('CM_IMAGE', '') != '':
-        batch_filenames = [os.environ['CM_IMAGE']]
+    if os.environ.get('MLC_IMAGE', '') != '':
+        batch_filenames = [os.environ['MLC_IMAGE']]
 
     batch_data = load_a_batch(batch_filenames)
     # print(batch_data.shape)
@@ -166,7 +166,7 @@ for batch_idx in range(batch_count):
         [output_layer_name], {
             input_layer_name: batch_data})[0]
 
-    cm_status = {'classifications': []}
+    mlc_status = {'classifications': []}
 
     print('')
     top_classification = ''
@@ -187,18 +187,18 @@ for batch_idx in range(batch_count):
                     softmax_vector[class_idx],
                     labels[class_idx]))
 
-            cm_status['classifications'].append({'class_idx': int(class_idx),
+            mlc_status['classifications'].append({'class_idx': int(class_idx),
                                                  'softmax': float(softmax_vector[class_idx]),
-                                                 'label': labels[class_idx]})
+                                                  'label': labels[class_idx]})
 
     print('')
     print('Top classification: {}'.format(top_classification))
-    cm_status['top_classification'] = top_classification
+    mlc_status['top_classification'] = top_classification
 
 avg_time = (time.time() - start_time) / batch_count
-cm_status['avg_time'] = avg_time
+mlc_status['avg_time'] = avg_time
 
-# Record cm_status to embedded it into CM workflows
-with open('tmp-run-state.json', 'w') as cm_file:
-    cm_file.write(json.dumps(
-        {'cm_app_image_classification_onnx_py': cm_status}, sort_keys=True, indent=2))
+# Record mlc_status to embedded it into CM workflows
+with open('tmp-run-state.json', 'w') as mlc_file:
+    mlc_file.write(json.dumps(
+        {'mlc_app_image_classification_onnx_py': mlc_status}, sort_keys=True, indent=2))

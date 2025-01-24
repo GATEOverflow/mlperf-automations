@@ -1,0 +1,122 @@
+alias: generate-mlperf-inference-submission
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: false
+category: MLPerf benchmark support
+default_env:
+  MLC_MLPERF_RUN_STYLE: valid
+  MLC_MLPERF_SUBMISSION_DIR_SHARED: 'yes'
+  MLC_RUN_MLPERF_ACCURACY: 'on'
+predeps: False
+deps:
+- names:
+  - python
+  - python3
+  tags: get,python3
+- names:
+  - inference-src
+  tags: mlcommons,inference,src
+- tags: get,sut,system-description
+- tags: install,pip-package,for-cmind-python,_package.tabulate
+- tags: get,mlperf,inference,utils
+- names:
+  - get-mlperf-results-dir
+  skip_if_env:
+    MLC_MLPERF_INFERENCE_RESULTS_DIR_:
+    - 'on'
+  tags: get,mlperf,results,dir,local
+- names:
+  - get-mlperf-submission-dir
+  skip_if_env:
+    MLC_MLPERF_INFERENCE_SUBMISSION_DIR:
+    - 'on'
+  tags: get,mlperf,submission,dir
+docker:
+  mlc_repo: mlcommons@mlperf-automations
+  mlc_repo_branch: dev
+  deps:
+  - names: get-mlperf-inference-results-dir
+    skip_if_env:
+      MLC_MLPERF_INFERENCE_RESULTS_DIR_:
+      - 'on'
+    tags: get,mlperf,inference,results,dir,local
+  - names: get-mlperf-inference-submission-dir
+    skip_if_any_env:
+      MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR:
+      - 'on'
+    tags: get,mlperf,inference,submission,dir,local
+  docker_input_mapping:
+    results_dir: MLC_MLPERF_INFERENCE_RESULTS_DIR_
+    submission_base_dir: MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR
+  extra_run_args: ' --cap-add SYS_ADMIN'
+  mounts:
+  - ${{ MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR }}:${{ MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR
+    }}
+  - ${{ MLC_MLPERF_INFERENCE_RESULTS_DIR_ }}:${{ MLC_MLPERF_INFERENCE_RESULTS_DIR_ }}
+  os: ubuntu
+  os_version: '22.04'
+  pre_run_cmds:
+  - mlc pull repo
+  real_run: false
+  use_host_group_id: true
+  use_host_user_id: true
+input_mapping:
+  analyzer_settings_file: MLC_MLPERF_POWER_ANALYZER_SETTINGS_FILE_PATH
+  category: MLC_MLPERF_SUBMISSION_CATEGORY
+  clean: MLC_MLPERF_CLEAN_SUBMISSION_DIR
+  dashboard: MLC_MLPERF_DASHBOARD
+  dashboard_wb_project: MLC_MLPERF_DASHBOARD_WANDB_PROJECT
+  device: MLC_MLPERF_DEVICE
+  division: MLC_MLPERF_SUBMISSION_DIVISION
+  duplicate: MLC_MLPERF_DUPLICATE_SCENARIO_RESULTS
+  extra_checker_args: MLC_MLPERF_SUBMISSION_CHECKER_EXTRA_ARG 
+  hw_name: MLC_HW_NAME
+  hw_notes_extra: MLC_MLPERF_SUT_HW_NOTES_EXTRA
+  infer_scenario_results: MLC_MLPERF_DUPLICATE_SCENARIO_RESULTS
+  power_settings_file: MLC_MLPERF_POWER_SETTINGS_FILE_PATH
+  preprocess: MLC_RUN_MLPERF_SUBMISSION_PREPROCESSOR
+  preprocess_submission: MLC_RUN_MLPERF_SUBMISSION_PREPROCESSOR
+  results_dir: MLC_MLPERF_INFERENCE_RESULTS_DIR_
+  run_checker: MLC_RUN_SUBMISSION_CHECKER
+  run_style: MLC_MLPERF_RUN_STYLE
+  skip_truncation: MLC_SKIP_TRUNCATE_ACCURACY
+  submission_base_dir: MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR
+  submission_dir: MLC_MLPERF_INFERENCE_SUBMISSION_DIR
+  submitter: MLC_MLPERF_SUBMITTER
+  sw_notes_extra: MLC_MLPERF_SUT_SW_NOTES_EXTRA
+  tar: MLC_TAR_SUBMISSION_DIR
+  get_platform_details: MLC_GET_PLATFORM_DETAILS
+  version: MLC_MLPERF_SUBMISSION_CHECKER_VERSION
+post_deps:
+- enable_if_env:
+    MLC_RUN_MLPERF_ACCURACY:
+    - 'on'
+  skip_if_env:
+    MLC_SKIP_TRUNCATE_ACCURACY:
+    - 'yes'
+  tags: accuracy,truncate,mlc
+- enable_if_env:
+    MLC_RUN_MLPERF_SUBMISSION_PREPROCESSOR:
+    - 'on'
+    - 'True'
+    - 'yes'
+    - true
+  tags: preprocess,mlperf,submission
+- skip_if_env:
+    MLC_RUN_SUBMISSION_CHECKER:
+    - 'no'
+  names:
+  - mlperf-inference-submission-checker
+  - submission-checker
+  tags: submission,inference,checker,mlc
+tags:
+- generate
+- submission
+- mlperf
+- mlperf-inference
+- inference
+- mlcommons
+- inference-submission
+- mlperf-inference-submission
+- mlcommons-inference-submission
+uid: 5f8ab2d0b5874d53

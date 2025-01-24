@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import subprocess
 import select
@@ -16,19 +16,19 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     if os.geteuid() == 0:
-        env['CM_SUDO'] = ''  # root user does not need sudo
-        env['CM_SUDO_USER'] = "yes"
+        env['MLC_SUDO'] = ''  # root user does not need sudo
+        env['MLC_SUDO_USER'] = "yes"
     else:
         if can_execute_sudo_without_password() or prompt_sudo() == 0:
-            env['CM_SUDO_USER'] = "yes"
-            env['CM_SUDO'] = 'sudo'
+            env['MLC_SUDO_USER'] = "yes"
+            env['MLC_SUDO'] = 'sudo'
 
         else:
-            env['CM_SUDO_USER'] = "no"
-            env['CM_SUDO'] = ''
+            env['MLC_SUDO_USER'] = "no"
+            env['MLC_SUDO'] = ''
 
     return {'return': 0}
 

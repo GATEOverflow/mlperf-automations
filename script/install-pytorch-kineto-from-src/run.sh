@@ -2,7 +2,7 @@
 
 CUR_DIR=$PWD
 rm -rf kineto
-cp -r ${CM_PYTORCH_KINETO_SRC_REPO_PATH} kineto
+cp -r ${MLC_PYTORCH_KINETO_SRC_REPO_PATH} kineto
 cd kineto
 rm -rf libkineto/build
 

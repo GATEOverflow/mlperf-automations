@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -11,18 +11,18 @@ def preprocess(i):
     recursion_spaces = i['recursion_spaces']
 
     file_name = 'openssl'
-    if 'CM_OPENSSL_BIN_WITH_PATH' not in env:
+    if 'MLC_OPENSSL_BIN_WITH_PATH' not in env:
         r = i['automation'].find_artifact({'file_name': file_name,
                                            'env': env,
                                            'os_info': os_info,
                                            'default_path_env_key': 'PATH',
                                            'detect_version': True,
-                                           'env_path_key': 'CM_OPENSSL_BIN_WITH_PATH',
+                                           'env_path_key': 'MLC_OPENSSL_BIN_WITH_PATH',
                                            'run_script_input': i['run_script_input'],
                                            'recursion_spaces': i['recursion_spaces']})
         if r['return'] > 0:
             if r['return'] == 16 and os_info['platform'] != 'windows':
-                env['CM_REQUIRE_INSTALL'] = "yes"
+                env['MLC_REQUIRE_INSTALL'] = "yes"
                 return {'return': 0}
             return r
 
@@ -32,7 +32,7 @@ def preprocess(i):
 def detect_version(i):
     r = i['automation'].parse_version({'match_text': r'OpenSSL\s*([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_OPENSSL_VERSION',
+                                       'env_key': 'MLC_OPENSSL_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r
@@ -50,10 +50,10 @@ def postprocess(i):
     if r['return'] > 0:
         return r
     version = r['version']
-    found_file_path = env['CM_OPENSSL_BIN_WITH_PATH']
+    found_file_path = env['MLC_OPENSSL_BIN_WITH_PATH']
 
     found_path = os.path.dirname(found_file_path)
-    env['CM_OPENSSL_INSTALLED_PATH'] = found_path
+    env['MLC_OPENSSL_INSTALLED_PATH'] = found_path
 
     # Save tags that can be used to specialize further dependencies (such as
     # python packages)

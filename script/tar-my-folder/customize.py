@@ -1,5 +1,4 @@
-from cmind import utils
-import cmind as cm
+from mlc import utils
 import os
 import subprocess
 from os.path import exists
@@ -9,13 +8,13 @@ def preprocess(i):
 
     os_info = i['os_info']
     env = i['env']
-    input_dir = env.get("CM_TAR_INPUT_DIR", "")
+    input_dir = env.get("MLC_TAR_INPUT_DIR", "")
     if input_dir == "":
-        return {'return': 1, 'error': 'Please set CM_TAR_INPUT_DIR'}
-    output_dir = env.get("CM_TAR_OUTPUT_DIR", "")
+        return {'return': 1, 'error': 'Please set MLC_TAR_INPUT_DIR'}
+    output_dir = env.get("MLC_TAR_OUTPUT_DIR", "")
     if output_dir == "":
         output_dir = os.getcwd()
-    output_file = env.get("CM_TAR_OUTFILE", "")
+    output_file = env.get("MLC_TAR_OUTFILE", "")
     input_dirname = os.path.basename(input_dir)
     if output_file == "":
         output_file = input_dirname + ".tar.gz"

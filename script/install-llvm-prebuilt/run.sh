@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo ""
-echo "Unarchiving ${CM_LLVM_PACKAGE} ..."
+echo "Unarchiving ${MLC_LLVM_PACKAGE} ..."
 
-tar --strip 1 -xf ${CM_LLVM_PACKAGE}
+tar --strip 1 -xf ${MLC_LLVM_PACKAGE}
 test $? -eq 0 || exit 1
 
-rm -f ${CM_LLVM_PACKAGE}
+rm -f ${MLC_LLVM_PACKAGE}
 test $? -eq 0 || exit 1

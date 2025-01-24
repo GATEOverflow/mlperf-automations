@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -13,6 +13,6 @@ def preprocess(i):
 def postprocess(i):
 
     env = i['env']
-    env['CM_ZEPHYR_DIR'] = os.path.join(os.getcwd(), "zephyr")
+    env['MLC_ZEPHYR_DIR'] = os.path.join(os.getcwd(), "zephyr")
 
     return {'return': 0}

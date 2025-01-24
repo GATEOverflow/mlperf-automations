@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#CM Script location: ${CM_TMP_CURRENT_SCRIPT_PATH}
+#CM Script location: ${MLC_TMP_CURRENT_SCRIPT_PATH}
 
 #To export any variable
 #echo "VARIABLE_NAME=VARIABLE_VALUE" >>tmp-run-env.out
 
-#${CM_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
+#${MLC_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
 
 
 
@@ -17,7 +17,7 @@ function run() {
   echo "Running: "
   echo "$1"
   echo ""
-  if [[ ${CM_FAKE_RUN} != 'yes' ]]; then
+  if [[ ${MLC_FAKE_RUN} != 'yes' ]]; then
     eval "$1"
     exit_if_error
   fi
@@ -37,8 +37,8 @@ category="edge"
 power=""
 power=" --power=yes --adr.mlperf-power-client.power_server=192.168.0.15"
 #Add your run commands here...
-# run "$CM_RUN_CMD"
-find_performance_cmd='cm run script --tags=generate-run-cmds,inference,_find-performance \
+# run "$MLC_RUN_CMD"
+find_performance_cmd='mlcr --tags=generate-run-cmds,inference,_find-performance \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=edge --division=open --scenario=Offline  --quiet --test_query_count=$test_query_count'
 
@@ -49,7 +49,7 @@ find_performance_cmd='cm run script --tags=generate-run-cmds,inference,_find-per
 #run "3d-unet" "30" "${find_performance_cmd}"
 
 
-submission_cmd='cm run script --tags=generate-run-cmds,inference,_submission,_all-scenarios \
+submission_cmd='mlcr --tags=generate-run-cmds,inference,_submission,_all-scenarios \
 --model=$model --execution-mode=valid --implementation=$implementation --device=$device --backend=$backend --results_dir=$HOME/results_dir \
 --category=$category --division=$division --skip_submission_generation=yes --quiet $power'
 
@@ -58,4 +58,4 @@ run_model "resnet50" "10" "${submission_cmd} --offline_target_qps=45000 --server
 run_model "rnnt" "10" "${submission_cmd} --offline_target_qps=15200 --server_target_qps=14150 --singlestream_target_latency=23"
 run_model "retinanet" "10" "${submission_cmd} --offline_target_qps=620 --server_target_qps=590 --singlestream_target_latency=2 --multistream_target_latency=14"
 run_model "bert-99" "10" "${submission_cmd} --offline_target_qps=4100 --server_target_qps=3950 --singlestream_target_latency=1"
-run_model "3d-unet-99.9" "10" "${submission_cmd} --offline_target_qps=4 --singlestream_target_latency=433 --env.CM_MLPERF_USE_MAX_DURATION=no"
+run_model "3d-unet-99.9" "10" "${submission_cmd} --offline_target_qps=4 --singlestream_target_latency=433 --env.MLC_MLPERF_USE_MAX_DURATION=no"

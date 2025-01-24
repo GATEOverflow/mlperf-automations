@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,14 +12,14 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     cmds = []
 
-    if env.get('CM_ULIMIT_NOFILE', '') != '':
-        cmds.append(f"ulimit -n {env['CM_ULIMIT_NOFILE']}")
+    if env.get('MLC_ULIMIT_NOFILE', '') != '':
+        cmds.append(f"ulimit -n {env['MLC_ULIMIT_NOFILE']}")
 
-    env['CM_RUN_CMD'] = " && ".join(cmds)
+    env['MLC_RUN_CMD'] = " && ".join(cmds)
 
     return {'return': 0}
 

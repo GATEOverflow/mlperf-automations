@@ -1,21 +1,21 @@
 @echo off
 
-if "%CM_RUN_DIR%" == "" (
-  echo CM_RUN_DIR is not set
+if "%MLC_RUN_DIR%" == "" (
+  echo MLC_RUN_DIR is not set
   exit 1
 )
 
-cd %CM_RUN_DIR%
+cd %MLC_RUN_DIR%
 
-if "%CM_DEBUG_SCRIPT_BENCHMARK_PROGRAM%" == "True" (
+if "%MLC_DEBUG_SCRIPT_BENCHMARK_PROGRAM%" == "True" (
   echo *****************************************************
   echo You are now in Debug shell with pre-set CM env and can run the following command line manually:
 
   echo.
-  if not "%CM_RUN_CMD0%" == "" (
-    echo %CM_RUN_CMD0%
+  if not "%MLC_RUN_CMD0%" == "" (
+    echo %MLC_RUN_CMD0%
   ) else (
-    echo %CM_RUN_CMD%
+    echo %MLC_RUN_CMD%
   )
 
   echo.
@@ -27,13 +27,13 @@ if "%CM_DEBUG_SCRIPT_BENCHMARK_PROGRAM%" == "True" (
   exit 0
 )
 
-rem Check CM_RUN_CMD0
-if not "%CM_RUN_CMD0%" == "" (
+rem Check MLC_RUN_CMD0
+if not "%MLC_RUN_CMD0%" == "" (
   echo.
-  %CM_RUN_CMD0%
+  %MLC_RUN_CMD0%
 ) else (
   echo.
-  %CM_RUN_CMD%
+  %MLC_RUN_CMD%
 )
 
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%

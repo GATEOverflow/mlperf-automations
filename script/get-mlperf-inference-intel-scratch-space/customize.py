@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,10 +12,10 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    if env.get('CM_INTEL_MLPERF_SCRATCH_PATH', '') == '':
-        env['CM_INTEL_MLPERF_SCRATCH_PATH'] = os.getcwd()
+    if env.get('MLC_INTEL_MLPERF_SCRATCH_PATH', '') == '':
+        env['MLC_INTEL_MLPERF_SCRATCH_PATH'] = os.getcwd()
 
     return {'return': 0}
 
@@ -24,6 +24,6 @@ def postprocess(i):
 
     env = i['env']
 
-    env['CM_GET_DEPENDENT_CACHED_PATH'] = env['CM_INTEL_MLPERF_SCRATCH_PATH']
+    env['MLC_GET_DEPENDENT_CACHED_PATH'] = env['MLC_INTEL_MLPERF_SCRATCH_PATH']
 
     return {'return': 0}

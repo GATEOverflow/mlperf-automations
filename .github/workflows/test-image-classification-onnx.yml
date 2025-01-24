@@ -1,18 +1,15 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: image classification with ONNX
+name: Image classification with ONNX
 
 on:
   pull_request:
-    branches: [ "main", "dev", "mlperf-inference" ]
+    branches: [ "main", "dev" ]
     paths:
       - '.github/workflows/test-image-classification-onnx.yml'
       - '**'
       - '!**.md'
 
 jobs:
-  build:
+  mlc-run:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -30,18 +27,15 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         git config --system core.longpaths true
-    - name: Install cm4mlops on Windows
-      if: matrix.os == 'windows-latest'
+
+    - name: Install mlcflow
       run: |
-        $env:CM_PULL_DEFAULT_MLOPS_REPO = "no"; pip install cm4mlops
-    - name: Install dependencies on Unix Platforms
-      if: matrix.os != 'windows-latest'
-      run: |
-        CM_PULL_DEFAULT_MLOPS_REPO=no pip install cm4mlops
+        pip install mlcflow
+        pip install tabulate
+
     - name: Pull MLOps repository
       run: |
-        cm pull repo --url=${{ github.event.pull_request.head.repo.html_url }} --checkout=${{ github.event.pull_request.head.ref }}
-        cm run script --quiet --tags=get,sys-utils-cm
+        mlc pull repo ${{ github.event.pull_request.head.repo.html_url }} --branch=${{ github.event.pull_request.head.ref }}
     - name: Test image classification with ONNX
       run: |
-        cm run script --tags=python,app,image-classification,onnx --quiet
+        mlcr --tags=python,app,image-classification,onnx --quiet

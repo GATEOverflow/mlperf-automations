@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,20 +12,20 @@ def preprocess(i):
 
     file_name = 'rocminfo.exe' if os_info['platform'] == 'windows' else 'rocminfo'
     env['FILE_NAME'] = file_name
-    env['CM_TMP_PATH'] = "/opt/rocm/bin"
+    env['MLC_TMP_PATH'] = "/opt/rocm/bin"
 
-    if 'CM_ROCM_BIN_WITH_PATH' not in env:
+    if 'MLC_ROMLC_BIN_WITH_PATH' not in env:
         r = i['automation'].find_artifact({'file_name': file_name,
                                            'env': env,
                                            'os_info': os_info,
                                            'default_path_env_key': 'PATH',
                                            'detect_version': True,
-                                           'env_path_key': 'CM_ROCM_BIN_WITH_PATH',
+                                           'env_path_key': 'MLC_ROMLC_BIN_WITH_PATH',
                                            'run_script_input': i['run_script_input'],
                                            'recursion_spaces': recursion_spaces})
         if r['return'] > 0:
             if r['return'] == 16:
-                env['CM_REQUIRE_INSTALL'] = "yes"
+                env['MLC_REQUIRE_INSTALL'] = "yes"
                 return {'return': 0}
             else:
                 return r
@@ -36,7 +36,7 @@ def preprocess(i):
 def detect_version(i):
     r = i['automation'].parse_version({'match_text': r'([\d.]+[-\d+]*)',
                                        'group_number': 1,
-                                       'env_key': 'CM_ROCM_VERSION',
+                                       'env_key': 'MLC_ROMLC_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r
@@ -56,11 +56,11 @@ def postprocess(i):
         return r
 
     version = r['version']
-    found_file_path = env['CM_ROCM_BIN_WITH_PATH']
+    found_file_path = env['MLC_ROMLC_BIN_WITH_PATH']
 
     found_path = os.path.dirname(found_file_path)
-    env['CM_ROCM_INSTALLED_PATH'] = found_path
+    env['MLC_ROMLC_INSTALLED_PATH'] = found_path
 
-    env['CM_ROCM_CACHE_TAGS'] = 'version-' + version
+    env['MLC_ROMLC_CACHE_TAGS'] = 'version-' + version
 
     return {'return': 0, 'version': version}

@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -13,7 +13,7 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     models = env['MODELS'].split(",")
 
@@ -68,7 +68,7 @@ def preprocess(i):
             cmds.append(cmd)
             assemble_tflite_cmds(cmds)
 
-            if env.get('CM_HOST_CPU_ARCHITECTURE', '') == "aarch64":
+            if env.get('MLC_HOST_CPU_ARCHITECTURE', '') == "aarch64":
                 extra_tags = ",_armnn,_use-neon"
                 cmd = f'export extra_tags="{extra_tags}"'
                 cmds.append(cmd)

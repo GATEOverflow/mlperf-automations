@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,18 +12,18 @@ def preprocess(i):
 
     file_name = 'gh.exe' if os_info['platform'] == 'windows' else 'gh'
 
-    # Will check env['CM_TMP_PATH'] if comes from installation script
+    # Will check env['MLC_TMP_PATH'] if comes from installation script
     r = i['automation'].find_artifact({'file_name': file_name,
                                        'env': env,
                                        'os_info': os_info,
                                        'default_path_env_key': 'PATH',
                                        'detect_version': True,
-                                       'env_path_key': 'CM_GITHUBCLI_BIN_WITH_PATH',
+                                       'env_path_key': 'MLC_GITHUBCLI_BIN_WITH_PATH',
                                        'run_script_input': i['run_script_input'],
                                        'recursion_spaces': recursion_spaces})
     if r['return'] > 0:
         if r['return'] == 16:
-            if env.get('CM_TMP_FAIL_IF_NOT_FOUND', '').lower() == 'yes':
+            if env.get('MLC_TMP_FAIL_IF_NOT_FOUND', '').lower() == 'yes':
                 return r
 
             print(recursion_spaces + '    # {}'.format(r['error']))
@@ -47,7 +47,7 @@ def postprocess(i):
 
     r = i['automation'].parse_version({'match_text': r'gh\s*version\s*([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_GITHUBCLI_VERSION',
+                                       'env_key': 'MLC_GITHUBCLI_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r

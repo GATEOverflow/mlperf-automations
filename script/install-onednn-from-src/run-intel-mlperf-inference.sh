@@ -1,10 +1,10 @@
 #!/bin/bash
 
-export PATH=${CM_CONDA_BIN_PATH}:$PATH
+export PATH=${MLC_CONDA_BIN_PATH}:$PATH
 
 CUR_DIR=$PWD
 rm -rf onednn
-cp -r ${CM_ONEDNN_SRC_REPO_PATH} onednn
+cp -r ${MLC_ONEDNN_SRC_REPO_PATH} onednn
 cd onednn
 rm -rf build
 pwd

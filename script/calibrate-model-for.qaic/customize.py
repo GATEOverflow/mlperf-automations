@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import sys
 import yaml
@@ -14,9 +14,9 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    if env.get('CM_CREATE_INPUT_BATCH', '') == 'yes':
+    if env.get('MLC_CREATE_INPUT_BATCH', '') == 'yes':
         r = create_batched_inputs(env)
         if r['return'] > 0:
             return r
@@ -28,14 +28,14 @@ def preprocess(i):
 
     print("Profiling from " + os.getcwd())
 
-    env['CM_RUN_CMD'] = cmd
+    env['MLC_RUN_CMD'] = cmd
 
     return {'return': 0}
 
 
 def create_batched_inputs(env):
-    original_images_file = env['CM_DATASET_PREPROCESSED_IMAGES_LIST']
-    batchsize = env['CM_QAIC_MODEL_BATCH_SIZE']
+    original_images_file = env['MLC_DATASET_PREPROCESSED_IMAGES_LIST']
+    batchsize = env['MLC_QAIC_MODEL_BATCH_SIZE']
 
     file_paths = []
     with open(original_images_file) as f:
@@ -71,13 +71,13 @@ def create_batched_inputs(env):
 
 
 def construct_calibration_cmd(env):
-    compiler_params = env['CM_QAIC_COMPILER_PARAMS']
-    batchsize = env.get('CM_QAIC_MODEL_BATCH_SIZE', "1")
-    cmd = env['CM_QAIC_EXEC_PATH'] + " "
-    if env.get('CM_CREATE_INPUT_BATCH', '') == 'yes':
+    compiler_params = env['MLC_QAIC_COMPILER_PARAMS']
+    batchsize = env.get('MLC_QAIC_MODEL_BATCH_SIZE', "1")
+    cmd = env['MLC_QAIC_EXEC_PATH'] + " "
+    if env.get('MLC_CREATE_INPUT_BATCH', '') == 'yes':
         cmd += " -input-list-file=batched_input_files  -batchsize=" + batchsize + " "
     cmd += compiler_params + " -dump-profile=profile.yaml -model=" + \
-        env['CM_ML_MODEL_FILE_WITH_PATH']
+        env['MLC_ML_MODEL_FILE_WITH_PATH']
 
     return {'return': 0, 'cmd': cmd}
 
@@ -86,10 +86,10 @@ def postprocess(i):
 
     env = i['env']
     profile_file_path = os.path.join(os.getcwd(), "profile.yaml")
-    env['CM_QAIC_MODEL_PROFILE_WITH_PATH'] = profile_file_path
+    env['MLC_QAIC_MODEL_PROFILE_WITH_PATH'] = profile_file_path
 
-    if env.get('CM_ML_MODEL_INPUT_LAYER_NAME', '') != '':
-        input_layer_names = [env.get('CM_ML_MODEL_INPUT_LAYER_NAME')]
+    if env.get('MLC_ML_MODEL_INPUT_LAYER_NAME', '') != '':
+        input_layer_names = [env.get('MLC_ML_MODEL_INPUT_LAYER_NAME')]
     else:
         input_layer_names = ["images:0", "images/:0"]
 
@@ -128,7 +128,7 @@ def postprocess(i):
             "TopK_578/:0"
         ]
 
-    if env.get('CM_QAIC_MODEL_NAME', '') == "retinanet":
+    if env.get('MLC_QAIC_MODEL_NAME', '') == "retinanet":
         with open(profile_file_path, "r") as stream:
             try:
                 output_min_val_loc = sys.maxsize
@@ -158,8 +158,8 @@ if isinstance(doc,                     if )
                                 max_val = k['Max']
                                 scale, offset = get_scale_offset(
                                     min_val, max_val)
-                                env['CM_QAIC_MODEL_RETINANET_IMAGE_SCALE'] = scale
-                                env['CM_QAIC_MODEL_RETINANET_IMAGE_OFFSET'] = offset
+                                env['MLC_QAIC_MODEL_RETINANET_IMAGE_SCALE'] = scale
+                                env['MLC_QAIC_MODEL_RETINANET_IMAGE_OFFSET'] = offset
 
                             if k["NodeOutputName"] in output_layer_names_loc[oindex]:
                                 min_val = k['Min']
@@ -172,9 +172,9 @@ if isinstance(doc,                     if )
                                     min_val, max_val)
                                 index = output_layer_names_loc[oindex].index(
                                     k["NodeOutputName"])
-                                env[f'CM_QAIC_MODEL_RETINANET_LOC_SCALE{index}'] = loc_scale
+                                env[f'MLC_QAIC_MODEL_RETINANET_LOC_SCALE{index}'] = loc_scale
                                 # to uint8 is done in NMS code
-                                env[f'CM_QAIC_MODEL_RETINANET_LOC_OFFSET{index}'] = loc_offset - 128
+                                env[f'MLC_QAIC_MODEL_RETINANET_LOC_OFFSET{index}'] = loc_offset - 128
 
                                 total_range = max_val - min_val
                                 scale = total_range / 256.0
@@ -191,9 +191,9 @@ if isinstance(doc,                     if )
                                     min_val, max_val)
                                 index = output_layer_names_conf[oindex].index(
                                     k["NodeOutputName"])
-                                env[f'CM_QAIC_MODEL_RETINANET_CONF_SCALE{index}'] = conf_scale
+                                env[f'MLC_QAIC_MODEL_RETINANET_CONF_SCALE{index}'] = conf_scale
                                 # to uint8 is done in NMS code
-                                env[f'CM_QAIC_MODEL_RETINANET_CONF_OFFSET{index}'] = conf_offset - 128
+                                env[f'MLC_QAIC_MODEL_RETINANET_CONF_OFFSET{index}'] = conf_offset - 128
                                 total_range = max_val - min_val
                                 scale = total_range / 256.0
                                 offset = round(-min_val / scale)
@@ -202,10 +202,10 @@ if isinstance(doc,                     if )
                     output_min_val_loc, output_max_val_loc)
                 conf_scale, conf_offset = get_scale_offset(
                     output_min_val_conf, output_max_val_conf)
-                env['CM_QAIC_MODEL_RETINANET_LOC_SCALE'] = loc_scale
-                env['CM_QAIC_MODEL_RETINANET_LOC_OFFSET'] = loc_offset - 128  # to uint8 is done in NMS code
-                env['CM_QAIC_MODEL_RETINANET_CONF_SCALE'] = conf_scale
-                env['CM_QAIC_MODEL_RETINANET_CONF_OFFSET'] = conf_offset - 128  # to uint8 is done in NMS code
+                env['MLC_QAIC_MODEL_RETINANET_LOC_SCALE'] = loc_scale
+                env['MLC_QAIC_MODEL_RETINANET_LOC_OFFSET'] = loc_offset - 128  # to uint8 is done in NMS code
+                env['MLC_QAIC_MODEL_RETINANET_CONF_SCALE'] = conf_scale
+                env['MLC_QAIC_MODEL_RETINANET_CONF_OFFSET'] = conf_offset - 128  # to uint8 is done in NMS code
 
             except yaml.YAMLError as exc:
                 return {'return': 1, 'error': exc}

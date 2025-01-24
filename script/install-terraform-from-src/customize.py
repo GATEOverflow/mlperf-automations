@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -14,8 +14,8 @@ def postprocess(i):
 
     env = i['env']
     installed_path = os.path.join(os.getcwd(), 'bin')
-    env['CM_TERRAFORM_INSTALLED_PATH'] = installed_path
-    env['CM_TERRAFORM_BIN_WITH_PATH'] = os.path.join(
+    env['MLC_TERRAFORM_INSTALLED_PATH'] = installed_path
+    env['MLC_TERRAFORM_BIN_WITH_PATH'] = os.path.join(
         installed_path, "terraform")
     env['+PATH'] = [installed_path]
 

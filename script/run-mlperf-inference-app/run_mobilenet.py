@@ -1,4 +1,4 @@
-import cmind
+import mlc
 import os
 import sys
 
@@ -73,7 +73,7 @@ for model in variation_strings:
                 continue
             if model == "efficientnet" and precision == "uint8":
                 precision = "int8"
-            cm_input = {
+            mlc_input = {
                 'action': 'run',
                 'automation': 'script',
                 'tags': f'generate-run-cmds,mlperf,inference,{var}',
@@ -96,8 +96,8 @@ for model in variation_strings:
                         }
                 }
             }
-            print(cm_input)
-            r = cmind.access(cm_input)
+            print(mlc_input)
+            r = mlc.access(mlc_input)
             if r['return'] > 0:
                 print(r)
                 # exit(1)

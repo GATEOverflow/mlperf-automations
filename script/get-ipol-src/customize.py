@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,19 +12,19 @@ def preprocess(i):
 
     automation = i['automation']
 
-    cm = automation.cmind
+    cm = automation.action_object
 
     path = os.getcwd()
 
-    url = env['CM_IPOL_SRC_URL']
+    url = env['MLC_IPOL_SRC_URL']
 
-    year = env.get('CM_IPOL_YEAR', '')
-    number = env.get('CM_IPOL_NUMBER', '')
+    year = env.get('MLC_IPOL_YEAR', '')
+    number = env.get('MLC_IPOL_NUMBER', '')
 
     url = url.replace(
-        '{{CM_IPOL_YEAR}}',
+        '{{MLC_IPOL_YEAR}}',
         year).replace(
-        '{{CM_IPOL_NUMBER}}',
+        '{{MLC_IPOL_NUMBER}}',
         number)
 
     print('Downloading from {}'.format(url))
@@ -54,7 +54,7 @@ def preprocess(i):
 
     subdir = ff[0]
 
-    env['CM_IPOL_PATH'] = os.path.join(path, subdir)
+    env['MLC_IPOL_PATH'] = os.path.join(path, subdir)
 
     # Applying patch
     cmd = 'patch -p0 < {}'.format(os.path.join(script_path,

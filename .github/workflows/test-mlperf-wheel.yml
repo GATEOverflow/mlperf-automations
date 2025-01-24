@@ -1,0 +1,52 @@
+name: Build Python Wheel
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - '.github/workflows/test-mlperf-wheel.yml'
+      - 'setup.py'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        python-version: [ '3.8', '3.13']
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      if: runner.os == 'linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3 python3-pip python3-venv
+
+    - name: Build the Python wheel
+      if: runner.os != 'Windows'
+      run: |
+        python3 -m venv mlc
+        source mlc/bin/activate
+        python3 -m pip install . -v
+
+    - name: Build the Python wheel
+      if: runner.os == 'Windows'
+      run: |
+        python3 -m venv mlc
+        mlc\Scripts\activate.bat
+        git config --system core.longpaths true
+        python3 -m pip install . -v

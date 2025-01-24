@@ -4,17 +4,17 @@ echo "************************************************"
 echo "Installing some system dependencies via sudo apt"
 
 
-if [[ "$CM_QUIET" != "yes" ]]; then 
+if [[ "$MLC_QUIET" != "yes" ]]; then 
  echo "Enter skip to skip this step or press enter to continue:"
  read DUMMY
 
  if [[ "$DUMMY" == "skip" ]]; then exit 0; fi
 fi
 
-CM_APT_TOOL=${CM_APT_TOOL:-apt-get}
+MLC_APT_TOOL=${MLC_APT_TOOL:-apt-get}
 
-${CM_SUDO} ${CM_APT_TOOL} update && \
-    ${CM_SUDO} DEBIAN_FRONTEND=noninteractive ${CM_APT_TOOL} install -y --no-install-recommends \
+${MLC_SUDO} ${MLC_APT_TOOL} update && \
+    ${MLC_SUDO} DEBIAN_FRONTEND=noninteractive ${MLC_APT_TOOL} install -y --no-install-recommends --ignore-missing \
            apt-utils \
            git \
            wget \
@@ -50,15 +50,14 @@ ${CM_SUDO} ${CM_APT_TOOL} update && \
            python-is-python3 \
            sudo \
            libgl1 \
-           libncurses5 \
            libjpeg9-dev \
            unzip \
            libgl1 \
            zlib1g-dev
 
 # Install Python deps though preference is to install them 
-# via cmr "get generic-python-lib _package.{Python PIP package name}"
-if [[ "${CM_SKIP_PYTHON_DEPS}" != "yes" ]]; then
- . ${CM_TMP_CURRENT_SCRIPT_PATH}/do_pip_installs.sh
+# via mlcr "get generic-python-lib _package.{Python PIP package name}"
+if [[ "${MLC_SKIP_PYTHON_DEPS}" != "yes" ]]; then
+ . ${MLC_TMP_CURRENT_SCRIPT_PATH}/do_pip_installs.sh
  test $? -eq 0 || exit $?
 fi

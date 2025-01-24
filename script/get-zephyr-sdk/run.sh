@@ -1,11 +1,11 @@
 #!/bin/bash
-CM_TMP_CURRENT_SCRIPT_PATH=${CM_TMP_CURRENT_SCRIPT_PATH:-$PWD}
-version=${CM_ZEPHYR_SDK_VERSION}
-os=${CM_HOST_OS_TYPE}
+MLC_TMP_CURRENT_SCRIPT_PATH=${MLC_TMP_CURRENT_SCRIPT_PATH:-$PWD}
+version=${MLC_ZEPHYR_SDK_VERSION}
+os=${MLC_HOST_OS_TYPE}
 if [ $os == "darwin" ]; then
-  os=${CM_HOST_OS_FLAVOR}
+  os=${MLC_HOST_OS_FLAVOR}
 fi
-platform=${CM_HOST_OS_MACHINE}
+platform=${MLC_HOST_OS_MACHINE}
 if [ $platform == "arm64" ]; then
   platform=aarch64
 fi

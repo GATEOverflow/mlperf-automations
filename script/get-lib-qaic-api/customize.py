@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -9,7 +9,7 @@ def preprocess(i):
 
     env = i['env']
 
-    # env['CM_GIT_CHECKOUT'] = env['CM_TMP_GIT_BRANCH_NAME']
+    # env['MLC_GIT_CHECKOUT'] = env['MLC_TMP_GIT_BRANCH_NAME']
 
     return {'return': 0}
 
@@ -28,16 +28,16 @@ def postprocess(i):
     for key in paths:
         env[key] = []
 
-    include_paths = [env['CM_TMP_CURRENT_SCRIPT_PATH']]
+    include_paths = [env['MLC_TMP_CURRENT_SCRIPT_PATH']]
 
     for inc_path in include_paths:
         env['+C_INCLUDE_PATH'].append(inc_path)
         env['+CPLUS_INCLUDE_PATH'].append(inc_path)
 
     version = "master"
-    env['CM_QAIC_API_SRC_FILE'] = os.path.join(
-        env['CM_TMP_CURRENT_SCRIPT_PATH'], version, "QAicInfApi.cpp")
-    env['CM_QAIC_API_INC_FILE'] = os.path.join(
-        env['CM_TMP_CURRENT_SCRIPT_PATH'], version, "QAicInfApi.h")
+    env['MLC_QAIC_API_SRC_FILE'] = os.path.join(
+        env['MLC_TMP_CURRENT_SCRIPT_PATH'], version, "QAicInfApi.cpp")
+    env['MLC_QAIC_API_INC_FILE'] = os.path.join(
+        env['MLC_TMP_CURRENT_SCRIPT_PATH'], version, "QAicInfApi.h")
 
     return {'return': 0}

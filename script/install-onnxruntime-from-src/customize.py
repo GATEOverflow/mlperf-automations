@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -13,11 +13,11 @@ def preprocess(i):
 
     run_cmd = "./build.sh --config RelWithDebInfo --build_wheel --parallel --allow_running_as_root --skip_tests "
 
-    if env.get('CM_ONNXRUNTIME_GPU', '') == "yes":
+    if env.get('MLC_ONNXRUNTIME_GPU', '') == "yes":
         cuda_home = env['CUDA_HOME']
         run_cmd += f"--use_cuda --cuda_home {cuda_home} --cudnn_home {cuda_home}"
 
-    env['CM_RUN_DIR'] = env['CM_ONNXRUNTIME_SRC_REPO_PATH']
-    env['CM_RUN_CMD'] = run_cmd
+    env['MLC_RUN_DIR'] = env['MLC_ONNXRUNTIME_SRC_REPO_PATH']
+    env['MLC_RUN_CMD'] = run_cmd
 
     return {'return': 0}

@@ -1,6 +1,5 @@
 import requests
-from cmind import utils
-import cmind as cm
+from mlc import utils
 import os
 import json
 
@@ -12,10 +11,10 @@ def preprocess(i):
     meta = i['meta']
     automation = i['automation']
 
-    server = env['CM_MLPERF_SUBMISSION_URL']
-    benchmark = env['CM_MLPERF_BENCHMARK']
-    submitter_id = env['CM_MLPERF_SUBMITTER_ID']
-    file_path = env['CM_MLPERF_SUBMISSION_FILE']
+    server = env['MLC_MLPERF_SUBMISSION_URL']
+    benchmark = env['MLC_MLPERF_BENCHMARK']
+    submitter_id = env['MLC_MLPERF_SUBMITTER_ID']
+    file_path = env['MLC_MLPERF_SUBMISSION_FILE']
 
     r = get_signed_url(server, benchmark, submitter_id, file_path)
     if r['return'] > 0:

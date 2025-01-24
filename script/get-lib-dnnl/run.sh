@@ -2,7 +2,7 @@
 
 CUR_DIR=${PWD:-tmp}
 
-git clone --recursive -b "${CM_GIT_CHECKOUT}" ${CM_GIT_URL} src
+git clone --recursive -b "${MLC_GIT_CHECKOUT}" ${MLC_GIT_URL} src
 
 test $? -eq 0 || exit 1
 
@@ -25,7 +25,7 @@ cmake .. \
 if [ "${?}" != "0" ]; then exit 1; fi
 
 echo "******************************************************"
-cmake --build . -j${CM_CPUINFO_CPUs}
+cmake --build . -j${MLC_CPUINFO_CPUs}
 if [ "${?}" != "0" ]; then exit 1; fi
 
 echo "******************************************************"
@@ -35,7 +35,7 @@ if [ "${?}" != "0" ]; then exit 1; fi
 
 # Clean build directory (too large)
 cd ${INSTALL_DIR}
-if [ "${CM_DNNL_CLEAN_BUILD}" != "no" ]; then
+if [ "${MLC_DNNL_CLEAN_BUILD}" != "no" ]; then
     rm -rf build
 fi
 

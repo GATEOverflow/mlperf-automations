@@ -1,11 +1,11 @@
-export PATH=${CM_CONDA_BIN_PATH}:$PATH
+export PATH=${MLC_CONDA_BIN_PATH}:$PATH
 
-cd ${CM_HARNESS_CODE_ROOT}
+cd ${MLC_HARNESS_CODE_ROOT}
 
 
 export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 
-export IPEX_PATH=${CM_IPEX_INSTALLED_PATH}
+export IPEX_PATH=${MLC_IPEX_INSTALLED_PATH}
 export TORCH_PATH=`python -c 'import torch;print(torch.utils.cmake_prefix_path)'`
 
 if [[ -z ${TORCH_PATH} ]]; then
@@ -13,10 +13,10 @@ if [[ -z ${TORCH_PATH} ]]; then
   exit 1
 fi
 
-export LOADGEN_DIR="${CM_MLPERF_INFERENCE_LOADGEN_INSTALL_PATH}/../"
-export OPENCV_DIR=${CM_OPENCV_BUILD_PATH}
-export RAPIDJSON_INCLUDE_DIR=${CM_RAPIDJSON_SRC_REPO_PATH}/include
-export GFLAGS_DIR=${CM_GFLAGS_BUILD_PATH}
+export LOADGEN_DIR="${MLC_MLPERF_INFERENCE_LOADGEN_INSTALL_PATH}/../"
+export OPENCV_DIR=${MLC_OPENCV_BUILD_PATH}
+export RAPIDJSON_INCLUDE_DIR=${MLC_RAPIDJSON_SRC_REPO_PATH}/include
+export GFLAGS_DIR=${MLC_GFLAGS_BUILD_PATH}
 export USE_CUDA=0
 
 BUILD_DIR=${PWD}/build

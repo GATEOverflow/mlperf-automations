@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -10,7 +10,7 @@ def preprocess(i):
     path = env.get('SDXL_CHECKPOINT_PATH', '').strip()
 
     if path == '' or not os.path.exists(path):
-        env['CM_TMP_REQUIRE_DOWNLOAD'] = 'yes'
+        env['MLC_TMP_REQUIRE_DOWNLOAD'] = 'yes'
 
     return {'return': 0}
 
@@ -20,10 +20,10 @@ def postprocess(i):
     env = i['env']
 
     if env.get('SDXL_CHECKPOINT_PATH', '') == '':
-        env['SDXL_CHECKPOINT_PATH'] = env['CM_ML_MODEL_PATH']
-    elif env.get('CM_ML_MODEL_PATH', '') == '':
-        env['CM_ML_MODEL_PATH'] = env['SDXL_CHECKPOINT_PATH']
+        env['SDXL_CHECKPOINT_PATH'] = env['MLC_ML_MODEL_PATH']
+    elif env.get('MLC_ML_MODEL_PATH', '') == '':
+        env['MLC_ML_MODEL_PATH'] = env['SDXL_CHECKPOINT_PATH']
 
-    env['CM_GET_DEPENDENT_CACHED_PATH'] = env['SDXL_CHECKPOINT_PATH']
+    env['MLC_GET_DEPENDENT_CACHED_PATH'] = env['SDXL_CHECKPOINT_PATH']
 
     return {'return': 0}

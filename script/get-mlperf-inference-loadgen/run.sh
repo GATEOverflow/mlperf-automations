@@ -11,38 +11,38 @@ echo "******************************************************"
 
 cd build
 
-if [ "${CM_MLPERF_INFERENCE_LOADGEN_DOWNLOAD}" == "YES" ]; then
-    export CM_MLPERF_INFERENCE_SOURCE="${CM_EXTRACT_EXTRACTED_PATH}"
+if [ "${MLC_MLPERF_INFERENCE_LOADGEN_DOWNLOAD}" == "YES" ]; then
+    export MLC_MLPERF_INFERENCE_SOURCE="${MLC_EXTRACT_EXTRACTED_PATH}"
 fi
 
 
-if [ -z "${CM_MLPERF_INFERENCE_SOURCE}" ]; then
-   echo "Error: env CM_MLPERF_INFERENCE_SOURCE is not defined - something is wrong with script automation!"
+if [ -z "${MLC_MLPERF_INFERENCE_SOURCE}" ]; then
+   echo "Error: env MLC_MLPERF_INFERENCE_SOURCE is not defined - something is wrong with script automation!"
    exit 1
 fi
 
 cmake \
     -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
-     "${CM_MLPERF_INFERENCE_SOURCE}/loadgen" \
-     -DPYTHON_EXECUTABLE:FILEPATH="${CM_PYTHON_BIN_WITH_PATH}" -B .
+     "${MLC_MLPERF_INFERENCE_SOURCE}/loadgen" \
+     -DPYTHON_EXECUTABLE:FILEPATH="${MLC_PYTHON_BIN_WITH_PATH}" -B .
 test $? -eq 0 || exit $?
 
 echo "******************************************************"
-CM_MAKE_CORES=${CM_MAKE_CORES:-${CM_HOST_CPU_TOTAL_CORES}}
-CM_MAKE_CORES=${CM_MAKE_CORES:-2}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-${MLC_HOST_CPU_TOTAL_CORES}}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-2}
 
-cmake --build . --target install -j "${CM_MAKE_CORES}"
+cmake --build . --target install -j "${MLC_MAKE_CORES}"
 test $? -eq 0 || exit $?
 
 # Clean build directory (too large)
 cd "${CUR_DIR}"
-if [[ $CM_MLPERF_INFERENCE_LOADGEN_BUILD_CLEAN == "yes" ]]; then
+if [[ $MLC_MLPERF_INFERENCE_LOADGEN_BUILD_CLEAN == "yes" ]]; then
   rm -rf build
 fi
 
 
-cd "${CM_MLPERF_INFERENCE_SOURCE}/loadgen"
-${CM_PYTHON_BIN_WITH_PATH} -m pip install . --target="${MLPERF_INFERENCE_PYTHON_SITE_BASE}"
+cd "${MLC_MLPERF_INFERENCE_SOURCE}/loadgen"
+${MLC_PYTHON_BIN_WITH_PATH} -m pip install . --target="${MLPERF_INFERENCE_PYTHON_SITE_BASE}"
 test $? -eq 0 || exit $?
 
 # Clean the built wheel

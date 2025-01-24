@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#CM Script location: ${CM_TMP_CURRENT_SCRIPT_PATH}
+#CM Script location: ${MLC_TMP_CURRENT_SCRIPT_PATH}
 
 #To export any variable
 #echo "VARIABLE_NAME=VARIABLE_VALUE" >>tmp-run-env.out
 
-#${CM_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
+#${MLC_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
 
 
 
@@ -17,7 +17,7 @@ function run() {
   echo "Running: "
   echo "$1"
   echo ""
-  if [[ ${CM_FAKE_RUN} != 'yes' ]]; then
+  if [[ ${MLC_FAKE_RUN} != 'yes' ]]; then
     eval "$1"
     exit_if_error
   fi
@@ -34,8 +34,8 @@ implementation="nvidia-original"
 category="edge,datacenter"
 
 #Add your run commands here...
-# run "$CM_RUN_CMD"
-find_performance_cmd='cm run script --tags=generate-run-cmds,inference,_find-performance \
+# run "$MLC_RUN_CMD"
+find_performance_cmd='mlcr --tags=generate-run-cmds,inference,_find-performance \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=edge --division=open --scenario=Offline  --quiet --test_query_count=$test_query_count'
 
@@ -47,7 +47,7 @@ run "bert-99.9" "5000" "${find_performance_cmd}"
 run "3d-unet" "10" "${find_performance_cmd}"
 
 
-submission_cmd='cm run script --tags=generate-run-cmds,inference,_submission,_all-scenarios \
+submission_cmd='mlcr --tags=generate-run-cmds,inference,_submission,_all-scenarios \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=$category --division=$division  --quiet'
 

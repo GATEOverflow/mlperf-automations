@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -9,7 +9,7 @@ def preprocess(i):
     env = i['env']
 
     dlrm_data_path = env.get(
-        'CM_DLRM_DATA_PATH', env.get(
+        'MLC_DLRM_DATA_PATH', env.get(
             'DLRM_DATA_PATH', ''))
     if dlrm_data_path == '':
         print(
@@ -35,48 +35,48 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    variation = env['CM_DLRM_DATA_VARIATION']
+    variation = env['MLC_DLRM_DATA_VARIATION']
 
     if variation == "nvidia":
         if not os.path.exists(os.path.join(dlrm_data_path, "model")):
             print(f'model directory is missing inside {dlrm_data_path}')
-            env['CM_DLRM_MODEL_DOWNLOAD'] = True
+            env['MLC_DLRM_MODEL_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(dlrm_data_path, "criteo")):
             print(f'criteo directory is missing inside {dlrm_data_path}')
-            env['CM_DLRM_DATASET_DOWNLOAD'] = True
+            env['MLC_DLRM_DATASET_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(
                 dlrm_data_path, "model", "model_weights")):
             print(
                 f'model_weights directory is missing inside {dlrm_data_path}/model')
-            env['CM_DLRM_MODEL_DOWNLOAD'] = True
+            env['MLC_DLRM_MODEL_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(dlrm_data_path, "criteo", "day23")):
             print(f'day23 directory is missing inside {dlrm_data_path}/day23')
-            env['CM_DLRM_DATASET_DOWNLOAD'] = True
+            env['MLC_DLRM_DATASET_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(
                 dlrm_data_path, "criteo", "day23", "fp32")):
             print(
                 f'fp32 directory is missing inside {dlrm_data_path}/criteo/day23')
-            env['CM_DLRM_DATASET_DOWNLOAD'] = True
+            env['MLC_DLRM_DATASET_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(dlrm_data_path, "criteo", "day23", "fp32", "day_23_sparse_multi_hot.npz")) and not os.path.exists(
                 os.path.join(dlrm_data_path, "criteo", "day23", "fp32", "day_23_sparse_multi_hot_unpacked")):
             print(
                 f'day_23_sparse_multi_hot.npz or day_23_sparse_multi_hot_unpacked is missing inside {dlrm_data_path}/criteo/day23/fp32')
-            env['CM_DLRM_DATASET_DOWNLOAD'] = True
+            env['MLC_DLRM_DATASET_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(
                 dlrm_data_path, "criteo", "day23", "fp32", "day_23_dense.npy")):
             print(
                 f'day_23_dense.npy is missing inside {dlrm_data_path}/criteo/day23/fp32')
-            env['CM_DLRM_DATASET_DOWNLOAD'] = True
+            env['MLC_DLRM_DATASET_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(
                 dlrm_data_path, "criteo", "day23", "fp32", "day_23_labels.npy")):
             print(
                 f'day_23_labels.npy is missing inside {dlrm_data_path}/criteo/day23/fp32')
-            env['CM_DLRM_DATASET_DOWNLOAD'] = True
+            env['MLC_DLRM_DATASET_DOWNLOAD'] = True
         if not os.path.exists(os.path.join(
                 dlrm_data_path, "criteo", "day23", "raw_data")):
-            if env.get('CM_CRITEO_DAY23_RAW_DATA_PATH', '') == '':
+            if env.get('MLC_CRITEO_DAY23_RAW_DATA_PATH', '') == '':
                 return {
                     'return': 1, 'error': 'Raw data missing inside {dlrm_data_path}/criteo/day23. Specify the target folder through input mapping(--criteo_day23_raw_data_path="path to raw criteo dataset")'}
 
@@ -84,14 +84,14 @@ def preprocess(i):
         xsep = ' && '
 
         # addition of run command to download the datasets and model
-        if env.get('CM_DLRM_DATASET_DOWNLOAD', False) == True:
-            run_cmd += 'cp -r "$CM_CRITEO_PREPROCESSED_PATH"/. ' + \
+        if env.get('MLC_DLRM_DATASET_DOWNLOAD', False) == True:
+            run_cmd += 'cp -r "$MLC_CRITEO_PREPROCESSED_PATH"/. ' + \
                 os.path.join(dlrm_data_path, "criteo", "day23", "fp32") + xsep
-        if env.get('CM_DLRM_MODEL_DOWNLOAD', False) == True:
-            run_cmd += 'cp -r "$CM_ML_MODEL_FILE_WITH_PATH"/. ' + \
+        if env.get('MLC_DLRM_MODEL_DOWNLOAD', False) == True:
+            run_cmd += 'cp -r "$MLC_ML_MODEL_FILE_WITH_PATH"/. ' + \
                 os.path.join(dlrm_data_path, "model") + xsep
 
-        if env.get('CM_DLRM_DATASET_DOWNLOAD', '') != True:
+        if env.get('MLC_DLRM_DATASET_DOWNLOAD', '') != True:
             if not os.path.exists(os.path.join(
                     dlrm_data_path, "criteo", "day23", "fp32", "day_23_sparse_multi_hot_unpacked")):
                 os.system(f"unzip {os.path.join(dlrm_data_path, 'criteo', 'day23', 'fp32', 'day_23_sparse_multi_hot.npz')} -d {os.path.join(dlrm_data_path, 'criteo', 'day23', 'fp32', 'day_23_sparse_multi_hot_unpacked')}")
@@ -99,7 +99,7 @@ def preprocess(i):
             run_cmd += f"unzip {os.path.join(dlrm_data_path, 'criteo', 'day23', 'fp32', 'day_23_sparse_multi_hot.npz')} -d {os.path.join(dlrm_data_path, 'criteo', 'day23', 'fp32', 'day_23_sparse_multi_hot_unpacked')}" + xsep
 
         if os.path.exists(os.path.join(dlrm_data_path, "criteo", "day23", "fp32",
-                          "day_23_sparse_multi_hot.npz")) or env['CM_DLRM_DATASET_DOWNLOAD'] == True:
+                          "day_23_sparse_multi_hot.npz")) or env['MLC_DLRM_DATASET_DOWNLOAD'] == True:
             file_path = os.path.join(
                 dlrm_data_path,
                 "criteo",
@@ -131,12 +131,12 @@ def preprocess(i):
         run_cmd += ("cd {}; md5sum -c {}").format(dir_path,
                                                   os.path.join(script_path, "checksums.txt"))
 
-        env['CM_DLRM_V2_DAY23_FILE_PATH'] = os.path.join(
+        env['MLC_DLRM_V2_DAY23_FILE_PATH'] = os.path.join(
             dlrm_data_path, "criteo", "day23", "raw_data")
-        env['CM_DLRM_V2_AGGREGATION_TRACE_FILE_PATH'] = os.path.join(
+        env['MLC_DLRM_V2_AGGREGATION_TRACE_FILE_PATH'] = os.path.join(
             dlrm_data_path, "criteo", "day23", "sample_partition.txt")
 
-        env['CM_RUN_CMD'] = run_cmd
+        env['MLC_RUN_CMD'] = run_cmd
 
     return {'return': 0}
 
@@ -145,11 +145,11 @@ def postprocess(i):
 
     env = i['env']
 
-    if env.get('CM_DLRM_DATA_PATH', '') == '' and env.get(
+    if env.get('MLC_DLRM_DATA_PATH', '') == '' and env.get(
             'DLRM_DATA_PATH', '') == '':
-        env['CM_DLRM_DATA_PATH'] = os.getcwd()
+        env['MLC_DLRM_DATA_PATH'] = os.getcwd()
     else:
-        env['CM_GET_DEPENDENT_CACHED_PATH'] = env.get(
-            'CM_DLRM_DATA_PATH', env['DLRM_DATA_PATH'])
+        env['MLC_GET_DEPENDENT_CACHED_PATH'] = env.get(
+            'MLC_DLRM_DATA_PATH', env['DLRM_DATA_PATH'])
 
     return {'return': 0}

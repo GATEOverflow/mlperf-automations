@@ -31,13 +31,13 @@ def main():
 
     env = os.environ
 
-    dashboard_user = env.get('CM_MLPERF_DASHBOARD_WANDB_USER', '')
+    dashboard_user = env.get('MLC_MLPERF_DASHBOARD_WANDB_USER', '')
     if dashboard_user == '':
         dashboard_user = 'cmind'
 
-    dashboard_project = env.get('CM_MLPERF_DASHBOARD_WANDB_PROJECT', '')
+    dashboard_project = env.get('MLC_MLPERF_DASHBOARD_WANDB_PROJECT', '')
     if dashboard_project == '':
-        dashboard_project = 'cm-mlperf-dse-testing'
+        dashboard_project = 'mlc-mlperf-dse-testing'
 
     for k in results:
 
@@ -69,26 +69,26 @@ def main():
 
         # Check extra env variables
         x = {
-            "lang": "CM_MLPERF_LANG",
-            "device": "CM_MLPERF_DEVICE",
-            "submitter": "CM_MLPERF_SUBMITTER",
-            "backend": "CM_MLPERF_BACKEND",
-            "model": "CM_MLPERF_MODEL",
-            "run_style": "CM_MLPERF_RUN_STYLE",
-            "rerun": "CM_RERUN",
-            "hw_name": "CM_HW_NAME",
-            "max_batchsize": "CM_MLPERF_LOADGEN_MAX_BATCHSIZE",
-            "num_threads": "CM_NUM_THREADS",
-            "scenario": "CM_MLPERF_LOADGEN_SCENARIO",
-            "test_query_count": "CM_TEST_QUERY_COUNT",
-            "run_checker": "CM_RUN_SUBMISSION_CHECKER",
-            "skip_truncation": "CM_SKIP_TRUNCATE_ACCURACY"
+            "lang": "MLC_MLPERF_LANG",
+            "device": "MLC_MLPERF_DEVICE",
+            "submitter": "MLC_MLPERF_SUBMITTER",
+            "backend": "MLC_MLPERF_BACKEND",
+            "model": "MLC_MLPERF_MODEL",
+            "run_style": "MLC_MLPERF_RUN_STYLE",
+            "rerun": "MLC_RERUN",
+            "hw_name": "MLC_HW_NAME",
+            "max_batchsize": "MLC_MLPERF_LOADGEN_MAX_BATCHSIZE",
+            "num_threads": "MLC_NUM_THREADS",
+            "scenario": "MLC_MLPERF_LOADGEN_SCENARIO",
+            "test_query_count": "MLC_TEST_QUERY_COUNT",
+            "run_checker": "MLC_RUN_SUBMISSION_CHECKER",
+            "skip_truncation": "MLC_SKIP_TRUNCATE_ACCURACY"
         }
 
         for k in x:
             env_key = x[k]
             if os.environ.get(env_key, '') != '':
-                result['cm_misc_input_' + k] = os.environ[env_key]
+                result['mlc_misc_input_' + k] = os.environ[env_key]
 
         wandb.init(entity=dashboard_user,
                    project=dashboard_project,

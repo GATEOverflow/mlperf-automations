@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,14 +12,14 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    csv_file = env.get('CM_CSV_FILE', '')
-    md_file = env.get('CM_MD_FILE', '')
+    csv_file = env.get('MLC_CSV_FILE', '')
+    md_file = env.get('MLC_MD_FILE', '')
     process_file = os.path.join(i['run_script_input']['path'], "process.py")
 
-    env['CM_RUN_CMD'] = '{} {} {} {} '.format(
-        env["CM_PYTHON_BIN_WITH_PATH"], process_file, csv_file, md_file)
+    env['MLC_RUN_CMD'] = '{} {} {} {} '.format(
+        env["MLC_PYTHON_BIN_WITH_PATH"], process_file, csv_file, md_file)
 
     return {'return': 0}
 

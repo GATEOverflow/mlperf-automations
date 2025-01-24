@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-scenario=${CM_MLPERF_LOADGEN_SCENARIO}
-OUTDIR="${CM_MLPERF_OUTPUT_DIR}"
+scenario=${MLC_MLPERF_LOADGEN_SCENARIO}
+OUTDIR="${MLC_MLPERF_OUTPUT_DIR}"
 #python ../../user_config.py
 
 
@@ -14,11 +14,11 @@ number_threads=`nproc --all`
 export number_cores=`lscpu -b -p=Core,Socket | grep -v '^#' | sort -u | wc -l`
 num_numa=$(numactl --hardware|grep available|awk -F' ' '{ print $2 }')
 num_instance=$((number_cores/CPUS_PER_INSTANCE))
-export PYTHONPATH=${CM_HARNESS_CODE_ROOT}/common:$PYTHONPATH
-cp -r ${CM_HARNESS_CODE_ROOT}/meta $OUTDIR/
-cp ${CM_HARNESS_CODE_ROOT}/unet3d_jit_model.pt $OUTDIR/
-cp ${CM_HARNESS_CODE_ROOT}/calibration_result.json $OUTDIR/
-ln -sf ${CM_HARNESS_CODE_ROOT}/build $OUTDIR/build
+export PYTHONPATH=${MLC_HARNESS_CODE_ROOT}/common:$PYTHONPATH
+cp -r ${MLC_HARNESS_CODE_ROOT}/meta $OUTDIR/
+cp ${MLC_HARNESS_CODE_ROOT}/unet3d_jit_model.pt $OUTDIR/
+cp ${MLC_HARNESS_CODE_ROOT}/calibration_result.json $OUTDIR/
+ln -sf ${MLC_HARNESS_CODE_ROOT}/build $OUTDIR/build
 #the log path is hardcoded in the intel implementation. This is a hack to get them to where we want
 rm -rf $OUTDIR/output_logs
 ln -sf $OUTDIR $OUTDIR/output_logs 
@@ -31,13 +31,13 @@ export LD_PRELOAD=$CONDA_PREFIX/lib/libjemalloc.so:$LD_PRELOAD
 export MALLOC_CONF="oversize_threshold:1,background_thread:true,percpu_arena:percpu,metadata_thp:always,dirty_decay_ms:9000000000,muzzy_decay_ms:9000000000";
 
 
-#cd ${CM_HARNESS_CODE_ROOT}
-cmd="python ${CM_HARNESS_CODE_ROOT}/run.py   \
+#cd ${MLC_HARNESS_CODE_ROOT}
+cmd="python ${MLC_HARNESS_CODE_ROOT}/run.py   \
       --mode ${LOADGEN_MODE} \
       --workload-name 3dunet \
-      --mlperf-conf ${CM_MLPERF_CONF} \
-      --user-conf ${CM_MLPERF_USER_CONF} \
-      --workload-config ${CM_HARNESS_CODE_ROOT}/config.json \
+      --mlperf-conf ${MLC_MLPERF_CONF} \
+      --user-conf ${MLC_MLPERF_USER_CONF} \
+      --workload-config ${MLC_HARNESS_CODE_ROOT}/config.json \
       --num-instance $num_instance \
       --cpus-per-instance $CPUS_PER_INSTANCE \
       --scenario $scenario \

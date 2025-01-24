@@ -1,11 +1,11 @@
 #!/bin/bash
 
-export PATH=${CM_CONDA_BIN_PATH}:$PATH
+export PATH=${MLC_CONDA_BIN_PATH}:$PATH
 
 CUR_DIR=$PWD
 echo $PWD
 rm -rf transformers
-cmd="cp -r ${CM_TRANSFORMERS_SRC_REPO_PATH} transformers"
+cmd="cp -r ${MLC_TRANSFORMERS_SRC_REPO_PATH} transformers"
 echo "$cmd"
 eval "$cmd"
 cd transformers
@@ -16,8 +16,8 @@ if [ "${?}" != "0" ]; then exit 1; fi
 git apply transformers.patch
 if [ "${?}" != "0" ]; then exit 1; fi
 
-echo ${CM_RUN_CMD}
-eval ${CM_RUN_CMD}
+echo ${MLC_RUN_CMD}
+eval ${MLC_RUN_CMD}
 
 if [ "${?}" != "0" ]; then exit 1; fi
 

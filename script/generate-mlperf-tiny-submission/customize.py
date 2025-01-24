@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import json
 import shutil
@@ -17,11 +17,11 @@ def generate_submission(i):
     env = i['env']
     state = i['state']
     inp = i['input']
-    results_dir = env['CM_MLPERF_RESULTS_DIR']
+    results_dir = env['MLC_MLPERF_RESULTS_DIR']
 
-    if 'CM_MLPERF_SUBMISSION_DIR' not in env:
-        env['CM_MLPERF_SUBMISSION_DIR'] = os.path.join(cur_dir, "results")
-    submission_dir = env['CM_MLPERF_SUBMISSION_DIR']
+    if 'MLC_MLPERF_SUBMISSION_DIR' not in env:
+        env['MLC_MLPERF_SUBMISSION_DIR'] = os.path.join(cur_dir, "results")
+    submission_dir = env['MLC_MLPERF_SUBMISSION_DIR']
     if not os.path.isdir(submission_dir):
         os.makedirs(submission_dir)
 
@@ -37,7 +37,7 @@ def generate_submission(i):
 
     if division not in ['open', 'closed']:
         return {'return': 1, 'error': '"division" must be "open" or "closed"'}
-    system_meta = state['CM_SUT_META']
+    system_meta = state['MLC_SUT_META']
     division = system_meta['division']
 
     print('* MLPerf tiny division: {}'.format(division))
@@ -49,7 +49,7 @@ def generate_submission(i):
 
     # Check submitter
     submitter = system_meta['submitter']
-    env['CM_MLPERF_SUBMITTER'] = submitter
+    env['MLC_MLPERF_SUBMITTER'] = submitter
 
     print('* MLPerf tiny submitter: {}'.format(submitter))
 

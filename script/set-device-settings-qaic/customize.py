@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,11 +12,11 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    if env.get('CM_QAIC_ECC', '') == 'yes':
+    if env.get('MLC_QAIC_ECC', '') == 'yes':
         import json
-        for device in env['CM_QAIC_DEVICES'].split(","):
+        for device in env['MLC_QAIC_DEVICES'].split(","):
             ecc_template = {}
             ecc_template['request'] = []
             ecc_template['request'].append({})
@@ -31,8 +31,8 @@ def preprocess(i):
             with open("request_" + device + ".json", "w") as f:
                 f.write(json.dumps(ecc_template))
 
-    if env.get('CM_QAIC_VC', '') != '':
-        env['CM_QAIC_VC_HEX'] = hex(int(env['CM_QAIC_VC']))
+    if env.get('MLC_QAIC_VC', '') != '':
+        env['MLC_QAIC_VC_HEX'] = hex(int(env['MLC_QAIC_VC']))
 
     return {'return': 0}
 

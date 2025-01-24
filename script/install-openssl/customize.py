@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -15,10 +15,10 @@ def preprocess(i):
 
     recursion_spaces = i['recursion_spaces']
 
-    need_version = env.get('CM_VERSION', '')
+    need_version = env.get('MLC_VERSION', '')
     if need_version == '':
         return {'return': 1,
-                'error': 'internal problem - CM_VERSION is not defined in env'}
+                'error': 'internal problem - MLC_VERSION is not defined in env'}
 
     print(recursion_spaces + '    # Requested version: {}'.format(need_version))
 
@@ -33,7 +33,7 @@ def postprocess(i):
     install_path = os.path.join(
         os.getcwd(),
         'openssl-' +
-        env['CM_VERSION'] +
+        env['MLC_VERSION'] +
         'g',
         'install')
     path_lib = os.path.join(install_path, 'lib')
@@ -42,6 +42,6 @@ def postprocess(i):
     env['+LD_LIBRARY_PATH'].append(path_lib)
     bin_name = "openssl"
     path_bin = os.path.join(install_path, 'bin')
-    env['CM_OPENSSL_INSTALLED_PATH'] = path_bin
-    env['CM_OPENSSL_BIN_WITH_PATH'] = os.path.join(path_bin, bin_name)
+    env['MLC_OPENSSL_INSTALLED_PATH'] = path_bin
+    env['MLC_OPENSSL_BIN_WITH_PATH'] = os.path.join(path_bin, bin_name)
     return {'return': 0}

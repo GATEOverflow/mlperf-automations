@@ -17,11 +17,11 @@ via CM command line, Python API or GUI.
 
 CM scripts can easily chained together into automation workflows using `deps` and `tags` keys
 while automatically updating all environment variables and paths 
-for a given task and platform [using simple JSON or YAML](https://github.com/mlcommons/ck/blob/master/cm-mlops/script/app-image-classification-onnx-py/_cm.yaml).
+for a given task and platform [using simple JSON or YAML](https://github.com/mlcommons/ck/blob/master/mlc-mlops/script/app-image-classification-onnx-py/_cm.yaml).
 
 
 *Note that CM is a community project being developed and extended by [MLCommons members and individual contributors](../CONTRIBUTING.md) -
- you can find source code of CM scripts maintained by MLCommons [here](../cm-mlops/script).
+ you can find source code of CM scripts maintained by MLCommons [here](../mlc-mlops/script).
  Please join [Discord server](https://discord.gg/JjWNWXKxwT) to participate in collaborative developments or provide your feedback.*
 
 
@@ -40,13 +40,13 @@ for a given task and platform [using simple JSON or YAML](https://github.com/mlc
 
 # List of CM scripts by categories
 
-{{CM_TOC_CATEGORIES}}
+{{MLC_TOC_CATEGORIES}}
 
-{{CM_TOC2}}
+{{MLC_TOC2}}
 
 # List of all sorted CM scripts 
 
-{{CM_TOC}}
+{{MLC_TOC}}
 
 
-{{CM_MAIN}}
+{{MLC_MAIN}}

@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import subprocess
 
@@ -18,18 +18,18 @@ def preprocess(i):
     env = i['env']
 
     if not check_installation("numactl", os_info):
-        env['CM_INSTALL_NUMACTL'] = 'True'
+        env['MLC_INSTALL_NUMACTL'] = 'True'
 
     # if not check_installation("cpupower",os_info):
-    env['CM_INSTALL_CPUPOWER'] = 'True'
+    env['MLC_INSTALL_CPUPOWER'] = 'True'
 
-    if env.get('CM_PLATFORM_DETAILS_FILE_PATH', '') == '':
-        if env.get('CM_PLATFORM_DETAILS_DIR_PATH', '') == '':
-            env['CM_PLATFORM_DETAILS_DIR_PATH'] = os.getcwd()
-        if env.get('CM_PLATFORM_DETAILS_FILE_NAME', '') == '':
-            env['CM_PLATFORM_DETAILS_FILE_NAME'] = "system-info.txt"
-        env['CM_PLATFORM_DETAILS_FILE_PATH'] = os.path.join(
-            env['CM_PLATFORM_DETAILS_DIR_PATH'], env['CM_PLATFORM_DETAILS_FILE_NAME'])
+    if env.get('MLC_PLATFORM_DETAILS_FILE_PATH', '') == '':
+        if env.get('MLC_PLATFORM_DETAILS_DIR_PATH', '') == '':
+            env['MLC_PLATFORM_DETAILS_DIR_PATH'] = os.getcwd()
+        if env.get('MLC_PLATFORM_DETAILS_FILE_NAME', '') == '':
+            env['MLC_PLATFORM_DETAILS_FILE_NAME'] = "system-info.txt"
+        env['MLC_PLATFORM_DETAILS_FILE_PATH'] = os.path.join(
+            env['MLC_PLATFORM_DETAILS_DIR_PATH'], env['MLC_PLATFORM_DETAILS_FILE_NAME'])
 
     return {'return': 0}
 

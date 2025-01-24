@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -8,7 +8,7 @@ def preprocess(i):
 
     env = i['env']
 
-    env['CM_TMP_PATH'] = os.path.join(os.getcwd(), 'install', 'bin')
-    env['CM_TMP_FAIL_IF_NOT_FOUND'] = 'yes'
+    env['MLC_TMP_PATH'] = os.path.join(os.getcwd(), 'install', 'bin')
+    env['MLC_TMP_FAIL_IF_NOT_FOUND'] = 'yes'
 
     return {'return': 0}

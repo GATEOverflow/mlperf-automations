@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -13,10 +13,10 @@ def preprocess(i):
 
 def postprocess(i):
     env = i['env']
-    folder_name = env['CM_DATASET_ARCHIVE'].split(".")[0]
-    env['CM_DATASET_LIBRISPEECH_PATH'] = os.path.join(
+    folder_name = env['MLC_DATASET_ARCHIVE'].split(".")[0]
+    env['MLC_DATASET_LIBRISPEECH_PATH'] = os.path.join(
         os.getcwd(), "LibriSpeech", folder_name)
-    env['CM_DATASET_PATH'] = os.path.join(
+    env['MLC_DATASET_PATH'] = os.path.join(
         os.getcwd(), "LibriSpeech", folder_name)
 
     return {'return': 0}

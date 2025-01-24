@@ -3,7 +3,7 @@
 CUR_DIR=$PWD
 echo $PWD
 rm -rf numactl
-cmd="cp -r ${CM_NUMACTL_SRC_REPO_PATH} numactl"
+cmd="cp -r ${MLC_NUMACTL_SRC_REPO_PATH} numactl"
 echo "$cmd"
 eval "$cmd"
 cd numactl

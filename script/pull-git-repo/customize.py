@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import shutil
 
@@ -10,10 +10,10 @@ def preprocess(i):
     env = i['env']
     meta = i['meta']
 
-    if 'CM_GIT_CHECKOUT_PATH' not in env:
-        return {'return': 1, 'error': 'CM_GIT_CHECKOUT_PATH is not set'}
+    if 'MLC_GIT_CHECKOUT_PATH' not in env:
+        return {'return': 1, 'error': 'MLC_GIT_CHECKOUT_PATH is not set'}
 
-    env['CM_GIT_PULL_CMD'] = "git pull --rebase"
+    env['MLC_GIT_PULL_CMD'] = "git pull --rebase"
 
     return {'return': 0}
 

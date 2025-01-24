@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUTPUT_FILE="$CM_PLATFORM_DETAILS_FILE_PATH"
+OUTPUT_FILE="$MLC_PLATFORM_DETAILS_FILE_PATH"
 #set -e
 #echo $OUTPUT_FILE
 echo "WARNING: sudo permission is needed for some of the below commands"
@@ -43,9 +43,9 @@ test $? -eq 0 || exit $?
 echo "------------------------------------------------------------" >> $OUTPUT_FILE
 
 echo "8. numactl --hardware" >> $OUTPUT_FILE
-if [[ ${CM_SUDO_USER} == "yes" ]]; then
-    echo "${CM_SUDO} numactl --hardware"
-    eval "${CM_SUDO} numactl --hardware" >> $OUTPUT_FILE
+if [[ ${MLC_SUDO_USER} == "yes" ]]; then
+    echo "${MLC_SUDO} numactl --hardware"
+    eval "${MLC_SUDO} numactl --hardware" >> $OUTPUT_FILE
     test $? -eq 0 || exit $?
 else
     echo "Requires SUDO permission" >> $OUTPUT_FILE
@@ -64,12 +64,12 @@ echo "------------------------------------------------------------" >> $OUTPUT_F
 
 echo "11. Systemd service manager version" >> $OUTPUT_FILE
 eval "systemctl --version | head -n 1" >> $OUTPUT_FILE
-test $? -eq 0 || exit $?
+#test $? -eq 0 || exit $?
 echo "------------------------------------------------------------" >> $OUTPUT_FILE
 
 echo "12. Services, from systemctl list-unit-files" >> $OUTPUT_FILE
 eval "systemctl list-unit-files" >> $OUTPUT_FILE
-test $? -eq 0 || exit $?
+#test $? -eq 0 || exit $?
 echo "------------------------------------------------------------" >> $OUTPUT_FILE
 
 echo "13. Linux kernel boot-time arguments, from /proc/cmdline" >> $OUTPUT_FILE
@@ -83,9 +83,9 @@ test $? -eq 0 || echo "FAILED: cpupower frequency-info" >> $OUTPUT_FILE
 echo "------------------------------------------------------------" >> $OUTPUT_FILE
 
 echo "15. sysctl" >> $OUTPUT_FILE
-if [[ ${CM_SUDO_USER} == "yes" ]]; then
-    echo "${CM_SUDO} sysctl -a"
-    eval "${CM_SUDO} sysctl -a" >> $OUTPUT_FILE
+if [[ ${MLC_SUDO_USER} == "yes" ]]; then
+    echo "${MLC_SUDO} sysctl -a"
+    eval "${MLC_SUDO} sysctl -a" >> $OUTPUT_FILE
     test $? -eq 0 || exit $?
 else
     echo "Requires SUDO permission" >> $OUTPUT_FILE
@@ -118,8 +118,8 @@ test $? -eq 0 || exit $?
 echo "------------------------------------------------------------" >> $OUTPUT_FILE
 
 echo "21. dmidecode" >> $OUTPUT_FILE
-if [[ ${CM_SUDO_USER} == "yes" ]]; then
-    eval "${CM_SUDO} dmidecode" >> $OUTPUT_FILE
+if [[ ${MLC_SUDO_USER} == "yes" ]]; then
+    eval "${MLC_SUDO} dmidecode" >> $OUTPUT_FILE
     test $? -eq 0 || echo "FAILED: dmidecode" >> $OUTPUT_FILE
 else
     echo "Requires SUDO permission" >> $OUTPUT_FILE
@@ -127,8 +127,8 @@ fi
 echo "------------------------------------------------------------" >> $OUTPUT_FILE
 
 echo "22. BIOS" >> $OUTPUT_FILE
-if [[ ${CM_SUDO_USER} == "yes" ]]; then
-    eval "${CM_SUDO} dmidecode -t bios" >> $OUTPUT_FILE
+if [[ ${MLC_SUDO_USER} == "yes" ]]; then
+    eval "${MLC_SUDO} dmidecode -t bios" >> $OUTPUT_FILE
     test $? -eq 0 || echo "FAILED: dmidecode -t bios" >> $OUTPUT_FILE
 else
     echo "Requires SUDO permission" >> $OUTPUT_FILE

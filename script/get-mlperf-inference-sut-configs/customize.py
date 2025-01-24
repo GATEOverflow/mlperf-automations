@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import yaml
 import shutil
@@ -8,52 +8,56 @@ def postprocess(i):
     env = i['env']
     state = i['state']
 
-    if env.get('CM_HW_NAME', '') == '':
-        host_name = env.get('CM_HOST_SYSTEM_NAME', 'default').replace("-", "_")
-        env['CM_HW_NAME'] = host_name
+    if env.get('MLC_HW_NAME', '') == '':
+        host_name = env.get(
+            'MLC_HOST_SYSTEM_NAME',
+            'default').replace(
+            "-",
+            "_")
+        env['MLC_HW_NAME'] = host_name
 
-    device = env.get('CM_MLPERF_DEVICE', 'cpu')
+    device = env.get('MLC_MLPERF_DEVICE', 'cpu')
 
-    backend = env.get('CM_MLPERF_BACKEND', 'default')
-    if env.get('CM_MLPERF_BACKEND_VERSION', '') != '':
-        backend_version = "v" + env.get('CM_MLPERF_BACKEND_VERSION') if not env.get(
-            'CM_MLPERF_BACKEND_VERSION').startswith("v") else env.get('CM_MLPERF_BACKEND_VERSION')
+    backend = env.get('MLC_MLPERF_BACKEND', 'default')
+    if env.get('MLC_MLPERF_BACKEND_VERSION', '') != '':
+        backend_version = "v" + env.get('MLC_MLPERF_BACKEND_VERSION') if not env.get(
+            'MLC_MLPERF_BACKEND_VERSION').startswith("v") else env.get('MLC_MLPERF_BACKEND_VERSION')
     else:
         backend_version = 'vdefault'
 
-    if 'CM_SUT_CONFIG' not in state:
-        state['CM_SUT_CONFIG'] = {}
-    if 'CM_SUT_CONFIG_PATH' not in state:
-        state['CM_SUT_CONFIG_PATH'] = {}
+    if 'MLC_SUT_CONFIG' not in state:
+        state['MLC_SUT_CONFIG'] = {}
+    if 'MLC_SUT_CONFIG_PATH' not in state:
+        state['MLC_SUT_CONFIG_PATH'] = {}
 
-    implementation_string = env['CM_MLPERF_SUT_NAME_IMPLEMENTATION_PREFIX'] if env.get(
-        'CM_MLPERF_SUT_NAME_IMPLEMENTATION_PREFIX', '') != '' else env.get(
-        'CM_MLPERF_IMPLEMENTATION', 'default')
+    implementation_string = env['MLC_MLPERF_SUT_NAME_IMPLEMENTATION_PREFIX'] if env.get(
+        'MLC_MLPERF_SUT_NAME_IMPLEMENTATION_PREFIX', '') != '' else env.get(
+        'MLC_MLPERF_IMPLEMENTATION', 'default')
 
     run_config = []
     for i in range(1, 6):
-        if env.get(f'CM_MLPERF_SUT_NAME_RUN_CONFIG_SUFFIX{i}', '') != '':
+        if env.get(f'MLC_MLPERF_SUT_NAME_RUN_CONFIG_SUFFIX{i}', '') != '':
             run_config.append(
-                env.get(f'CM_MLPERF_SUT_NAME_RUN_CONFIG_SUFFIX{i}'))
+                env.get(f'MLC_MLPERF_SUT_NAME_RUN_CONFIG_SUFFIX{i}'))
 
     run_config_string = "_".join(
         run_config) if run_config else 'default_config'
-    env['CM_MLPERF_INFERENCE_SUT_RUN_CONFIG'] = run_config_string
+    env['MLC_MLPERF_INFERENCE_SUT_RUN_CONFIG'] = run_config_string
 
-    if env.get('CM_SUT_NAME', '') == '':
-        env['CM_SUT_NAME'] = env['CM_HW_NAME'] + "-" + implementation_string + "-" + \
+    if env.get('MLC_SUT_NAME', '') == '':
+        env['MLC_SUT_NAME'] = env['MLC_HW_NAME'] + "-" + implementation_string + "-" + \
             device + "-" + backend + "-" + backend_version + "-" + run_config_string
 
-    if env.get('CM_SUT_CONFIGS_PATH', '') != '':
-        path = env['CM_SUT_CONFIGS_PATH']
-    elif env.get('CM_SUT_USE_EXTERNAL_CONFIG_REPO', '') == "yes":
-        path = env.get('CM_GIT_CHECKOUT_PATH')
+    if env.get('MLC_SUT_CONFIGS_PATH', '') != '':
+        path = env['MLC_SUT_CONFIGS_PATH']
+    elif env.get('MLC_SUT_USE_EXTERNAL_CONFIG_REPO', '') == "yes":
+        path = env.get('MLC_GIT_CHECKOUT_PATH')
     else:
         path = os.path.join(os.getcwd(), "configs")
 
     config_path = os.path.join(
         path,
-        env['CM_HW_NAME'],
+        env['MLC_HW_NAME'],
         implementation_string +
         "-implementation",
         device +
@@ -68,7 +72,7 @@ def postprocess(i):
         os.makedirs(os.path.dirname(config_path), exist_ok=True)
         config_path_default = os.path.join(
             path,
-            env['CM_HW_NAME'],
+            env['MLC_HW_NAME'],
             implementation_string +
             "-implementation",
             device +
@@ -80,36 +84,36 @@ def postprocess(i):
             shutil.copy(config_path_default, config_path)
         else:
             src_config_full = os.path.join(
-                env['CM_TMP_CURRENT_SCRIPT_PATH'],
+                env['MLC_TMP_CURRENT_SCRIPT_PATH'],
                 "configs",
-                env['CM_HW_NAME'],
+                env['MLC_HW_NAME'],
                 implementation_string + "-implementation",
                 device + "-device",
                 backend + "-framework",
                 "framework-version-" + backend_version,
                 run_config_string + "-config.yaml")
             src_config_partial1 = os.path.join(
-                env['CM_TMP_CURRENT_SCRIPT_PATH'],
+                env['MLC_TMP_CURRENT_SCRIPT_PATH'],
                 "configs",
-                env['CM_HW_NAME'],
+                env['MLC_HW_NAME'],
                 implementation_string + "-implementation",
                 device + "-device",
                 backend + "-framework",
                 "framework-version-" + backend_version,
                 "default-config.yaml")
             src_config_partial2 = os.path.join(
-                env['CM_TMP_CURRENT_SCRIPT_PATH'],
+                env['MLC_TMP_CURRENT_SCRIPT_PATH'],
                 "configs",
-                env['CM_HW_NAME'],
+                env['MLC_HW_NAME'],
                 implementation_string + "-implementation",
                 device + "-device",
                 backend + "-framework",
                 "framework-version-default",
                 "default-config.yaml")
             src_config_partial3 = os.path.join(
-                env['CM_TMP_CURRENT_SCRIPT_PATH'],
+                env['MLC_TMP_CURRENT_SCRIPT_PATH'],
                 "configs",
-                env['CM_HW_NAME'],
+                env['MLC_HW_NAME'],
                 implementation_string + "-implementation",
                 device + "-device",
                 backend + "-framework",
@@ -124,9 +128,9 @@ def postprocess(i):
                 shutil.copy(src_config_partial3, config_path)
             else:
                 print(
-                    f"Config file missing for given hw_name: '{env['CM_HW_NAME']}', implementation: '{implementation_string}', device: '{device},  backend: '{backend}', copying from default")
+                    f"Config file missing for given hw_name: '{env['MLC_HW_NAME']}', implementation: '{implementation_string}', device: '{device},  backend: '{backend}', copying from default")
                 src_config = os.path.join(
-                    env['CM_TMP_CURRENT_SCRIPT_PATH'],
+                    env['MLC_TMP_CURRENT_SCRIPT_PATH'],
                     "configs",
                     "default",
                     "config.yaml")
@@ -136,9 +140,9 @@ def postprocess(i):
                     exist_ok=True)
                 shutil.copy(src_config, config_path_default)
 
-    state['CM_SUT_CONFIG'][env['CM_SUT_NAME']] = yaml.load(
+    state['MLC_SUT_CONFIG'][env['MLC_SUT_NAME']] = yaml.load(
         open(config_path), Loader=yaml.SafeLoader)
-    state['CM_SUT_CONFIG_NAME'] = env['CM_SUT_NAME']
-    state['CM_SUT_CONFIG_PATH'][env['CM_SUT_NAME']] = config_path
+    state['MLC_SUT_CONFIG_NAME'] = env['MLC_SUT_NAME']
+    state['MLC_SUT_CONFIG_PATH'][env['MLC_SUT_NAME']] = config_path
 
     return {'return': 0}

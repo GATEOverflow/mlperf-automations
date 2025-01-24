@@ -1,5 +1,4 @@
-import cmind as cm
-from cmind import utils
+from mlc import utils
 
 import os
 import subprocess
@@ -14,12 +13,12 @@ def preprocess(i):
     cur_dir = os.getcwd()
 
     # Query cache for results dirs
-    env_repo_tags = env.get('CM_IMPORT_TINYMLPERF_REPO_TAGS', '').strip()
+    env_repo_tags = env.get('MLC_IMPORT_TINYMLPERF_REPO_TAGS', '').strip()
     xtags = '' if env_repo_tags == '' else ',version-' + env_repo_tags
 
-    r = cm.access({'action': 'find',
+    r = mlc.access({'action': 'find',
                    'automation': 'cache,541d6f712a6b464e',
-                   'tags': 'get,repo,mlperf-tiny-results' + xtags})
+                    'tags': 'get,repo,mlperf-tiny-results' + xtags})
     if r['return'] > 0:
         return r
 
@@ -46,9 +45,9 @@ def preprocess(i):
             run_script_input = i['run_script_input']
             automation = i['automation']
 
-            env['CM_TINYMLPERF_REPO_PATH'] = path
-            env['CM_TINYMLPERF_CURRENT_DIR'] = cur_dir
-            env['CM_TINYMLPERF_REPO_VERSION'] = version
+            env['MLC_TINYMLPERF_REPO_PATH'] = path
+            env['MLC_TINYMLPERF_CURRENT_DIR'] = cur_dir
+            env['MLC_TINYMLPERF_REPO_VERSION'] = version
 
             print('')
             print('Repo path: {}'.format(path))
@@ -66,9 +65,9 @@ def postprocess(i):
 
     env = i['env']
 
-    path = env['CM_TINYMLPERF_REPO_PATH']
-    cur_dir = env['CM_TINYMLPERF_CURRENT_DIR']
-    version = env['CM_TINYMLPERF_REPO_VERSION']
+    path = env['MLC_TINYMLPERF_REPO_PATH']
+    cur_dir = env['MLC_TINYMLPERF_CURRENT_DIR']
+    version = env['MLC_TINYMLPERF_REPO_VERSION']
 
     for ext in ['.csv', '.xlsx']:
 

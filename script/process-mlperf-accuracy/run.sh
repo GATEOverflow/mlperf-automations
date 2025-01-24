@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IFS="??" read -r -a cmd_array <<< "$CM_RUN_CMDS"
+IFS="??" read -r -a cmd_array <<< "$MLC_RUN_CMDS"
 for cmd in "${cmd_array[@]}"
 do
   echo "${cmd}"

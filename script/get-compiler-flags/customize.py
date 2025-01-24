@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import subprocess
 
@@ -16,16 +16,16 @@ def preprocess(i):
     if os_info['platform'] == 'windows':
         return {'return': 0}
 
-    if env.get("CM_FAST_COMPILATION") in ["yes", "on", "1"]:
-        DEFAULT_COMPILER_FLAGS = env.get("CM_COMPILER_FLAGS_FAST", "-O3")
+    if env.get("MLC_FAST_COMPILATION") in ["yes", "on", "1"]:
+        DEFAULT_COMPILER_FLAGS = env.get("MLC_COMPILER_FLAGS_FAST", "-O3")
         # -flto") - this flag is not always available
-        DEFAULT_LINKER_FLAGS = env.get("CM_LINKER_FLAGS_FAST", "-O3")
-    elif env.get("CM_DEBUG_COMPILATION") in ["yes", "on", "1"]:
-        DEFAULT_COMPILER_FLAGS = env.get("CM_COMPILER_FLAGS_DEBUG", "-O0")
-        DEFAULT_LINKER_FLAGS = env.get("CM_LINKER_FLAGS_DEBUG", "-O0")
+        DEFAULT_LINKER_FLAGS = env.get("MLC_LINKER_FLAGS_FAST", "-O3")
+    elif env.get("MLC_DEBUG_COMPILATION") in ["yes", "on", "1"]:
+        DEFAULT_COMPILER_FLAGS = env.get("MLC_COMPILER_FLAGS_DEBUG", "-O0")
+        DEFAULT_LINKER_FLAGS = env.get("MLC_LINKER_FLAGS_DEBUG", "-O0")
     else:
-        DEFAULT_COMPILER_FLAGS = env.get("CM_COMPILER_FLAGS_DEFAULT", "-O2")
-        DEFAULT_LINKER_FLAGS = env.get("CM_LINKER_FLAGS_DEFAULT", "-O2")
+        DEFAULT_COMPILER_FLAGS = env.get("MLC_COMPILER_FLAGS_DEFAULT", "-O2")
+        DEFAULT_LINKER_FLAGS = env.get("MLC_LINKER_FLAGS_DEFAULT", "-O2")
 
     env['+ CFLAGS'] += DEFAULT_COMPILER_FLAGS.split(" ")
     env['+ CXXFLAGS'] += DEFAULT_COMPILER_FLAGS.split(" ")
@@ -51,15 +51,15 @@ def preprocess(i):
             break
         if 'gcc' not in out:
             inc_dir.append(out.strip())
-    env['+CM_HOST_OS_DEFAULT_INCLUDE_PATH'] = inc_dir
+    env['+MLC_HOST_OS_DEFAULT_INCLUDE_PATH'] = inc_dir
 
-#    if env['CM_C_COMPILER_BIN'] == 'icc':
-#        if env['CM_CPUINFO_Vendor_ID'] == 'GenuineIntel':
-#            if int(env['CM_CPUINFO_CPU_family']) >= 0:
+#    if env['MLC_C_COMPILER_BIN'] == 'icc':
+#        if env['MLC_CPUINFO_Vendor_ID'] == 'GenuineIntel':
+#            if int(env['MLC_CPUINFO_CPU_family']) >= 0:
 #                env['+ CFLAGS'] += ["-ipo"]
-#    if env['CM_C_COMPILER_BIN'] == 'gcc':
-#        if env['CM_HOST_CPU_VENDOR_ID'] == 'AMD':
-#            if int(env['CM_HOST_CPU_FAMILY']) >= 0:
+#    if env['MLC_C_COMPILER_BIN'] == 'gcc':
+#        if env['MLC_HOST_CPU_VENDOR_ID'] == 'AMD':
+#            if int(env['MLC_HOST_CPU_FAMILY']) >= 0:
 #                env['+ CFLAGS'] += ["-march=znver2", "-flto"]
 
     return {'return': 0}

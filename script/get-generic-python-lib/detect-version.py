@@ -1,7 +1,7 @@
 import os
 import sys
 
-package_name = os.environ.get('CM_GENERIC_PYTHON_PACKAGE_NAME', '')
+package_name = os.environ.get('MLC_GENERIC_PYTHON_PACKAGE_NAME', '')
 package_name = package_name.split("[")[0]
 
 filename = 'tmp-ver.out'

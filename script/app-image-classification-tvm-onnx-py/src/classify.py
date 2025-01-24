@@ -107,9 +107,9 @@ def run_case(dtype, image, target):
 #    plt.show()
     plt.savefig('pre-processed-image.png')
     # Load model
-    model_path = os.environ.get('CM_ML_MODEL_FILE_WITH_PATH', '')
+    model_path = os.environ.get('MLC_ML_MODEL_FILE_WITH_PATH', '')
     if model_path == '':
-        print('Error: environment variable CM_ML_MODEL_FILE_WITH_PATH is not defined')
+        print('Error: environment variable MLC_ML_MODEL_FILE_WITH_PATH is not defined')
         exit(1)
 
     opt = rt.SessionOptions()
@@ -154,9 +154,9 @@ def run_case(dtype, image, target):
 
         build_conf = {'relay.backend.use_auto_scheduler': False}
         opt_lvl = int(os.environ.get('TVM_OPT_LEVEL', 3))
-        host = os.environ.get('CM_HOST_PLATFORM_FLAVOR')
+        host = os.environ.get('MLC_HOST_PLATFORM_FLAVOR')
         if host == 'x86_64' and 'AMD' in os.environ.get(
-                'CM_HOST_CPU_VENDOR_ID', ''):
+                'MLC_HOST_CPU_VENDOR_ID', ''):
             target = os.environ.get('TVM_TARGET', 'llvm -mcpu=znver2')
         else:
             target = os.environ.get('TVM_TARGET', 'llvm')
@@ -283,7 +283,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.image.strip().lower() == '':
-        print('Please specify path to an image using CM_IMAGE environment variable!')
+        print('Please specify path to an image using MLC_IMAGE environment variable!')
         exit(1)
 
     # set parameter
@@ -296,7 +296,7 @@ if __name__ == '__main__':
     out_shape = (batch_size, num_classes)
 
     dtype = 'float32'
-    if os.environ.get('CM_TVM_DTYPE', '') != '':
-        dtype = os.environ['CM_TVM_DTYPE']
+    if os.environ.get('MLC_TVM_DTYPE', '') != '':
+        dtype = os.environ['MLC_TVM_DTYPE']
 
     run_case(dtype, args.image, args.target)

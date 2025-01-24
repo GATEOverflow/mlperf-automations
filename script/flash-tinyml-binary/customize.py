@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -9,9 +9,9 @@ def preprocess(i):
 
     if os_info['platform'] == 'windows':
         return {'return': 1, 'error': 'Windows is not supported in this script yet'}
-    if 'CM_TINY_BUILD_DIR' not in env:
+    if 'MLC_TINY_BUILD_DIR' not in env:
         return {
-            'return': 1, 'error': 'Please set CM_TINY_BUILD_DIR to the build directory of the model'}
+            'return': 1, 'error': 'Please set MLC_TINY_BUILD_DIR to the build directory of the model'}
     return {'return': 0}
 
 

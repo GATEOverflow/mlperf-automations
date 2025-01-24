@@ -35,7 +35,7 @@ zoo_stub_list=( \
 )
 
 rerun=""
-power=" --power=yes --adr.mlperf-power-client.power_server=192.168.0.15 --env.CM_MLPERF_SKIP_POWER_CHECKS=yes"
+power=" --power=yes --adr.mlperf-power-client.power_server=192.168.0.15 --env.MLC_MLPERF_SKIP_POWER_CHECKS=yes"
 power=" --power=yes --adr.mlperf-power-client.power_server=192.168.0.15"
 power=""
 max_batchsize=1
@@ -45,7 +45,7 @@ scenario="Offline"
 
 if [[ $scenario == "Offline" ]]; then
 for stub in ${zoo_stub_list[@]}; do
-cmd="cm run script --tags=run,mlperf,inference,generate-run-cmds,_find-performance  \
+cmd="mlcr --tags=run,mlperf,inference,generate-run-cmds,_find-performance  \
    --adr.python.version_min=3.8 \
    --implementation=reference \
    --model=bert-99 \
@@ -55,7 +55,7 @@ cmd="cm run script --tags=run,mlperf,inference,generate-run-cmds,_find-performan
    --scenario=Offline \
    --test_query_count=15000 \
    --adr.mlperf-inference-implementation.max_batchsize=$max_batchsize \
-   --env.CM_MLPERF_NEURALMAGIC_MODEL_ZOO_STUB=$stub \
+   --env.MLC_MLPERF_NEURALMAGIC_MODEL_ZOO_STUB=$stub \
    ${rerun} \
    --quiet"
   echo ${cmd}
@@ -64,7 +64,7 @@ done
 fi
 
 for stub in ${zoo_stub_list[@]}; do
- cmd="cm run script --tags=run,mlperf,inference,generate-run-cmds  \
+ cmd="mlcr --tags=run,mlperf,inference,generate-run-cmds  \
    --adr.python.version_min=3.8 \
    --adr.compiler.tags=gcc \
    --implementation=reference \
@@ -76,7 +76,7 @@ for stub in ${zoo_stub_list[@]}; do
    --execution_mode=valid \
    --adr.mlperf-inference-implementation.max_batchsize=$max_batchsize \
    ${power} \
-   --env.CM_MLPERF_NEURALMAGIC_MODEL_ZOO_STUB=$stub \
+   --env.MLC_MLPERF_NEURALMAGIC_MODEL_ZOO_STUB=$stub \
    --quiet"
   echo ${cmd}
   eval ${cmd}

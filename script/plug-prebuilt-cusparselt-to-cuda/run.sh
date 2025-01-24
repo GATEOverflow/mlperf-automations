@@ -5,33 +5,33 @@ INSTALL_DIR=${CUR}/install
 
 echo "******************************************"
 echo "${CUR}"
-echo "${CM_CUSPARSELT_TAR_FILE_PATH}"
-echo "${CM_CUSPARSELT_TAR_DIR}"
-echo "${CM_CUSPARSELT_UNTAR_PATH}"
+echo "${MLC_CUSPARSELT_TAR_FILE_PATH}"
+echo "${MLC_CUSPARSELT_TAR_DIR}"
+echo "${MLC_CUSPARSELT_UNTAR_PATH}"
 echo "${CUDA_HOME}"
-echo "${CM_CUDA_PATH_INCLUDE}"
-echo "${CM_CUDA_PATH_LIB}"
+echo "${MLC_CUDA_PATH_INCLUDE}"
+echo "${MLC_CUDA_PATH_LIB}"
 echo "******************************************"
 
 echo "Untaring file ..."
 echo ""
-tar -xf ${CM_CUSPARSELT_TAR_FILE_PATH}
+tar -xf ${MLC_CUSPARSELT_TAR_FILE_PATH}
 test $? -eq 0 || exit $?
 
 echo "Copying include files ..."
 echo ""
-${CM_SUDO} cp -P ${CM_CUSPARSELT_TAR_DIR}/include/cusparseLt*.h ${CM_CUDA_PATH_INCLUDE}
-${CM_SUDO} chmod a+r ${CM_CUDA_PATH_INCLUDE}/cusparseLt*.h
+${MLC_SUDO} cp -P ${MLC_CUSPARSELT_TAR_DIR}/include/cusparseLt*.h ${MLC_CUDA_PATH_INCLUDE}
+${MLC_SUDO} chmod a+r ${MLC_CUDA_PATH_INCLUDE}/cusparseLt*.h
 
 echo "Copying lib files ..."
 echo ""
-${CM_SUDO} cp -P ${CM_CUSPARSELT_TAR_DIR}/lib/libcusparseLt* ${CM_CUDA_PATH_LIB}
-${CM_SUDO} chmod a+r ${CM_CUDA_PATH_LIB}/libcusparseLt*
+${MLC_SUDO} cp -P ${MLC_CUSPARSELT_TAR_DIR}/lib/libcusparseLt* ${MLC_CUDA_PATH_LIB}
+${MLC_SUDO} chmod a+r ${MLC_CUDA_PATH_LIB}/libcusparseLt*
 
 echo "Adding file that CUSPARSELT is installed ..."
 echo ""
-if [ "${CM_SUDO}" == "sudo" ]; then
-  ${CM_SUDO} sh -c "echo '${CM_VERSION}' > ${CUDA_HOME}/cm_installed_cusparselt.txt"
+if [ "${MLC_SUDO}" == "sudo" ]; then
+  ${MLC_SUDO} sh -c "echo '${MLC_VERSION}' > ${CUDA_HOME}/mlc_installed_cusparselt.txt"
 else
-  echo "${CM_VERSION}" > ${CUDA_HOME}/cm_installed_cusparselt.txt
+  echo "${MLC_VERSION}" > ${CUDA_HOME}/mlc_installed_cusparselt.txt
 fi

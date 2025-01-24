@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -8,20 +8,20 @@ def preprocess(i):
 
     env = i['env']
 
-    if env.get('CM_PYTHON_CONDA', '') == 'yes' and env.get(
-            'CM_CONDA_BIN_PATH', '') != '':
-        env['CM_PYTHON_BIN_WITH_PATH'] = os.path.join(
-            env['CM_CONDA_BIN_PATH'], "python")
+    if env.get('MLC_PYTHON_CONDA', '') == 'yes' and env.get(
+            'MLC_CONDA_BIN_PATH', '') != '':
+        env['MLC_PYTHON_BIN_WITH_PATH'] = os.path.join(
+            env['MLC_CONDA_BIN_PATH'], "python")
 
     recursion_spaces = i['recursion_spaces']
 
-    # we need to understand whether this script is called first and CM_PYTHON_BIN_WITH_PATH is empty
+    # we need to understand whether this script is called first and MLC_PYTHON_BIN_WITH_PATH is empty
     #   then we should search for related artifacts (python in our case)
-    # or this script is called after install-python* and CM_PYTHON_BIN_WITH_PATH is set there
+    # or this script is called after install-python* and MLC_PYTHON_BIN_WITH_PATH is set there
     # then we do not search for an artifact (python) but pick it up from the
     # installation
 
-    if 'CM_PYTHON_BIN_WITH_PATH' not in env:
+    if 'MLC_PYTHON_BIN_WITH_PATH' not in env:
         # file_name = 'python.exe' if os_info['platform'] == 'windows' else 'python[0-9|\.]*$'
         file_name = 'python.exe' if os_info['platform'] == 'windows' else 'python3'
         extra_paths = {"include": "+C_INCLUDE_PATH", "lib": "+LD_LIBRARY_PATH"}
@@ -35,7 +35,7 @@ def preprocess(i):
                                            'detect_version': True,
                                            # the next key is used in run.sh to
                                            # detect python version
-                                           'env_path_key': 'CM_PYTHON_BIN_WITH_PATH',
+                                           'env_path_key': 'MLC_PYTHON_BIN_WITH_PATH',
                                            'run_script_input': i['run_script_input'],
                                            'recursion_spaces': i['recursion_spaces'],
                                            'extra_paths': extra_paths
@@ -45,7 +45,7 @@ def preprocess(i):
                 # If artifact is not found and we are not on windows
                 # we should try to install python from src
                 # in prehook_deps
-                env['CM_REQUIRE_INSTALL'] = "yes"
+                env['MLC_REQUIRE_INSTALL'] = "yes"
 
                 return {'return': 0}
             else:
@@ -57,7 +57,7 @@ def preprocess(i):
 def detect_version(i):
     r = i['automation'].parse_version({'match_text': r'Python\s*([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_PYTHON_VERSION',
+                                       'env_key': 'MLC_PYTHON_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r
@@ -80,12 +80,12 @@ def postprocess(i):
 
     version = r['version']
 
-    found_file_path = env['CM_PYTHON_BIN_WITH_PATH']
+    found_file_path = env['MLC_PYTHON_BIN_WITH_PATH']
 
     found_path = os.path.dirname(found_file_path)
 
-    env['CM_PYTHON_BIN'] = os.path.basename(found_file_path)
-    env['CM_PYTHON_BIN_PATH'] = os.path.dirname(found_file_path)
+    env['MLC_PYTHON_BIN'] = os.path.basename(found_file_path)
+    env['MLC_PYTHON_BIN_PATH'] = os.path.dirname(found_file_path)
 
     # Save tags that can be used to specialize further dependencies (such as
     # python packages)
@@ -93,7 +93,7 @@ def postprocess(i):
 
     add_extra_cache_tags = []
 
-    extra_tags = env.get('CM_EXTRA_CACHE_TAGS', '')
+    extra_tags = env.get('MLC_EXTRA_CACHE_TAGS', '')
     if extra_tags != '':
         tags += ',' + extra_tags
 
@@ -103,7 +103,7 @@ def postprocess(i):
     if not from_virtual:
         tags += ',non-virtual'
 
-    env['CM_PYTHON_CACHE_TAGS'] = tags
+    env['MLC_PYTHON_CACHE_TAGS'] = tags
 
     add_extra_cache_tags = tags.split(',')
 
@@ -135,9 +135,9 @@ def postprocess(i):
     if len(version_split) > 2:
         python_patch_version = version_split[2]
 
-    env['CM_PYTHON_MAJOR_VERSION'] = python_major_version
-    env['CM_PYTHON_MINOR_VERSION'] = python_minor_version
-    env['CM_PYTHON_PATCH_VERSION'] = python_patch_version
+    env['MLC_PYTHON_MAJOR_VERSION'] = python_major_version
+    env['MLC_PYTHON_MINOR_VERSION'] = python_minor_version
+    env['MLC_PYTHON_PATCH_VERSION'] = python_patch_version
 
     return {'return': 0, 'version': version,
             'add_extra_cache_tags': add_extra_cache_tags}

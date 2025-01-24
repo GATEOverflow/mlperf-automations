@@ -1,12 +1,12 @@
 # This workflow will run configured tests for any updated CM scripts
-name: Individual CM script Tests
+name: Individual Automation script Tests
 
 on:
   pull_request:
     branches: [ "main", "dev" ]
     paths:
-      - 'script/**_cm.json'
-      - 'script/**_cm.yaml'
+      - 'script/**meta.json'
+      - 'script/**meta.yaml'
 
 jobs:
   run-script-tests:
@@ -32,6 +32,6 @@ jobs:
         for file in ${{ steps.getfile.outputs.files }}; do
           echo $file
         done
-        CM_PULL_DEFAULT_MLOPS_REPO=no pip install cm4mlops
-        cm pull repo --url=${{ github.event.pull_request.head.repo.html_url }} --checkout=${{ github.event.pull_request.head.ref }}
-        DOCKER_CM_REPO=${{ github.event.pull_request.head.repo.html_url }} DOCKER_CM_REPO_BRANCH=${{ github.event.pull_request.head.ref }} TEST_INPUT_INDEX=${{ matrix.test-input-index }} python3 script/test-cm-core/src/script/process_tests.py ${{ steps.getfile.outputs.files }}
+        pip install mlcflow
+        mlc pull repo ${{ github.event.pull_request.head.repo.html_url }} --branch=${{ github.event.pull_request.head.ref }}
+        DOCKER_MLC_REPO=${{ github.event.pull_request.head.repo.html_url }} DOCKER_MLC_REPO_BRANCH=${{ github.event.pull_request.head.ref }} TEST_INPUT_INDEX=${{ matrix.test-input-index }} python3 .github/scripts/process_individual_tests.py ${{ steps.getfile.outputs.files }}

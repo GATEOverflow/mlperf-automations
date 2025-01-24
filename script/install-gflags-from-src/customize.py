@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -22,7 +22,7 @@ def postprocess(i):
 
     env = i['env']
 
-    env['CM_GFLAGS_BUILD_PATH'] = os.path.join(os.getcwd(), "gflags", "build")
-    env['CM_DEPENDENT_CACHED_PATH'] = env['CM_GFLAGS_BUILD_PATH']
+    env['MLC_GFLAGS_BUILD_PATH'] = os.path.join(os.getcwd(), "gflags", "build")
+    env['MLC_DEPENDENT_CACHED_PATH'] = env['MLC_GFLAGS_BUILD_PATH']
 
     return {'return': 0}

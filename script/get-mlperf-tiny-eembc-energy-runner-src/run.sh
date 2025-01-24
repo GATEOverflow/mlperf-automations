@@ -1,26 +1,26 @@
 #!/bin/bash
 
 CUR_DIR=$PWD
-SCRIPT_DIR=${CM_TMP_CURRENT_SCRIPT_PATH}
+SCRIPT_DIR=${MLC_TMP_CURRENT_SCRIPT_PATH}
 
 echo "******************************************************"
-echo "Cloning EEMBC Energy Runner from ${CM_GIT_URL} with branch ${CM_GIT_CHECKOUT} ${CM_GIT_DEPTH} ${CM_GIT_RECURSE_SUBMODULES} ..."
+echo "Cloning EEMBC Energy Runner from ${MLC_GIT_URL} with branch ${MLC_GIT_CHECKOUT} ${MLC_GIT_DEPTH} ${MLC_GIT_RECURSE_SUBMODULES} ..."
 
 if [ ! -d "src" ]; then
-  if [ -z ${CM_GIT_SHA} ]; then
-    git clone ${CM_GIT_RECURSE_SUBMODULES} -b "${CM_GIT_CHECKOUT}" ${CM_GIT_URL} ${CM_GIT_DEPTH} src
+  if [ -z ${MLC_GIT_SHA} ]; then
+    git clone ${MLC_GIT_RECURSE_SUBMODULES} -b "${MLC_GIT_CHECKOUT}" ${MLC_GIT_URL} ${MLC_GIT_DEPTH} src
     cd src
   else
-    git clone ${CM_GIT_RECURSE_SUBMODULES} ${CM_GIT_URL} ${CM_GIT_DEPTH} src
+    git clone ${MLC_GIT_RECURSE_SUBMODULES} ${MLC_GIT_URL} ${MLC_GIT_DEPTH} src
     cd src
-    git checkout -b "${CM_GIT_CHECKOUT}"
+    git checkout -b "${MLC_GIT_CHECKOUT}"
   fi
   if [ "${?}" != "0" ]; then exit 1; fi
 else
     cd src
 fi
 
-IFS=',' read -r -a submodules <<< "${CM_GIT_SUBMODULES}"
+IFS=',' read -r -a submodules <<< "${MLC_GIT_SUBMODULES}"
 
 for submodule in "${submodules[@]}"
 do
@@ -29,8 +29,8 @@ do
     if [ "${?}" != "0" ]; then exit 1; fi
 done
 
-if [ ${CM_GIT_PATCH} == "yes" ]; then
-  patch_filename=${CM_GIT_PATCH_FILENAME:-git.patch}
+if [ ${MLC_GIT_PATCH} == "yes" ]; then
+  patch_filename=${MLC_GIT_PATCH_FILENAME:-git.patch}
   echo "Applying patch ${SCRIPT_DIR}/patch/$patch_filename"
   git apply ${SCRIPT_DIR}/patch/"$patch_filename"
   if [ "${?}" != "0" ]; then exit 1; fi

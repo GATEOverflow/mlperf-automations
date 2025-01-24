@@ -2,7 +2,7 @@
 
 CUR_DIR=$PWD
 
-if [ "${CM_TVM_PIP_INSTALL}" != "no" ]; then
+if [ "${MLC_TVM_PIP_INSTALL}" != "no" ]; then
   exit 0;
 fi
 
@@ -11,15 +11,15 @@ echo "Path for TVM: ${CUR_DIR}"
 echo ""
 
 if [ ! -d "tvm" ]; then
-  echo "git clone --recursive -b ${CM_GIT_CHECKOUT} ${CM_GIT_URL} tvm"
-  git clone --recursive -b "${CM_GIT_CHECKOUT}" ${CM_GIT_URL} tvm
+  echo "git clone --recursive -b ${MLC_GIT_CHECKOUT} ${MLC_GIT_URL} tvm"
+  git clone --recursive -b "${MLC_GIT_CHECKOUT}" ${MLC_GIT_URL} tvm
   test $? -eq 0 || exit 1
 fi
 
 cd tvm
-if [ "${CM_GIT_SHA}" != "" ]; then
-  echo "git checkout ${CM_GIT_SHA}"
-  git checkout ${CM_GIT_SHA}
+if [ "${MLC_GIT_SHA}" != "" ]; then
+  echo "git checkout ${MLC_GIT_SHA}"
+  git checkout ${MLC_GIT_SHA}
   test $? -eq 0 || exit 1
 fi
 
@@ -35,20 +35,20 @@ if [ ! -d "${CUR_DIR}/tvm/build" ]; then
 
     cd ${CUR_DIR}/tvm/build
 
-    if [[ ${CM_TVM_USE_LLVM} == "yes" ]]; then
-        if [[ -z "${CM_LLVM_INSTALLED_PATH}" ]]; then
-            llvm_version=$(echo "${CM_LLVM_CLANG_VERSION}" | cut -d. -f1)
+    if [[ ${MLC_TVM_USE_LLVM} == "yes" ]]; then
+        if [[ -z "${MLC_LLVM_INSTALLED_PATH}" ]]; then
+            llvm_version=$(echo "${MLC_LLVM_CLANG_VERSION}" | cut -d. -f1)
             sed -i.bak "s|set(USE_LLVM OFF)|set(USE_LLVM llvm-config-$llvm_version)|" config.cmake
         else
-            sed -i.bak "s|set(USE_LLVM OFF)|set(USE_LLVM ${CM_LLVM_INSTALLED_PATH}/llvm-config)|" config.cmake
+            sed -i.bak "s|set(USE_LLVM OFF)|set(USE_LLVM ${MLC_LLVM_INSTALLED_PATH}/llvm-config)|" config.cmake
         fi
     fi
 
-    if [[ ${CM_TVM_USE_OPENMP} == "yes" ]]; then
+    if [[ ${MLC_TVM_USE_OPENMP} == "yes" ]]; then
         sed -i.bak 's/set(USE_OPENMP none)/set(USE_OPENMP gnu)/' config.cmake
     fi
 
-    if [[ ${CM_TVM_USE_CUDA} == "yes" ]]; then
+    if [[ ${MLC_TVM_USE_CUDA} == "yes" ]]; then
         sed -i.bak 's/set(USE_CUDA OFF)/set(USE_OPENMP ON)/' config.cmake
         echo 'set(USE_CUDA ON)' >> config.cmake
     fi
@@ -57,16 +57,16 @@ if [ ! -d "${CUR_DIR}/tvm/build" ]; then
     test $? -eq 0 || exit 1
 fi
 
-CM_MAKE_CORES=${CM_MAKE_CORES:-${CM_HOST_CPU_TOTAL_CORES}}
-CM_MAKE_CORES=${CM_MAKE_CORES:-2}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-${MLC_HOST_CPU_TOTAL_CORES}}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-2}
 
 echo "******************************************************"
-echo "Building  TVM using ${CM_MAKE_CORES} cores ..."
+echo "Building  TVM using ${MLC_MAKE_CORES} cores ..."
 echo ""
 
 cd ${CUR_DIR}/tvm/build
 
-make -j${CM_MAKE_CORES}
+make -j${MLC_MAKE_CORES}
 test $? -eq 0 || exit 1
 
 INSTALL_DIR=$PWD
@@ -74,7 +74,7 @@ INSTALL_DIR=$PWD
 cd ../../
 
 echo "TVM_HOME=$PWD/tvm" > tmp-run-env.out
-echo "CM_TVM_INSTALLED_PATH=$PWD/tvm" >> tmp-run-env.out
+echo "MLC_TVM_INSTALLED_PATH=$PWD/tvm" >> tmp-run-env.out
 
 echo "******************************************************"
 echo "TVM was built and installed to ${INSTALL_DIR} ..."

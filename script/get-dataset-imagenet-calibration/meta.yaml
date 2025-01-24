@@ -1,0 +1,48 @@
+uid: 30361fad3dff49ff
+alias: get-dataset-imagenet-calibration
+
+automation_alias: script
+automation_uid: 5b4e0237da074764
+
+cache: true
+
+category: "AI/ML datasets"
+
+deps:
+  - tags: download,file
+    force_env_keys:
+      - MLC_OUTDIRNAME
+    force_cache: true
+    extra_cache_tags: imagenet-calibration,imagenet,calibration
+    names:
+      - calibration-file-downloader
+    env:
+        MLC_DOWNLOAD_FINAL_ENV_NAME: MLC_MLPERF_IMAGENET_CALIBRATION_LIST_FILE_WITH_PATH
+
+new_env_keys:
+- MLC_MLPERF_IMAGENET_CALIBRATION_LIST_FILE_WITH_PATH
+
+tags:
+- get
+- dataset
+- imagenet
+- calibration
+
+variations:
+  mlperf.option1:
+    group: calibration-option
+    default: true
+    env:
+      MLC_MLPERF_IMAGENET_CALIBRATION_OPTION: one
+      MLC_DOWNLOAD_CHECKSUM: f09719174af3553119e2c621157773a6
+    adr:
+      calibration-file-downloader:
+        tags: _url.https://github.com/mlcommons/inference/raw/master/calibration/ImageNet/cal_image_list_option_1.txt
+  mlperf.option2:
+    group: calibration-option
+    env:
+      MLC_MLPERF_IMAGENET_CALIBRATION_OPTION: two
+      MLC_DOWNLOAD_CHECKSUM: e44582af00e3b4fc3fac30efd6bdd05f
+    adr:
+      calibration-file-downloader:
+        tags: _url.https://github.com/mlcommons/inference/raw/master/calibration/ImageNet/cal_image_list_option_2.txt

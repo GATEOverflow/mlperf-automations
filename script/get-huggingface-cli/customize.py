@@ -1,14 +1,14 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
 def preprocess(i):
     env = i['env']
-    if env.get('CM_HF_TOKEN', '') != '':
-        env['CM_HF_LOGIN_CMD'] = f"""git config --global credential.helper store && huggingface-cli login --token {env['CM_HF_TOKEN']} --add-to-git-credential
+    if env.get('MLC_HF_TOKEN', '') != '':
+        env['MLC_HF_LOGIN_CMD'] = f"""git config --global credential.helper store && huggingface-cli login --token {env['MLC_HF_TOKEN']} --add-to-git-credential
 """
-    elif str(env.get('CM_HF_DO_LOGIN')).lower() in ["yes", "1", "true"]:
-        env['CM_HF_LOGIN_CMD'] = f"""git config --global credential.helper store && huggingface-cli login
+    elif str(env.get('MLC_HF_DO_LOGIN')).lower() in ["yes", "1", "true"]:
+        env['MLC_HF_LOGIN_CMD'] = f"""git config --global credential.helper store && huggingface-cli login
 """
     return {'return': 0}
 
@@ -18,7 +18,7 @@ def postprocess(i):
 
     r = i['automation'].parse_version({'match_text': r'huggingface_hub\s*version:\s*([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_GITHUBCLI_VERSION',
+                                       'env_key': 'MLC_GITHUBCLI_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r

@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import xml.etree.ElementTree as et
 
@@ -15,8 +15,8 @@ def preprocess(i):
 
     platform_sdk_path = None
 
-    if env.get('CM_INPUT', '').strip() != '':
-        path = env['CM_INPUT']
+    if env.get('MLC_INPUT', '').strip() != '':
+        path = env['MLC_INPUT']
         if os.path.exists(os.path.join(path, "exec", "qaic-runner")):
             platform_sdk_path = path
         else:
@@ -31,11 +31,11 @@ def preprocess(i):
         return {'return': 1,
                 'error': f'qaic-runner not found in the default path: {path}'}
 
-    env['CM_QAIC_PLATFORM_SDK_PATH'] = path
-    env['CM_QAIC_RUNNER_PATH'] = os.path.join(path, "exec", "qaic-runner")
-    env['CM_QAIC_TOOLS_PATH'] = os.path.join(path, "tools")
+    env['MLC_QAIC_PLATFORM_SDK_PATH'] = path
+    env['MLC_QAIC_RUNNER_PATH'] = os.path.join(path, "exec", "qaic-runner")
+    env['MLC_QAIC_TOOLS_PATH'] = os.path.join(path, "tools")
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     return {'return': 0}
 
@@ -43,7 +43,7 @@ def preprocess(i):
 def detect_version(i):
 
     env = i['env']
-    sdk_path = env['CM_QAIC_PLATFORM_SDK_PATH']
+    sdk_path = env['MLC_QAIC_PLATFORM_SDK_PATH']
     version = None
     version_xml_path = os.path.join(sdk_path, "versions", "platform.xml")
     version_info = et.parse(version_xml_path)
@@ -80,7 +80,7 @@ def postprocess(i):
     if "+PATH" not in env:
         env["+PATH"] = []
 
-    env['+PATH'].append(os.path.dirname(env['CM_QAIC_RUNNER_PATH']))
+    env['+PATH'].append(os.path.dirname(env['MLC_QAIC_RUNNER_PATH']))
 
     paths = [
         "+C_INCLUDE_PATH",
@@ -95,7 +95,7 @@ def postprocess(i):
     include_paths = []
     lib_paths = []
 
-    inc_path = os.path.join(env['CM_QAIC_PLATFORM_SDK_PATH'], "dev", "inc")
+    inc_path = os.path.join(env['MLC_QAIC_PLATFORM_SDK_PATH'], "dev", "inc")
     if os.path.exists(inc_path):
         include_paths.append(inc_path)
 
@@ -104,10 +104,10 @@ def postprocess(i):
         env['+CPLUS_INCLUDE_PATH'].append(inc_path)
 
     lib_path = os.path.join(
-        env['CM_QAIC_PLATFORM_SDK_PATH'],
+        env['MLC_QAIC_PLATFORM_SDK_PATH'],
         "dev",
         "lib",
-        env['CM_HOST_PLATFORM_FLAVOR'])
+        env['MLC_HOST_PLATFORM_FLAVOR'])
     if os.path.exists(lib_path):
         lib_paths.append(lib_path)
 

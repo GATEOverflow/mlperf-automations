@@ -13,10 +13,10 @@ deps:
 script_name: run
 
 input_mapping:
-  experiment: CM_EXPERIMENT
+  experiment: MLC_EXPERIMENT
 
 default_env:
-  CM_EXPERIMENT: '1'
+  MLC_EXPERIMENT: '1'
 
 variations:
   install_deps:

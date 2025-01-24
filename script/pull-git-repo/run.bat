@@ -3,10 +3,10 @@ setlocal enabledelayedexpansion
 
 REM Save the current directory
 set "CUR_DIR=%CD%"
-set "SCRIPT_DIR=%CM_TMP_CURRENT_SCRIPT_PATH%"
+set "SCRIPT_DIR=%MLC_TMP_CURRENT_SCRIPT_PATH%"
 
 REM Change to the specified path
-set "path=%CM_GIT_CHECKOUT_PATH%"
+set "path=%MLC_GIT_CHECKOUT_PATH%"
 echo cd %path%
 
 cd /d "%path%"
@@ -16,8 +16,8 @@ if errorlevel 1 (
 )
 
 REM Execute the Git pull command
-echo %CM_GIT_PULL_CMD%
-call %CM_GIT_PULL_CMD%
+echo %MLC_GIT_PULL_CMD%
+call %MLC_GIT_PULL_CMD%
 REM Don't fail if there are local changes
 REM if errorlevel 1 exit /b %errorlevel%
 

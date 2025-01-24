@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import xml.etree.ElementTree as et
 
@@ -15,8 +15,8 @@ def preprocess(i):
 
     apps_sdk_path = None
 
-    if env.get('CM_INPUT', '').strip() != '':
-        path = env['CM_INPUT']
+    if env.get('MLC_INPUT', '').strip() != '':
+        path = env['MLC_INPUT']
         if os.path.exists(os.path.join(path, "exec", "qaic-exec")):
             apps_sdk_path = path
         else:
@@ -31,10 +31,10 @@ def preprocess(i):
         return {'return': 1,
                 'error': f'qaic-exec not found in the default path: {path}'}
 
-    env['CM_QAIC_APPS_SDK_PATH'] = path
-    env['CM_QAIC_EXEC_PATH'] = os.path.join(path, "exec", "qaic-exec")
+    env['MLC_QAIC_APPS_SDK_PATH'] = path
+    env['MLC_QAIC_EXEC_PATH'] = os.path.join(path, "exec", "qaic-exec")
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     return {'return': 0}
 
@@ -42,7 +42,7 @@ def preprocess(i):
 def detect_version(i):
 
     env = i['env']
-    sdk_path = env['CM_QAIC_APPS_SDK_PATH']
+    sdk_path = env['MLC_QAIC_APPS_SDK_PATH']
     version = None
     version_xml_path = os.path.join(sdk_path, "versions", "apps.xml")
     version_info = et.parse(version_xml_path)
@@ -79,7 +79,7 @@ def postprocess(i):
     if "+PATH" not in env:
         env["+PATH"] = []
 
-    env['+PATH'].append(os.path.dirname(env['CM_QAIC_EXEC_PATH']))
+    env['+PATH'].append(os.path.dirname(env['MLC_QAIC_EXEC_PATH']))
 
     paths = [
         "+C_INCLUDE_PATH",
@@ -94,7 +94,7 @@ def postprocess(i):
     include_paths = []
     lib_paths = []
 
-    inc_path = os.path.join(env['CM_QAIC_APPS_SDK_PATH'], "dev", "inc")
+    inc_path = os.path.join(env['MLC_QAIC_APPS_SDK_PATH'], "dev", "inc")
     if os.path.exists(inc_path):
         include_paths.append(inc_path)
 
@@ -103,7 +103,7 @@ def postprocess(i):
         env['+CPLUS_INCLUDE_PATH'].append(inc_path)
 
     lib_path = os.path.join(
-        env['CM_QAIC_APPS_SDK_PATH'],
+        env['MLC_QAIC_APPS_SDK_PATH'],
         "dev",
         "lib",
         "x86_64")

@@ -1,0 +1,117 @@
+alias: download-and-extract
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: false
+can_force_cache: true
+category: DevOps automation
+deps: []
+input_description: {}
+input_mapping:
+  download_path: MLC_DOWNLOAD_PATH
+  extra_folder: MLC_EXTRACT_TO_FOLDER
+  extract_path: MLC_EXTRACT_PATH
+  from: MLC_DOWNLOAD_LOCAL_FILE_PATH
+  local_path: MLC_DOWNLOAD_LOCAL_FILE_PATH
+  store: MLC_DOWNLOAD_PATH
+  to: MLC_EXTRACT_PATH
+  url: MLC_DAE_URL
+  verify: MLC_VERIFY_SSL
+new_env_keys:
+- MLC_DOWNLOAD_DOWNLOADED_PATH*
+- MLC_EXTRACT_EXTRACTED_PATH
+- <<<MLC_DOWNLOAD_FINAL_ENV_NAME>>>
+- <<<MLC_EXTRACT_FINAL_ENV_NAME>>>
+- <<<MLC_DAE_FINAL_ENV_NAME>>>
+- MLC_GET_DEPENDENT_CACHED_PATH
+new_state_keys: []
+post_deps: []
+posthook_deps:
+- enable_if_env:
+    MLC_DAE_EXTRACT_DOWNLOADED:
+    - 'yes'
+    - 'True'
+  names:
+  - extract-script
+  tags: extract,file
+  force_env_keys:
+    - MLC_OUTDIRNAME
+  update_tags_from_env_with_prefix:
+    _path.:
+    - MLC_DOWNLOAD_DOWNLOADED_PATH
+    - MLC_TORRENT_DOWNLOADED_PATH
+prehook_deps:
+- names:
+  - download-script
+  skip_if_env:
+    MLC_DAE_DOWNLOAD_USING_TORRENT:
+    - 'yes'
+    - 'True'
+  tags: download,file
+  force_env_keys:
+    - MLC_OUTDIRNAME
+  update_tags_from_env_with_prefix:
+    _url.:
+    - MLC_DAE_URL
+tags:
+- dae
+- file
+- download-and-extract
+tags_help: download-and-extract file
+uid: c67e81a4ce2649f5
+variations:
+  cmutil:
+    add_deps:
+      download-script:
+        tags: _cmutil
+    default: true
+    group: download-tool
+  curl:
+    add_deps:
+      download-script:
+        tags: _wget
+    group: download-tool
+  extract:
+    env:
+      MLC_DAE_EXTRACT_DOWNLOADED: 'yes'
+  gdown:
+    add_deps:
+      download-script:
+        tags: _gdown
+    group: download-tool
+  keep:
+    default: 'true'
+    env:
+      MLC_EXTRACT_REMOVE_EXTRACTED: 'no'
+    group: keep
+  no-remove-extracted:
+    env:
+      MLC_EXTRACT_REMOVE_EXTRACTED: 'no'
+    group: keep
+  rclone:
+    add_deps:
+      download-script:
+        tags: _rclone
+    group: download-tool
+  torrent:
+    env:
+      MLC_DAE_DOWNLOAD_USING_TORRENT: 'yes'
+      MLC_TORRENT_DOWNLOADED_FILE_NAME: <<<MLC_DAE_FILENAME>>>
+      MLC_TORRENT_DOWNLOADED_PATH_ENV_KEY: MLC_DAE_FILEPATH
+      MLC_TORRENT_WAIT_UNTIL_COMPLETED: 'yes'
+    group: download-tool
+    new_env_keys:
+    - MLC_TORRENT_DOWNLOADED_PATH
+    prehook_deps:
+    - tags: download,torrent
+      update_tags_from_env_with_prefix:
+        _torrent.:
+        - MLC_DAE_TORRENT_PATH
+  url.#:
+    env:
+      MLC_DAE_URL: '#'
+  wget:
+    add_deps:
+      download-script:
+        tags: _wget
+    group: download-tool
+versions: {}

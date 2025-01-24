@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -11,16 +11,16 @@ def preprocess(i):
 
     env = i['env']
 
-    if env.get('CM_MLPERF_INFERENCE_INTEL_LANGUAGE_MODEL', '') == "yes":
+    if env.get('MLC_MLPERF_INFERENCE_INTEL_LANGUAGE_MODEL', '') == "yes":
         i['run_script_input']['script_name'] = "run-intel-mlperf-inference-v3_1"
         run_cmd = "CC=clang CXX=clang++ USE_CUDA=OFF python -m pip install -e . "
 
-        env['CM_RUN_CMD'] = run_cmd
-    elif env.get('CM_MLPERF_INFERENCE_INTEL_MODEL', '') in ["resnet50", "retinanet"]:
+        env['MLC_RUN_CMD'] = run_cmd
+    elif env.get('MLC_MLPERF_INFERENCE_INTEL_MODEL', '') in ["resnet50", "retinanet"]:
         i['run_script_input']['script_name'] = "run-intel-mlperf-inference-vision"
-        run_cmd = f"CC={env['CM_C_COMPILER_WITH_PATH']} CXX={env['CM_CXX_COMPILER_WITH_PATH']} USE_CUDA=OFF python -m pip install -e . "
+        run_cmd = f"CC={env['MLC_C_COMPILER_WITH_PATH']} CXX={env['MLC_CXX_COMPILER_WITH_PATH']} USE_CUDA=OFF python -m pip install -e . "
 
-        env['CM_RUN_CMD'] = run_cmd
+        env['MLC_RUN_CMD'] = run_cmd
 
     if not env.get('+ CFLAGS', []):
         env['+ CFLAGS'] = []

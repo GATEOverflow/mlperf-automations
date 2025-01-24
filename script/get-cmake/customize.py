@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,18 +12,18 @@ def preprocess(i):
 
     file_name = 'cmake.exe' if os_info['platform'] == 'windows' else 'cmake'
 
-    if 'CM_CMAKE_BIN_WITH_PATH' not in env:
+    if 'MLC_CMAKE_BIN_WITH_PATH' not in env:
         r = i['automation'].find_artifact({'file_name': file_name,
                                            'env': env,
                                            'os_info': os_info,
                                            'default_path_env_key': 'PATH',
                                            'detect_version': True,
-                                           'env_path_key': 'CM_CMAKE_BIN_WITH_PATH',
+                                           'env_path_key': 'MLC_CMAKE_BIN_WITH_PATH',
                                            'run_script_input': i['run_script_input'],
                                            'recursion_spaces': recursion_spaces})
         if r['return'] > 0:
             if r['return'] == 16:
-                env['CM_REQUIRE_INSTALL'] = "yes"
+                env['MLC_REQUIRE_INSTALL'] = "yes"
                 return {'return': 0}
             else:
                 return r
@@ -34,7 +34,7 @@ def preprocess(i):
 def detect_version(i):
     r = i['automation'].parse_version({'match_text': r'cmake version\s*([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_CMAKE_VERSION',
+                                       'env_key': 'MLC_CMAKE_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r
@@ -53,13 +53,13 @@ def postprocess(i):
         return r
 
     version = r['version']
-    found_file_path = env['CM_CMAKE_BIN_WITH_PATH']
+    found_file_path = env['MLC_CMAKE_BIN_WITH_PATH']
 
     found_path = os.path.dirname(found_file_path)
 
-    env['CM_CMAKE_CACHE_TAGS'] = 'version-' + version
+    env['MLC_CMAKE_CACHE_TAGS'] = 'version-' + version
 
-    if 'CM_HOST_CPU_TOTAL_CORES' in env:
-        env['CM_MAKE_CORES'] = env['CM_HOST_CPU_TOTAL_CORES']
+    if 'MLC_HOST_CPU_TOTAL_CORES' in env:
+        env['MLC_MAKE_CORES'] = env['MLC_HOST_CPU_TOTAL_CORES']
 
     return {'return': 0, 'version': version}

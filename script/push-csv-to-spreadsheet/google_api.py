@@ -13,7 +13,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # The ID of a sample document.
-DOCUMENT_ID = os.environ['CM_GOOGLE_SPREADSHEET_ID']
+DOCUMENT_ID = os.environ['MLC_GOOGLE_SPREADSHEET_ID']
 
 
 def main():
@@ -40,8 +40,8 @@ def main():
 
     try:
         service = build("sheets", "v4", credentials=creds)
-        sheet_name = os.environ.get('CM_GOOGLE_SHEET_NAME', 'Sheet1')
-        csv_file = os.environ['CM_CSV_FILE_PATH']
+        sheet_name = os.environ.get('MLC_GOOGLE_SHEET_NAME', 'Sheet1')
+        csv_file = os.environ['MLC_CSV_FILE_PATH']
 
         f = open(csv_file, "r")
         values = [r for r in csv.reader(f)]

@@ -24,8 +24,8 @@ echo ""
 echo "Running program ..."
 echo ""
 
-cd ${CM_TMP_CURRENT_PATH}
+cd ${MLC_TMP_CURRENT_PATH}
 
-python ${CM_TMP_CURRENT_SCRIPT_PATH}/detect.py > tmp-run.out
+python ${MLC_TMP_CURRENT_SCRIPT_PATH}/detect.py > tmp-run.out
 cat tmp-run.out
 test $? -eq 0 || exit 1

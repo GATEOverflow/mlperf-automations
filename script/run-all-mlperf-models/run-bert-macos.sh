@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#CM Script location: ${CM_TMP_CURRENT_SCRIPT_PATH}
+#CM Script location: ${MLC_TMP_CURRENT_SCRIPT_PATH}
 
 #To export any variable
 #echo "VARIABLE_NAME=VARIABLE_VALUE" >>tmp-run-env.out
 
-#${CM_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
+#${MLC_PYTHON_BIN_WITH_PATH} contains the path to python binary if "get,python" is added as a dependency
 
 
 
@@ -17,7 +17,7 @@ function run() {
   echo "Running: "
   echo "$1"
   echo ""
-  if [[ ${CM_FAKE_RUN} != 'yes' ]]; then
+  if [[ ${MLC_FAKE_RUN} != 'yes' ]]; then
     eval "$1"
     exit_if_error
   fi
@@ -37,31 +37,31 @@ function run_test() {
 power=' --power=yes --adr.mlperf-power-client.power_server=192.168.0.15 --adr.mlperf-power-client.port=4950 '
 power=""
 #Add your run commands here...
-find_performance_cmd='cm run script --tags=generate-run-cmds,inference,_find-performance \
+find_performance_cmd='mlcr --tags=generate-run-cmds,inference,_find-performance \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=edge --division=open --scenario=Offline  --quiet --test_query_count=$test_query_count $rerun'
 
-submission_cmd='cm run script --tags=generate-run-cmds,inference,_submission,_all-scenarios \
+submission_cmd='mlcr --tags=generate-run-cmds,inference,_submission,_all-scenarios \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=$category --division=$division  --quiet --results_dir=$HOME/results_dir \
 --skip_submission_generation=yes --execution-mode=valid $power'
 
-submission_cmd_scenario='cm run script --tags=generate-run-cmds,inference,_submission  --scenario=$scenario \
+submission_cmd_scenario='mlcr --tags=generate-run-cmds,inference,_submission  --scenario=$scenario \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=$category --division=$division  --quiet --results_dir=$HOME/results_dir \
 --skip_submission_generation=yes --execution-mode=valid $power'
 
-readme_cmd_single='cm run script --tags=generate-run-cmds,inference,_populate-readme \
+readme_cmd_single='mlcr --tags=generate-run-cmds,inference,_populate-readme \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=$category --division=$division  --quiet --results_dir=$HOME/results_dir \
 --skip_submission_generation=yes --execution-mode=valid $power'
 
-readme_cmd='cm run script --tags=generate-run-cmds,inference,_populate-readme,_all-scenarios \
+readme_cmd='mlcr --tags=generate-run-cmds,inference,_populate-readme,_all-scenarios \
 --model=$model --implementation=$implementation --device=$device --backend=$backend \
 --category=$category --division=$division  --quiet --results_dir=$HOME/results_dir \
 --skip_submission_generation=yes --execution-mode=valid $power'
 
-# run "$CM_RUN_CMD"
+# run "$MLC_RUN_CMD"
 run_test "onnxruntime" "100" "reference" "cpu" "$find_performance_cmd"
 run_test "tf" "100" "reference" "cpu" "$find_performance_cmd"
 run_test "pytorch" "200" "reference" "cpu" "$find_performance_cmd"

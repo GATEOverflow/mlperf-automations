@@ -2,13 +2,13 @@
 
 echo =======================================================
 
-cd %CM_MLCOMMONS_CROISSANT_PATH%\python\mlcroissant
+cd %MLC_MLCOMMONS_CROISSANT_PATH%\python\mlcroissant
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%
 
 echo.
-echo Running %CM_PYTHON_BIN_WITH_PATH% -m pip install -e .[git]
+echo Running %MLC_PYTHON_BIN_WITH_PATH% -m pip install -e .[git]
 
-%CM_PYTHON_BIN_WITH_PATH% -m pip install -e .[git]
+%MLC_PYTHON_BIN_WITH_PATH% -m pip install -e .[git]
 IF %ERRORLEVEL% NEQ 0 EXIT %ERRORLEVEL%
 
 echo.

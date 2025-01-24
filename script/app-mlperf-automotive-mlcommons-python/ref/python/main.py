@@ -378,8 +378,8 @@ def add_results(final_results, name, result_dict,
         if "mAP" in result_dict:
             result["mAP"] = 100. * result_dict["mAP"]
             acc_str += ", mAP={:.3f}%".format(result["mAP"])
-            if os.environ.get('CM_COGNATA_ACCURACY_DUMP_FILE', '') != '':
-                accuracy_file = os.environ['CM_COGNATA_ACCURACY_DUMP_FILE']
+            if os.environ.get('MLC_COGNATA_ACCURACY_DUMP_FILE', '') != '':
+                accuracy_file = os.environ['MLC_COGNATA_ACCURACY_DUMP_FILE']
                 with open(accuracy_file, "w") as f:
                     f.write("{:.3f}%".format(result["mAP"]))
 
@@ -489,7 +489,7 @@ def main():
     count = ds.get_item_count()
 
     # warmup
-    if os.environ.get('CM_ABTF_ML_MODEL_SKIP_WARMUP',
+    if os.environ.get('MLC_ABTF_ML_MODEL_SKIP_WARMUP',
                       '').strip().lower() != 'yes':
         ds.load_query_samples([0])
         for _ in range(5):

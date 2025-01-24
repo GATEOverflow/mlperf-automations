@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 import configparser
 
@@ -17,11 +17,11 @@ def preprocess(i):
     run_script_input = i['run_script_input']
     automation = i['automation']
 
-    need_version = env.get('CM_VERSION', '')
+    need_version = env.get('MLC_VERSION', '')
 
     host_os_machine = ''
     if os_info['platform'] != 'windows':
-        host_os_machine = env['CM_HOST_OS_MACHINE']  # ABI
+        host_os_machine = env['MLC_HOST_OS_MACHINE']  # ABI
 
     r = automation.detect_version_using_script({
         'env': env,
@@ -32,7 +32,7 @@ def preprocess(i):
         if r['return'] == 16:
             install_script = 'install'
             if os_info['platform'] != 'windows' and env.get(
-                    'CM_RCLONE_SYSTEM', '') == 'yes':
+                    'MLC_RCLONE_SYSTEM', '') == 'yes':
                 install_script += '-system'
             else:
                 if os_info['platform'] != 'windows':
@@ -47,19 +47,19 @@ def preprocess(i):
                     elif os_info['platform'] == 'linux':
                         filename = filebase.format(need_version, 'linux', x1)
 
-                    env['CM_RCLONE_URL'] = urlbase.format(
+                    env['MLC_RCLONE_URL'] = urlbase.format(
                         need_version, filename + '.zip')
-                    env['CM_RCLONE_ARCHIVE'] = filename
-                    env['CM_RCLONE_ARCHIVE_WITH_EXT'] = filename + '.zip'
+                    env['MLC_RCLONE_ARCHIVE'] = filename
+                    env['MLC_RCLONE_ARCHIVE_WITH_EXT'] = filename + '.zip'
 
                     print(
                         recursion_spaces +
                         'Downloading {}'.format(
-                            env['CM_RCLONE_URL']))
+                            env['MLC_RCLONE_URL']))
 
                 cur_dir = os.getcwd()
                 path_bin = os.path.join(cur_dir, file_name)
-                env['CM_RCLONE_BIN_WITH_PATH'] = path_bin
+                env['MLC_RCLONE_BIN_WITH_PATH'] = path_bin
 
                 if not env.get('+PATH', []):
                     env['+PATH'] = []
@@ -83,7 +83,7 @@ def preprocess(i):
 def detect_version(i):
     r = i['automation'].parse_version({'match_text': r'rclone v([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_RCLONE_VERSION',
+                                       'env_key': 'MLC_RCLONE_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r
@@ -100,14 +100,14 @@ def postprocess(i):
     os_info = i['os_info']
     env = i['env']
 
-    gdrive = env.get('CM_RCLONE_GDRIVE', '')
+    gdrive = env.get('MLC_RCLONE_GDRIVE', '')
     if gdrive == "yes":
         config = configparser.ConfigParser()
         config_file_path = os.path.join(
-            env['CM_TMP_CURRENT_SCRIPT_PATH'], "configs", "rclone.conf")
+            env['MLC_TMP_CURRENT_SCRIPT_PATH'], "configs", "rclone.conf")
 
         config.read(config_file_path)
-        # config['cm-team']['service_account_file'] = os.path.join(env['CM_TMP_CURRENT_SCRIPT_PATH'], "accessfiles", "rclone-gdrive.json")
+        # config['mlc-team']['service_account_file'] = os.path.join(env['MLC_TMP_CURRENT_SCRIPT_PATH'], "accessfiles", "rclone-gdrive.json")
 
         default_config_path = os.path.join(
             os.path.expanduser('~'), ".config", "rclone", "rclone.conf")
@@ -131,17 +131,17 @@ def postprocess(i):
 
     version = r['version']
 
-    env['CM_RCLONE_CACHE_TAGS'] = 'version-' + version
+    env['MLC_RCLONE_CACHE_TAGS'] = 'version-' + version
 
     file_name = 'rclone.exe' if os_info['platform'] == 'windows' else 'rclone'
 
     if os_info['platform'] == 'windows' or env.get(
-            'CM_RCLONE_SYSTEM', '') != 'yes':
+            'MLC_RCLONE_SYSTEM', '') != 'yes':
         cur_dir = os.getcwd()
         path_bin = os.path.join(cur_dir, file_name)
         if os.path.isfile(path_bin):
             # Was downloaded and extracted by CM
-            env['CM_RCLONE_BIN_WITH_PATH'] = path_bin
+            env['MLC_RCLONE_BIN_WITH_PATH'] = path_bin
             env['+PATH'] = [cur_dir]
 
     return {'return': 0, 'version': version}

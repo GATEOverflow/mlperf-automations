@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,10 +12,10 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
     # Checking conditions
-    if env.get('CM_FAIL_WINDOWS', '').lower() == 'true':
+    if env.get('MLC_FAIL_WINDOWS', '').lower() == 'true':
         if os_info['platform'] == 'windows':
             return {'return': 1,
                     'error': 'CM detected fail condition: running on Windows'}

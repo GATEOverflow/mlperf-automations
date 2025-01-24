@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m transformers.onnx --model=${CM_MODEL_HUGG_PATH} ${PWD}
+python -m transformers.onnx --model=${MLC_MODEL_HUGG_PATH} ${PWD}

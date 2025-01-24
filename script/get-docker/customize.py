@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -15,13 +15,13 @@ def preprocess(i):
     file_name = 'docker.exe' if os_info['platform'] == 'windows' else 'docker'
     env['FILE_NAME'] = file_name
 
-    if 'CM_DOCKER_BIN_WITH_PATH' not in env:
+    if 'MLC_DOCKER_BIN_WITH_PATH' not in env:
         r = i['automation'].find_artifact({'file_name': file_name,
                                            'env': env,
                                            'os_info': os_info,
                                            'default_path_env_key': 'PATH',
                                            'detect_version': True,
-                                           'env_path_key': 'CM_DOCKER_BIN_WITH_PATH',
+                                           'env_path_key': 'MLC_DOCKER_BIN_WITH_PATH',
                                            'run_script_input': i['run_script_input'],
                                            'recursion_spaces': recursion_spaces})
         if r['return'] > 0:
@@ -40,7 +40,7 @@ def preprocess(i):
 def detect_version(i):
     r = i['automation'].parse_version({'match_text': r'[Docker|podman] version\s*([\d.]+)',
                                        'group_number': 1,
-                                       'env_key': 'CM_DOCKER_VERSION',
+                                       'env_key': 'MLC_DOCKER_VERSION',
                                        'which_env': i['env']})
     if r['return'] > 0:
         return r
@@ -66,16 +66,16 @@ def postprocess(i):
 
     version = r['version']
     tool = r['tool']
-    found_file_path = env['CM_DOCKER_BIN_WITH_PATH']
+    found_file_path = env['MLC_DOCKER_BIN_WITH_PATH']
 
     found_path = os.path.dirname(found_file_path)
-    env['CM_DOCKER_INSTALLED_PATH'] = found_path
+    env['MLC_DOCKER_INSTALLED_PATH'] = found_path
     env['+PATH'] = [found_path]
 
-    env['CM_DOCKER_CACHE_TAGS'] = 'version-' + version
+    env['MLC_DOCKER_CACHE_TAGS'] = 'version-' + version
 
-    env['CM_DOCKER_VERSION'] = version
+    env['MLC_DOCKER_VERSION'] = version
 
-    env['CM_CONTAINER_TOOL'] = tool
+    env['MLC_CONTAINER_TOOL'] = tool
 
     return {'return': 0, 'version': version}

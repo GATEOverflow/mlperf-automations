@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -8,16 +8,16 @@ def preprocess(i):
         return {'return': 1, 'error': 'Windows is not supported in this script yet'}
 
     env = i['env']
-    version = env['CM_LIB_ARMNN_VERSION']
-    if env.get('CM_HOST_PLATFORM_FLAVOR', '') == 'x86_64':
+    version = env['MLC_LIB_ARMNN_VERSION']
+    if env.get('MLC_HOST_PLATFORM_FLAVOR', '') == 'x86_64':
         url = f"https://github.com/ARM-software/armnn/releases/download/{version}/ArmNN-linux-x86_64.tar.gz"
-    elif env.get('CM_HOST_PLATFORM_FLAVOR', '') == 'aarch64':
+    elif env.get('MLC_HOST_PLATFORM_FLAVOR', '') == 'aarch64':
         url = f"https://github.com/ARM-software/armnn/releases/download/{version}/ArmNN-linux-aarch64.tar.gz"
 
-    env['CM_LIB_ARMNN_PREBUILT_BINARY_URL'] = url
-    env['CM_LIB_ARMNN_EXTRACT_FILENAME'] = os.path.basename(url)
+    env['MLC_LIB_ARMNN_PREBUILT_BINARY_URL'] = url
+    env['MLC_LIB_ARMNN_EXTRACT_FILENAME'] = os.path.basename(url)
 
-    env['CM_GIT_CHECKOUT'] = env['CM_TMP_GIT_BRANCH_NAME']
+    env['MLC_GIT_CHECKOUT'] = env['MLC_TMP_GIT_BRANCH_NAME']
 
     return {'return': 0}
 
@@ -37,7 +37,7 @@ def postprocess(i):
         env[key] = []
 
     include_paths = []
-    armnn_src_path = env['CM_GIT_CHECKOUT_PATH']
+    armnn_src_path = env['MLC_GIT_CHECKOUT_PATH']
     include_paths.append(os.path.join(os.getcwd(), 'include'))
     include_paths.append(os.path.join(armnn_src_path, 'include'))
     include_paths.append(os.path.join(armnn_src_path, 'profiling'))

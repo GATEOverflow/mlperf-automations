@@ -1,3 +1,3 @@
 #!/bin/bash
 
-${CM_CONDA_BIN_WITH_PATH} --version  > tmp-ver.out
+${MLC_CONDA_BIN_WITH_PATH} --version  > tmp-ver.out

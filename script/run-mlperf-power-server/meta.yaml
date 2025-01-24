@@ -1,0 +1,57 @@
+alias: run-mlperf-power-server
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: false
+category: MLPerf benchmark support
+clean_files: []
+default_env:
+  MLC_MLPERF_POWER_DEVICE_PORT: /dev/usbtmc0
+  MLC_MLPERF_POWER_DEVICE_TYPE: '49'
+  MLC_MLPERF_POWER_INTERFACE_FLAG: ''
+  MLC_MLPERF_POWER_NTP_SERVER: time.google.com
+  MLC_MLPERF_POWER_SERVER_ADDRESS: 0.0.0.0
+  MLC_MLPERF_POWER_SERVER_PORT: '4950'
+  MLC_MLPERF_POWER_SERVER_USE_SCREEN: 'no'
+deps:
+- names:
+  - python
+  - python3
+  tags: get,python3
+- tags: detect,os
+- names:
+  - power-src
+  tags: get,mlperf,power,src
+- names:
+  - power-damenon
+  tags: get,mlperf,power,daemon
+- names:
+  - screen
+  skip_if_env:
+    MLC_HOST_OS_TYPE: windows
+  tags: get,generic,sys-util,_screen
+- enable_if_env:
+    MLC_HOST_OS_TYPE: windows
+  names:
+  - win32
+  tags: get,generic-python-lib,_package.pypiwin32
+docker:
+  device: /dev/usbtmc0
+  port_maps:
+  - 4950:4950
+input_mapping:
+  device_port: MLC_MLPERF_POWER_DEVICE_PORT
+  device_type: MLC_MLPERF_POWER_DEVICE_TYPE
+  interface_flag: MLC_MLPERF_POWER_INTERFACE_FLAG
+  ntp_server: MLC_MLPERF_POWER_NTP_SERVER
+  conf_file: MLC_MLPERF_POWER_SERVER_CONF_FILE
+  screen: MLC_MLPERF_POWER_SERVER_USE_SCREEN
+  num_analyzers: MLC_MLPERF_POWER_NUM_ANALYZERS
+tags:
+- run
+- mlc
+- mlcommons
+- mlperf
+- power
+- server
+- power-server
+uid: 5bc68aaf389a40bd

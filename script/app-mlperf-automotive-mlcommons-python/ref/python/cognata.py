@@ -74,13 +74,13 @@ class Cognata(dataset.Dataset):
         # Grigori added for tests
         # Check if overridden by extrnal environment for tests
         x = os.environ.get(
-            'CM_DATASET_MLCOMMONS_COGNATA_SERIAL_NUMBERS',
+            'MLC_DATASET_MLCOMMONS_COGNATA_SERIAL_NUMBERS',
             '').strip()
         if x != '':
             folders = x.split(';') if ';' in x else [x]
 
         x = os.environ.get(
-            'CM_DATASET_MLCOMMONS_COGNATA_GROUP_NAMES',
+            'MLC_DATASET_MLCOMMONS_COGNATA_GROUP_NAMES',
             '').strip()
         if x != '':
             cameras = x.split(';') if ';' in x else [x]
@@ -103,7 +103,7 @@ class Cognata(dataset.Dataset):
         print('  Time: {:.2f} sec.'.format(time.time() - start))
 
         if os.environ.get(
-                'CM_ABTF_ML_MODEL_TRAINING_FORCE_COGNATA_LABELS', '') == 'yes':
+                'MLC_ABTF_ML_MODEL_TRAINING_FORCE_COGNATA_LABELS', '') == 'yes':
             label_map = cognata_labels.label_map
             label_info = cognata_labels.label_info
 

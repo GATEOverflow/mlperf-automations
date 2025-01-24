@@ -1,6 +1,6 @@
 #!/bin/bash
 python3() {
-  ${CM_PYTHON_BIN_WITH_PATH} "$@"
+  ${MLC_PYTHON_BIN_WITH_PATH} "$@"
 }
 export -f python3
 
@@ -8,11 +8,11 @@ CUR=${PWD}
 mkdir -p install
 INSTALL_DIR=${CUR}/install
 
-cd ${CM_MLPERF_INFERENCE_CLASSIFICATION_AND_DETECTION_PATH}
+cd ${MLC_MLPERF_INFERENCE_CLASSIFICATION_AND_DETECTION_PATH}
 cd tools
-if [[ ${CM_DATASET_CALIBRATION} == "no" ]]; then
-  if [ ! -z ${CM_DATASET_SIZE} ]; then
-    max_images=" -m ${CM_DATASET_SIZE}"
+if [[ ${MLC_DATASET_CALIBRATION} == "no" ]]; then
+  if [ ! -z ${MLC_DATASET_SIZE} ]; then
+    max_images=" -m ${MLC_DATASET_SIZE}"
   else
     max_images=""
   fi
@@ -21,8 +21,8 @@ if [[ ${CM_DATASET_CALIBRATION} == "no" ]]; then
   eval $cmd
   test $? -eq 0 || exit 1
 else
-  if [ -n ${CM_MLPERF_OPENIMAGES_CALIBRATION_LIST_FILE_WITH_PATH} ]; then
-    calibration_file_string=" --calibration-file ${CM_MLPERF_OPENIMAGES_CALIBRATION_LIST_FILE_WITH_PATH}"
+  if [ -n ${MLC_MLPERF_OPENIMAGES_CALIBRATION_LIST_FILE_WITH_PATH} ]; then
+    calibration_file_string=" --calibration-file ${MLC_MLPERF_OPENIMAGES_CALIBRATION_LIST_FILE_WITH_PATH}"
   else
     calibration_file_string=""
   fi

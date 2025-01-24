@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -12,9 +12,9 @@ def preprocess(i):
 
     automation = i['automation']
 
-    quiet = (env.get('CM_QUIET', False) == 'yes')
+    quiet = (env.get('MLC_QUIET', False) == 'yes')
 
-    file_path = env.get("CM_XILINX_SDK_BIN_PATH")
+    file_path = env.get("MLC_XILINX_SDK_BIN_PATH")
     if not file_path or not os.path.exists(file_path):
         return {'return': 1, 'error': 'FILE_PATH does not exist'}
 

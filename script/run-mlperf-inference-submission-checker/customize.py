@@ -1,5 +1,4 @@
-from cmind import utils
-import cmind as cm
+from mlc import utils
 import os
 import subprocess
 
@@ -10,28 +9,28 @@ def preprocess(i):
     env = i['env']
     q = '"' if os_info['platform'] == 'windows' else "'"
 
-    submission_dir = env.get("CM_MLPERF_INFERENCE_SUBMISSION_DIR", "")
+    submission_dir = env.get("MLC_MLPERF_INFERENCE_SUBMISSION_DIR", "")
 
-    version = env.get('CM_MLPERF_SUBMISSION_CHECKER_VERSION', '')
+    version = env.get('MLC_MLPERF_SUBMISSION_CHECKER_VERSION', '')
 
     if submission_dir == "":
         return {'return': 1,
-                'error': 'Please set --env.CM_MLPERF_INFERENCE_SUBMISSION_DIR'}
+                'error': 'Please set --env.MLC_MLPERF_INFERENCE_SUBMISSION_DIR'}
 
-    submitter = env.get("CM_MLPERF_SUBMITTER", "")  # "default")
+    submitter = env.get("MLC_MLPERF_SUBMITTER", "")  # "default")
     if ' ' in submitter:
         return {
-            'return': 1, 'error': 'CM_MLPERF_SUBMITTER cannot contain a space. Please provide a name without space using --submitter input. Given value: {}'.format(submitter)}
+            'return': 1, 'error': 'MLC_MLPERF_SUBMITTER cannot contain a space. Please provide a name without space using --submitter input. Given value: {}'.format(submitter)}
 
-    if 'CM_MLPERF_SKIP_COMPLIANCE' in env:
+    if 'MLC_MLPERF_SKIP_COMPLIANCE' in env:
         skip_compliance = " --skip_compliance"
     else:
         skip_compliance = ""
 
-    submission_checker_file = os.path.join(env['CM_MLPERF_INFERENCE_SOURCE'], "tools", "submission",
+    submission_checker_file = os.path.join(env['MLC_MLPERF_INFERENCE_SOURCE'], "tools", "submission",
                                            "submission_checker.py")
 
-    if env['CM_MLPERF_SHORT_RUN'] == "yes":
+    if env['MLC_MLPERF_SHORT_RUN'] == "yes":
         import shutil
         new_submission_checker_file = os.path.join(
             os.path.dirname(submission_checker_file),
@@ -46,24 +45,24 @@ def preprocess(i):
             file.write(data)
         submission_checker_file = new_submission_checker_file
 
-    if env.get('CM_MLPERF_EXTRA_MODEL_MAPPING', '') != '':
+    if env.get('MLC_MLPERF_EXTRA_MODEL_MAPPING', '') != '':
         extra_map = ' --extra_model_benchmark_map "' + \
-            env['CM_MLPERF_EXTRA_MODEL_MAPPING'] + '"'
+            env['MLC_MLPERF_EXTRA_MODEL_MAPPING'] + '"'
     else:
         extra_map = ""
 
-    if env.get('CM_MLPERF_SKIP_POWER_CHECK', 'no') == "yes":
+    if env.get('MLC_MLPERF_SKIP_POWER_CHECK', 'no') == "yes":
         power_check = " --skip-power-check"
     else:
         power_check = ""
 
-    extra_args = ' ' + env.get('CM_MLPERF_SUBMISSION_CHECKER_EXTRA_ARGS', '')
+    extra_args = ' ' + env.get('MLC_MLPERF_SUBMISSION_CHECKER_EXTRA_ARGS', '')
 
     x_submitter = ' --submitter ' + q + submitter + q if submitter != '' else ''
 
     x_version = ' --version ' + version + ' ' if version != '' else ''
 
-    CMD = env['CM_PYTHON_BIN_WITH_PATH'] + ' ' + q + submission_checker_file + q + ' --input ' + q + submission_dir + q + \
+    CMD = env['MLC_PYTHON_BIN_WITH_PATH'] + ' ' + q + submission_checker_file + q + ' --input ' + q + submission_dir + q + \
         x_submitter + \
         x_version + \
         skip_compliance + extra_map + power_check + extra_args
@@ -74,18 +73,18 @@ def preprocess(i):
     x_submission_repo_owner = ''
     x_submission_repo_branch = ''
 
-    if env.get('CM_MLPERF_RESULTS_GIT_REPO_NAME', '') != '':
-        x_submission_repo_name = f""" --repository {env['CM_MLPERF_RESULTS_GIT_REPO_NAME']}"""
-    if env.get('CM_MLPERF_RESULTS_GIT_REPO_OWNER', '') != '':
-        x_submission_repo_owner = f""" --repository-owner {env['CM_MLPERF_RESULTS_GIT_REPO_OWNER']}"""
-    if env.get('CM_MLPERF_RESULTS_GIT_REPO_BRANCH', '') != '':
-        x_submission_repo_branch = f""" --repository-branch  {env['CM_MLPERF_RESULTS_GIT_REPO_BRANCH']}"""
+    if env.get('MLC_MLPERF_RESULTS_GIT_REPO_NAME', '') != '':
+        x_submission_repo_name = f""" --repository {env['MLC_MLPERF_RESULTS_GIT_REPO_NAME']}"""
+    if env.get('MLC_MLPERF_RESULTS_GIT_REPO_OWNER', '') != '':
+        x_submission_repo_owner = f""" --repository-owner {env['MLC_MLPERF_RESULTS_GIT_REPO_OWNER']}"""
+    if env.get('MLC_MLPERF_RESULTS_GIT_REPO_BRANCH', '') != '':
+        x_submission_repo_branch = f""" --repository-branch  {env['MLC_MLPERF_RESULTS_GIT_REPO_BRANCH']}"""
 
-    report_generator_file = os.path.join(env['CM_MLPERF_INFERENCE_SOURCE'], "tools", "submission",
+    report_generator_file = os.path.join(env['MLC_MLPERF_INFERENCE_SOURCE'], "tools", "submission",
                                          "generate_final_report.py")
-    env['CM_RUN_CMD'] = CMD
+    env['MLC_RUN_CMD'] = CMD
     print(CMD)
-    env['CM_POST_RUN_CMD'] = env['CM_PYTHON_BIN_WITH_PATH'] + ' ' + q + report_generator_file + q + ' --input summary.csv ' + \
+    env['MLC_POST_RUN_CMD'] = env['MLC_PYTHON_BIN_WITH_PATH'] + ' ' + q + report_generator_file + q + ' --input summary.csv ' + \
         x_version + \
         x_submission_repo_name + \
         x_submission_repo_owner + \
@@ -97,15 +96,15 @@ def preprocess(i):
 def postprocess(i):
 
     env = i['env']
-    if env.get('CM_TAR_SUBMISSION_DIR', ''):
-        env['CM_TAR_INPUT_DIR'] = env['CM_MLPERF_INFERENCE_SUBMISSION_DIR']
+    if env.get('MLC_TAR_SUBMISSION_DIR', ''):
+        env['MLC_TAR_INPUT_DIR'] = env['MLC_MLPERF_INFERENCE_SUBMISSION_DIR']
 
     x = env.get('MLPERF_INFERENCE_SUBMISSION_TAR_FILE', '')
     if x != '':
-        env['CM_TAR_OUTFILE'] = x
+        env['MLC_TAR_OUTFILE'] = x
 
-    if env.get('CM_MLPERF_INFERENCE_SUBMISSION_BASE_DIR', '') != '':
-        env['CM_TAR_OUTPUT_DIR'] = env['CM_MLPERF_INFERENCE_SUBMISSION_BASE_DIR']
+    if env.get('MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR', '') != '':
+        env['MLC_TAR_OUTPUT_DIR'] = env['MLC_MLPERF_INFERENCE_SUBMISSION_BASE_DIR']
 
     x = env.get('MLPERF_INFERENCE_SUBMISSION_SUMMARY', '')
     if x != '':

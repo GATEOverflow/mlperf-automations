@@ -1,11 +1,8 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: MLPerf inference bert (deepsparse, tf, onnxruntime, pytorch)
 
 on:
-  pull_request_target:
-    branches: [ "main", "dev", "mlperf-inference" ]
+  pull_request:
+    branches: [ "main", "dev" ]
     paths:
       - '.github/workflows/test-mlperf-inference-bert-deepsparse-tf-onnxruntime-pytorch.yml'
       - '**'
@@ -35,25 +32,21 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install cm4mlops on Windows
-      if: matrix.os == 'windows-latest'
+    - name: Install mlcflow
       run: |
-        $env:CM_PULL_DEFAULT_MLOPS_REPO = "no"; pip install cm4mlops
-    - name: Install dependencies on Unix Platforms
-      if: matrix.os != 'windows-latest'
-      run: |
-        CM_PULL_DEFAULT_MLOPS_REPO=no pip install cm4mlops
+        pip install mlcflow
+        pip install tabulate
     - name: Pull MLOps repository
       run: |
-        cm pull repo --url=${{ github.event.pull_request.head.repo.html_url }} --checkout=${{ github.event.pull_request.head.ref }}
+        mlc pull repo ${{ github.event.pull_request.head.repo.html_url }} --branch=${{ github.event.pull_request.head.ref }}
     - name: Test MLPerf Inference Bert ${{ matrix.backend }} on ${{ matrix.os }}
       if: matrix.os == 'windows-latest'
       run: |
-        cm run script --tags=run,mlperf,inference,generate-run-cmds,_submission,_short --submitter="MLCommons" --hw_name=gh_${{ matrix.os }} --model=bert-99 --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=5 --adr.loadgen.tags=_from-pip --pip_loadgen=yes --precision=${{ matrix.precision }} --target_qps=1 -v --quiet
+        mlcr --tags=run,mlperf,inference,generate-run-cmds,_submission,_short --submitter="MLCommons" --hw_name=gh_${{ matrix.os }} --model=bert-99 --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=5 --adr.loadgen.tags=_from-pip --pip_loadgen=yes --precision=${{ matrix.precision }} --target_qps=1 -v --quiet
     - name: Test MLPerf Inference Bert ${{ matrix.backend }} on ${{ matrix.os }}
       if: matrix.os != 'windows-latest'
       run: |
-        cm run script --tags=run,mlperf,inference,generate-run-cmds,_submission,_short --submitter="MLCommons" --hw_name=gh_${{ matrix.os }}_x86 --model=bert-99 --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=5 --precision=${{ matrix.precision }} --target_qps=1 -v --quiet
+        mlcr --tags=run,mlperf,inference,generate-run-cmds,_submission,_short --submitter="MLCommons" --hw_name=gh_${{ matrix.os }}_x86 --model=bert-99 --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=5 --precision=${{ matrix.precision }} --target_qps=1 -v --quiet
     - name: Push Results
       if: github.repository_owner == 'gateoverflow'
       env:
@@ -67,4 +60,4 @@ jobs:
         git config --global credential.https://github.com.helper "!gh auth git-credential"
         git config --global credential.https://gist.github.com.helper ""
         git config --global credential.https://gist.github.com.helper "!gh auth git-credential"
-        cm run script --tags=push,github,mlperf,inference,submission --repo_url=https://github.com/mlcommons/mlperf_inference_test_submissions_v5.0 --repo_branch=dev --commit_message="Results from Bert GH action on ${{ matrix.os }}" --quiet
+        mlcr --tags=push,github,mlperf,inference,submission --repo_url=https://github.com/mlcommons/mlperf_inference_test_submissions_v5.0 --repo_branch=dev --commit_message="Results from Bert GH action on ${{ matrix.os }}" --quiet

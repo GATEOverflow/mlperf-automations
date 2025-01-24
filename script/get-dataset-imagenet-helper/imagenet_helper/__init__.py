@@ -6,35 +6,38 @@ import numpy as np
 
 # Processing in batches:
 #
-BATCH_SIZE = int(os.getenv('CM_BATCH_SIZE', 1))
+BATCH_SIZE = int(os.getenv('MLC_BATCH_SIZE', 1))
 
 
 # Model properties:
 #
-MODEL_IMAGE_HEIGHT = int(os.getenv('CM_ML_MODEL_IMAGE_HEIGHT',
-                                   os.getenv('CM_ONNX_MODEL_IMAGE_HEIGHT',
-                                             os.getenv('CM_TENSORFLOW_MODEL_IMAGE_HEIGHT',
+MODEL_IMAGE_HEIGHT = int(os.getenv('MLC_ML_MODEL_IMAGE_HEIGHT',
+                                   os.getenv('MLC_ONNX_MODEL_IMAGE_HEIGHT',
+                                             os.getenv('MLC_TENSORFLOW_MODEL_IMAGE_HEIGHT',
                                                        ''))))
-MODEL_IMAGE_WIDTH = int(os.getenv('CM_ML_MODEL_IMAGE_WIDTH',
-                                  os.getenv('CM_ONNX_MODEL_IMAGE_WIDTH',
-                                            os.getenv('CM_TENSORFLOW_MODEL_IMAGE_WIDTH',
+MODEL_IMAGE_WIDTH = int(os.getenv('MLC_ML_MODEL_IMAGE_WIDTH',
+                                  os.getenv('MLC_ONNX_MODEL_IMAGE_WIDTH',
+                                            os.getenv('MLC_TENSORFLOW_MODEL_IMAGE_WIDTH',
                                                       ''))))
-MODEL_IMAGE_CHANNELS = int(os.getenv('CM_ML_MODEL_IMAGE_CHANNELS', 3))
-MODEL_DATA_LAYOUT = os.getenv('CM_ML_MODEL_DATA_LAYOUT', 'NCHW')
+MODEL_IMAGE_CHANNELS = int(os.getenv('MLC_ML_MODEL_IMAGE_CHANNELS', 3))
+MODEL_DATA_LAYOUT = os.getenv('MLC_ML_MODEL_DATA_LAYOUT', 'NCHW')
 MODEL_COLOURS_BGR = os.getenv(
-    'CM_ML_MODEL_COLOUR_CHANNELS_BGR', 'NO') in (
+    'MLC_ML_MODEL_COLOUR_CHANNELS_BGR', 'NO') in (
         'YES', 'yes', 'ON', 'on', '1')
-MODEL_INPUT_DATA_TYPE = os.getenv('CM_ML_MODEL_INPUT_DATA_TYPE', 'float32')
-MODEL_DATA_TYPE = os.getenv('CM_ML_MODEL_DATA_TYPE', '(unknown)')
+MODEL_INPUT_DATA_TYPE = os.getenv('MLC_ML_MODEL_INPUT_DATA_TYPE', 'float32')
+MODEL_DATA_TYPE = os.getenv('MLC_ML_MODEL_DATA_TYPE', '(unknown)')
 MODEL_USE_DLA = os.getenv(
-    'CM_ML_MODEL_USE_DLA',
+    'MLC_ML_MODEL_USE_DLA',
     'NO') in (
         'YES',
         'yes',
         'ON',
         'on',
     '1')
-MODEL_MAX_BATCH_SIZE = int(os.getenv('CM_ML_MODEL_MAX_BATCH_SIZE', BATCH_SIZE))
+MODEL_MAX_BATCH_SIZE = int(
+    os.getenv(
+        'MLC_ML_MODEL_MAX_BATCH_SIZE',
+        BATCH_SIZE))
 
 
 # Internal processing:
@@ -45,14 +48,14 @@ INTERMEDIATE_DATA_TYPE = np.float32    # default for internal conversion
 
 # Image normalization:
 #
-MODEL_NORMALIZE_DATA = os.getenv('CM_ML_MODEL_NORMALIZE_DATA') in (
+MODEL_NORMALIZE_DATA = os.getenv('MLC_ML_MODEL_NORMALIZE_DATA') in (
     'YES', 'yes', 'ON', 'on', '1')
-MODEL_NORMALIZE_LOWER = float(os.getenv('CM_ML_MODEL_NORMALIZE_LOWER', -1.0))
-MODEL_NORMALIZE_UPPER = float(os.getenv('CM_ML_MODEL_NORMALIZE_UPPER', 1.0))
+MODEL_NORMALIZE_LOWER = float(os.getenv('MLC_ML_MODEL_NORMALIZE_LOWER', -1.0))
+MODEL_NORMALIZE_UPPER = float(os.getenv('MLC_ML_MODEL_NORMALIZE_UPPER', 1.0))
 SUBTRACT_MEAN = os.getenv(
-    'CM_ML_MODEL_SUBTRACT_MEANS', 'YES') in (
+    'MLC_ML_MODEL_SUBTRACT_MEANS', 'YES') in (
         'YES', 'yes', 'ON', 'on', '1')
-GIVEN_CHANNEL_MEANS = os.getenv('CM_ML_MODEL_GIVEN_CHANNEL_MEANS', '')
+GIVEN_CHANNEL_MEANS = os.getenv('MLC_ML_MODEL_GIVEN_CHANNEL_MEANS', '')
 if GIVEN_CHANNEL_MEANS:
     GIVEN_CHANNEL_MEANS = np.fromstring(
         GIVEN_CHANNEL_MEANS,
@@ -62,7 +65,7 @@ if GIVEN_CHANNEL_MEANS:
         # swapping Red and Blue colour channels
         GIVEN_CHANNEL_MEANS = GIVEN_CHANNEL_MEANS[::-1]
 
-GIVEN_CHANNEL_STDS = os.getenv('CM_ML_MODEL_GIVEN_CHANNEL_STDS', '')
+GIVEN_CHANNEL_STDS = os.getenv('MLC_ML_MODEL_GIVEN_CHANNEL_STDS', '')
 if GIVEN_CHANNEL_STDS:
     GIVEN_CHANNEL_STDS = np.fromstring(
         GIVEN_CHANNEL_STDS,
@@ -75,13 +78,13 @@ if GIVEN_CHANNEL_STDS:
 
 # ImageNet dataset properties:
 #
-LABELS_PATH = os.environ['CM_CAFFE_IMAGENET_SYNSET_WORDS_TXT']
+LABELS_PATH = os.environ['MLC_CAFFE_IMAGENET_SYNSET_WORDS_TXT']
 
 
 # Preprocessed input images' properties:
 #
-IMAGE_DIR = os.getenv('CM_DATASET_PREPROCESSED_PATH')
-IMAGE_DATA_TYPE = os.getenv('CM_DATASET_PREPROCESSED_DATA_TYPE', 'float32')
+IMAGE_DIR = os.getenv('MLC_DATASET_PREPROCESSED_PATH')
+IMAGE_DATA_TYPE = os.getenv('MLC_DATASET_PREPROCESSED_DATA_TYPE', 'float32')
 
 
 def load_labels(labels_filepath):

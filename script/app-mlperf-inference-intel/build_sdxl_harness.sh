@@ -1,4 +1,4 @@
-cd ${CM_HARNESS_CODE_ROOT}
+cd ${MLC_HARNESS_CODE_ROOT}
 
 cd utils
 cmd=" python -m pip install ."

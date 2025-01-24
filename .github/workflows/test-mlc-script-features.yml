@@ -1,0 +1,72 @@
+name: MLC script automation features test
+
+on:
+  pull_request:
+    branches: [ "main", "dev" ]
+    paths:
+      - '.github/workflows/test-mlc-script-features.yml'
+      - '**'
+      - '!**.md'
+
+jobs:
+  test_mlc_script_features:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.8"]
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Configure git longpaths (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        git config --system core.longpaths true
+    - name: Pull MLOps repository
+      run: |
+        pip install mlcflow
+        mlc pull repo ${{ github.event.pull_request.head.repo.html_url }} --branch=${{ github.event.pull_request.head.ref }}
+  
+    - name: Test Python venv
+      run: |
+        mlc run script --tags=install,python-venv --name=test --quiet
+        mlc search cache --tags=get,python,virtual,name-test --quiet
+
+    - name: Test variations
+      run: |
+        mlc run script --tags=get,dataset,preprocessed,imagenet,_NHWC --quiet
+        mlc search cache --tags=get,dataset,preprocessed,imagenet,-_NCHW
+        mlc search cache --tags=get,dataset,preprocessed,imagenet,-_NHWC
+
+    - name: Test versions
+      continue-on-error: true
+      if: runner.os == 'linux'
+      run: |
+        mlc run script --tags=get,generic-python-lib,_package.scipy --version=1.9.3 --quiet
+        test $? -eq 0 || exit $?
+        mlc run script --tags=get,generic-python-lib,_package.scipy --version=1.9.2 --quiet
+        test $? -eq 0 || exit $?
+        mlc run script --tags=get,generic-python-lib,_package.scipy --version=1.9.3 --quiet --only_execute_from_cache=True
+        test $? -eq 0 || exit 0
+
+    - name: Test python install from src
+      run: |
+        mlc run script --tags=python,src,install,_shared --version=3.9.10 --quiet
+        mlc search cache --tags=python,src,install,_shared,version-3.9.10
+
+    - name: Run docker container from dockerhub on linux
+      if: runner.os == 'linux'
+      run: |
+        mlc run script --tags=run,docker,container --adr.compiler.tags=gcc --docker_mlc_repo=mlcommons@mlperf-automations --docker_mlc_repo_branch=dev --image_name=cm-script-app-image-classification-onnx-py --env.MLC_DOCKER_RUN_SCRIPT_TAGS=app,image-classification,onnx,python --env.MLC_DOCKER_IMAGE_BASE=ubuntu:22.04 --env.MLC_DOCKER_IMAGE_REPO=cknowledge --quiet
+     
+    - name: Run docker container locally on linux
+      if: runner.os == 'linux'
+      run: |
+        mlc run script --tags=run,docker,container --adr.compiler.tags=gcc --docker_mlc_repo=mlcommons@mlperf-automations --docker_mlc_repo_branch=dev --image_name=mlc-script-app-image-classification-onnx-py --env.MLC_DOCKER_RUN_SCRIPT_TAGS=app,image-classification,onnx,python --env.MLC_DOCKER_IMAGE_BASE=ubuntu:22.04 --env.MLC_DOCKER_IMAGE_REPO=local --quiet
+

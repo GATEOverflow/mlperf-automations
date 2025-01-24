@@ -1,15 +1,15 @@
 #!/bin/bash
 
-rm -f ${CM_JAVAC_PREBUILT_FILENAME}.tar.gz
-rm -f ${CM_JAVAC_PREBUILT_FILENAME}.tar
+rm -f ${MLC_JAVAC_PREBUILT_FILENAME}.tar.gz
+rm -f ${MLC_JAVAC_PREBUILT_FILENAME}.tar
 
-wget --no-check-certificate ${CM_JAVAC_PREBUILT_URL}${CM_JAVAC_PREBUILT_FILENAME}.tar.gz
+wget --no-check-certificate ${MLC_JAVAC_PREBUILT_URL}${MLC_JAVAC_PREBUILT_FILENAME}.tar.gz
 test $? -eq 0 || exit 1
 
-gzip -d ${CM_JAVAC_PREBUILT_FILENAME}.tar.gz
+gzip -d ${MLC_JAVAC_PREBUILT_FILENAME}.tar.gz
 test $? -eq 0 || exit 1
 
-tar xvf ${CM_JAVAC_PREBUILT_FILENAME}.tar
+tar xvf ${MLC_JAVAC_PREBUILT_FILENAME}.tar
 test $? -eq 0 || exit 1
 
-rm -f ${CM_JAVAC_PREBUILT_FILENAME}.tar
+rm -f ${MLC_JAVAC_PREBUILT_FILENAME}.tar

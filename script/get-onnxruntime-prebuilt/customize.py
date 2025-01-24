@@ -1,4 +1,4 @@
-from cmind import utils
+from mlc import utils
 import os
 
 
@@ -6,13 +6,13 @@ def preprocess(i):
     os_info = i['os_info']
     env = i['env']
 
-    machine = env.get('CM_HOST_OS_MACHINE', '')
+    machine = env.get('MLC_HOST_OS_MACHINE', '')
     if machine == '':
         machine = 'x86_64'
     if machine == 'x86_64':
         machine = 'x64'
 
-    hostos = env['CM_HOST_OS_TYPE']
+    hostos = env['MLC_HOST_OS_TYPE']
 
     ext = '.tgz'
 
@@ -22,11 +22,11 @@ def preprocess(i):
         hostos = 'win'
         ext = '.zip'
 
-    device = env.get('CM_ONNXRUNTIME_DEVICE', '')
+    device = env.get('MLC_ONNXRUNTIME_DEVICE', '')
     if device != '':
         machine += '-' + device
 
-    version = env['CM_VERSION']
+    version = env['MLC_VERSION']
 
     FOLDER = 'onnxruntime-{}-{}-{}'.format(hostos, machine, version)
 
@@ -50,9 +50,9 @@ def postprocess(i):
 
     env = i['env']
 
-    hostos = env['CM_HOST_OS_TYPE']
+    hostos = env['MLC_HOST_OS_TYPE']
 
-    install_folder = env['CM_TMP_INSTALL_FOLDER']
+    install_folder = env['MLC_TMP_INSTALL_FOLDER']
 
     for key in ['+C_INCLUDE_PATH', '+CPLUS_INCLUDE_PATH',
                 '+LD_LIBRARY_PATH', '+DYLD_FALLBACK_LIBRARY_PATH']:
@@ -78,7 +78,7 @@ def postprocess(i):
         # For dynamic libraries
         env['+PATH'] = [lib_path]
 
-    env['CM_ONNXRUNTIME_LIB_PATH'] = lib_path
-    env['CM_ONNXRUNTIME_INCLUDE_PATH'] = include_path
+    env['MLC_ONNXRUNTIME_LIB_PATH'] = lib_path
+    env['MLC_ONNXRUNTIME_INCLUDE_PATH'] = include_path
 
     return {'return': 0}

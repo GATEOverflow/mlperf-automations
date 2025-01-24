@@ -5,8 +5,8 @@ CUR_DIR=$PWD
 echo "******************************************************"
 
 if [ ! -d "src" ]; then
-  echo "Cloning GCC from ${CM_GIT_URL} with branch ${CM_GIT_CHECKOUT}..."
-  git clone -b "${CM_GIT_CHECKOUT}" ${CM_GIT_URL} src
+  echo "Cloning GCC from ${MLC_GIT_URL} with branch ${MLC_GIT_CHECKOUT}..."
+  git clone -b "${MLC_GIT_CHECKOUT}" ${MLC_GIT_URL} src
   if [ "${?}" != "0" ]; then exit 1; fi
 fi
 
@@ -25,10 +25,10 @@ cd ../build
 if [ "${?}" != "0" ]; then exit 1; fi
 
 echo "******************************************************"
-CM_MAKE_CORES=${CM_MAKE_CORES:-${CM_HOST_CPU_TOTAL_CORES}}
-CM_MAKE_CORES=${CM_MAKE_CORES:-2}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-${MLC_HOST_CPU_TOTAL_CORES}}
+MLC_MAKE_CORES=${MLC_MAKE_CORES:-2}
 
-make -j${CM_MAKE_CORES}
+make -j${MLC_MAKE_CORES}
 if [ "${?}" != "0" ]; then exit 1; fi
 make install
 if [ "${?}" != "0" ]; then exit 1; fi

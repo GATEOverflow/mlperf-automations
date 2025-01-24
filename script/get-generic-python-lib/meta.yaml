@@ -1,0 +1,727 @@
+alias: get-generic-python-lib
+automation_alias: script
+automation_uid: 5b4e0237da074764
+cache: true
+category: Python automation
+clean_files: []
+deps:
+- tags: detect,os
+- tags: detect,cpu
+- names:
+  - python
+  - python3
+  skip_if_env:
+    MLC_TMP_USE_CUSTOM_PYTHON:
+    - 'on'
+  tags: get,python3
+  dynamic: true
+- names:
+  - python-pip
+  - pip
+  skip_if_env:
+    MLC_GENERIC_PYTHON_PACKAGE_NAME:
+    - pip
+  tags: get,generic-python-lib,_pip
+extra_cache_tags_from_env:
+- env: MLC_PYTHON_CACHE_TAGS
+  prefix: python-
+input_mapping:
+  extra_index_url: MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL
+  force_install: MLC_TMP_PYTHON_PACKAGE_FORCE_INSTALL
+  index_url: MLC_GENERIC_PYTHON_PIP_INDEX_URL
+local_env_keys:
+- MLC_GENERIC_PYTHON_PACKAGE_VARIANT
+new_env_keys:
+- MLC_PYTHONLIB_*
+prehook_deps:
+- enable_if_env:
+    MLC_INSTALL_ONNXRUNTIME_GPU_FROM_SRC:
+    - 'yes'
+  tags: install,onnxruntime,from.src,_cuda
+tags:
+- get
+- install
+- generic
+- pip-package
+- generic-python-lib
+tags_help: get generic-python-lib
+uid: 94b62a682bc44791
+variations:
+  Pillow:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: Pillow
+    new_env_keys:
+    - MLC_PILLOW_VERSION
+  anthropic:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: anthropic
+    new_env_keys:
+    - MLC_ANTHROPIC_VERSION
+  apache-tvm:
+    deps:
+    - tags: get,generic-python-lib,_typing_extensions
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: apache-tvm
+      MLC_GENERIC_PYTHON_PIP_EXTRA: ' --pre'
+    new_env_keys:
+    - MLC_APACHE_TVM_VERSION
+  apex:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: apex
+    new_env_keys:
+    - MLC_APEX_VERSION
+  async_timeout:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: async_timeout
+    new_env_keys:
+    - MLC_ASYNC_TIMEOUT_VERSION
+  attr:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: attr
+    new_env_keys:
+    - MLC_ATTR_VERSION
+  attrs:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: attrs
+    new_env_keys:
+    - MLC_ATTRS_VERSION
+  boto3:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: boto3
+    new_env_keys:
+    - MLC_BOTO3_VERSION
+  cloudpickle:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: cloudpickle
+    new_env_keys:
+    - MLC_CLOUDPICKLE_VERSION
+  cmind:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: cmind
+    new_env_keys:
+    - MLC_CMIND_VERSION
+  colored:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: colored
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://pypi.ngc.nvidia.com
+    new_env_keys:
+    - MLC_COLORED_VERSION
+  conda.#:
+    ad:
+      python-pip:
+        tags: _conda.#
+      python3:
+        tags: _conda.#
+  cupy:
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: cupy
+    new_env_keys:
+    - MLC_CUPY_VERSION
+  custom-python:
+    ad:
+      python-pip:
+        tags: _custom-python
+    env:
+      MLC_TMP_USE_CUSTOM_PYTHON: 'on'
+  cxx11-abi:
+    env: {}
+  datasets:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: datasets
+    new_env_keys:
+    - MLC_DATASETS_VERSION
+  decorator:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: decorator
+    new_env_keys:
+    - MLC_DECORATOR_VERSION
+  deepsparse:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: deepsparse
+    new_env_keys:
+    - MLC_DEEPSPARSE_VERSION
+  dllogger:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: dllogger
+      MLC_GENERIC_PYTHON_PIP_URL: git+https://github.com/NVIDIA/dllogger#egg=dllogger
+  extra-index-url.#:
+    env:
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: '#'
+  fiftyone:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: fiftyone
+    new_env_keys:
+    - MLC_FIFTYONE_VERSION
+  google-api-python-client:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: google_api_python_client
+    new_env_keys:
+    - MLC_GOOGLE_API_PYTHON_CLIENT_VERSION
+  google-auth-oauthlib:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: google_auth_oauthlib
+    new_env_keys:
+    - MLC_GOOGLE_AUTH_OAUTHLIB_VERSION
+  huggingface_hub:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: huggingface_hub
+    new_env_keys:
+    - MLC_HUGGINGFACE_HUB_VERSION
+  index-url.#:
+    env:
+      MLC_GENERIC_PYTHON_PIP_INDEX_URL: '#'
+  inflect:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: inflect
+    new_env_keys:
+    - MLC_INFLECT_VERSION
+  jax:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: jax
+    new_env_keys:
+    - MLC_JAX_VERSION*
+  jax_cuda:
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: jax[cuda]
+      MLC_GENERIC_PYTHON_PIP_EXTRA: -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+      MLC_JAX_VERSION_EXTRA: CUDA
+    new_env_keys:
+    - MLC_JAX_VERSION*
+  librosa:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: librosa
+    new_env_keys:
+    - MLC_LIBROSA_VERSION
+  matplotlib:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: matplotlib
+    new_env_keys:
+    - MLC_MATPLOTLIB_VERSION
+  mlperf_loadgen:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: mlperf_loadgen
+      MLC_GENERIC_PYTHON_PIP_URL: git+https://github.com/mlcommons/inference.git#subdirectory=loadgen
+    new_env_keys:
+    - MLC_MLPERF_LOADGEN_VERSION
+  mlperf_logging:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: mlperf_logging
+      MLC_GENERIC_PYTHON_PIP_URL: git+https://github.com/mlperf/logging.git
+    new_env_keys:
+    - MLC_MLPERF_LOGGING_VERSION
+  mpld3:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: mpld3
+    new_env_keys:
+    - MLC_MPLD3_VERSION
+  mxeval:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: mxeval
+      MLC_GENERIC_PYTHON_PIP_URL: git+https://github.com/amazon-science/mxeval.git
+      MLC_PIP_ERROR_SKIP: 'true'
+  nibabel:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: nibabel
+    new_env_keys:
+    - MLC_NIBABEL_VERSION
+  no-deps:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_INSTALL_DEPS: 'no'
+  numpy:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: numpy
+    new_env_keys:
+    - MLC_NUMPY_VERSION
+  nvidia-apex:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: apex
+      MLC_GENERIC_PYTHON_PACKAGE_VARIANT: nvidia-apex
+      MLC_GENERIC_PYTHON_PIP_URL: git+https://github.com/nvidia/apex@0da3ffb92ee6fbe5336602f0e3989db1cd16f880
+    new_env_keys:
+    - MLC_NVIDIA_APEX_VERSION
+  nvidia-apex-from-src:
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    - names:
+      - torch
+      tags: get,generic-python-lib,_torch_cuda
+    - env:
+        MLC_GIT_CHECKOUT_FOLDER: apex
+      extra_cache_tags: nvidia-apex
+      tags: get,git,repo,_repo.https://github.com/NVIDIA/apex,_tag.23.05
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: apex
+      MLC_GENERIC_PYTHON_PACKAGE_VARIANT: nvidia-apex
+    new_env_keys:
+    - MLC_NVIDIA_APEX_VERSION
+  nvidia-dali:
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: nvidia-dali-cuda120
+      MLC_GENERIC_PYTHON_PIP_EXTRA: ' --upgrade --default-timeout=900'
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://developer.download.nvidia.com/compute/redist
+    new_env_keys:
+    - MLC_NVIDIA_DALI_VERSION
+  nvidia-pycocotools:
+    base:
+    - pycocotools
+    deps:
+    - names:
+      - cython
+      tags: get,generic-python-lib,_package.cython
+    - names:
+      - numpy
+      tags: get,generic-python-lib,_package.numpy
+    env:
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: pycocotools
+      MLC_GENERIC_PYTHON_PIP_URL: pycocotools@git+https://github.com/NVIDIA/cocoapi#subdirectory=PythonAPI
+  nvidia-pyindex:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: nvidia-pyindex
+    new_env_keys:
+    - MLC_NVIDIA_PYINDEX_VERSION
+  nvidia-tensorrt:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: nvidia-tensorrt
+    new_env_keys:
+    - MLC_NVIDIA_TENSORRT_VERSION
+  onnx:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: onnx
+    new_env_keys:
+    - MLC_ONNX_VERSION
+  onnx-graphsurgeon:
+    deps:
+    - tags: get,generic-python-lib,_package.nvidia-pyindex
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: onnx_graphsurgeon
+    new_env_keys:
+    - MLC_ONNX_GRAPHSURGEON_VERSION
+  onnxruntime:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: onnxruntime
+    new_env_keys:
+    - MLC_ONNXRUNTIME_VERSION
+  onnxruntime,rocm:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: onnxruntime-training
+      MLC_GENERIC_PYTHON_PIP_URL: https://download.onnxruntime.ai/onnxruntime_training-1.16.0%2Brocm56-cp3<<<MLC_PYTHON_MINOR_VERSION>>>-cp3<<<MLC_PYTHON_MINOR_VERSION>>>-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    new_env_keys:
+    - MLC_ONNXRUNTIME_TRAINING_VERSION*
+  onnxruntime_gpu:
+    default_env:
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: onnxruntime
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: onnxruntime_gpu
+      MLC_ONNXRUNTIME_VERSION_EXTRA: GPU
+    new_env_keys:
+    - MLC_ONNXRUNTIME_GPU_VERSION*
+  openai:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: openai
+    new_env_keys:
+    - MLC_OPENAI_VERSION
+  opencv-python:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: opencv-python
+    new_env_keys:
+    - MLC_OPENCV_PYTHON_VERSION
+  package.#:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: '#'
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: ''
+      MLC_GENERIC_PYTHON_PIP_URL: ''
+  find_links_url.#:
+    env:
+      MLC_GENERIC_PYTHON_PIP_EXTRA_FIND_LINKS_URL: '#'
+  package.torch,cxx11-abi:
+    env:
+      MLC_GENERIC_PYTHON_PIP_INDEX_URL: https://download.pytorch.org/whl/nightly/cpu-cxx11-abi
+  pandas:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: pandas
+    new_env_keys:
+    - MLC_PANDAS_VERSION
+  path.#:
+    env:
+      MLC_GENERIC_PYTHON_PIP_URL: '#'
+  pillow:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: Pillow
+    new_env_keys:
+    - MLC_PILLOW_VERSION
+  pip:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: pip
+    new_env_keys:
+    - MLC_PIP_VERSION
+    - MLC_PYTHON_PIP_COMMON_EXTRA
+  polygraphy:
+    deps:
+    - tags: get,generic-python-lib,_colored
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: polygraphy
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://pypi.ngc.nvidia.com
+    new_env_keys:
+    - MLC_POLYGRAPHY_VERSION
+  pre:
+    env:
+      MLC_GENERIC_PYTHON_DEV_VERSION: 'yes'
+  protobuf:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: protobuf
+    new_env_keys:
+    - MLC_PROTOBUF_VERSION
+  psutil:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: psutil
+    new_env_keys:
+    - MLC_PSUTIL_VERSION
+  pycocotools:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: pycocotools
+    new_env_keys:
+    - MLC_PYCOCOTOOLS_VERSION
+  pycuda:
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: pycuda
+    new_env_keys:
+    - MLC_PYCUDA_VERSION
+  quark-amd:
+    deps:
+    - env:
+        MLC_DOWNLOAD_FILENAME: quark-0.1.0+a9827f5-py39-none-any.whl
+        MLC_DOWNLOAD_FINAL_ENV_NAME: MLC_QUARK_AMD_WHL_PATH
+      extra_cache_tags: quark-amd
+      force_cache: true
+      tags: download,file,_wget,_url.https://www.xilinx.com/bin/public/openDownload?filename=quark-0.1.0+a9827f5-py39-none-any.whl
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: quark
+      MLC_GENERIC_PYTHON_PIP_URL: <<<MLC_QUARK_AMD_WHL_PATH>>>
+  ray:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: ray[default]
+    new_env_keys:
+    - MLC_RAY_VERSION
+  requests:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: requests
+    new_env_keys:
+    - MLC_REQUESTS_VERSION
+  rocm:
+    deps:
+    - names:
+      - rocm
+      tags: get,rocm
+    env: {}
+  safetensors:
+    deps:
+    - skip_if_env:
+        MLC_HOST_PLATFORM_FLAVOR:
+        - x86_64
+      tags: get,rust-compiler
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: safetensors
+    new_env_keys:
+    - MLC_SAFETENSORS_VERSION
+  scikit-learn:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: scikit-learn
+    new_env_keys:
+    - MLC_SCIKIT_LEARN_VERSION
+  scipy:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: scipy
+    new_env_keys:
+    - MLC_SCIPY_VERSION
+  scons:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: scons
+    new_env_keys:
+    - MLC_SCONS_VERSION
+  setfit:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: setfit
+    new_env_keys:
+    - MLC_SETFIT_VERSION
+  setuptools:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: setuptools
+    new_env_keys:
+    - MLC_SETUPTOOL_VERSION
+  six:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: six
+    new_env_keys:
+    - MLC_SIX_VERSION
+  sklearn:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: sklearn
+    new_env_keys:
+    - MLC_SKLEARN_VERSION
+  sox:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: sox
+    new_env_keys:
+    - MLC_SOX_VERSION
+  sparsezoo:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: sparsezoo
+    new_env_keys:
+    - MLC_SPARSEZOO_VERSION
+  streamlit:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: streamlit
+    new_env_keys:
+    - MLC_STREAMLIT_VERSION
+  streamlit_option_menu:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: streamlit_option_menu
+    new_env_keys:
+    - MLC_STREAMLIT_OPTION_MENU_VERSION
+  tensorboard:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tensorboard
+    new_env_keys:
+    - MLC_TENSORBOARD_VERSION
+  tensorflow:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tensorflow
+    new_env_keys:
+    - MLC_TENSORFLOW_VERSION
+  tensorflow,rocm:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tensorflow-rocm
+    new_env_keys:
+    - MLC_TENSORFLOW_ROMLC_VERSION
+  tensorrt:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tensorrt
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/<<<MLC_CUDA_VERSION_STRING>>>
+      MLC_TORCH_VERSION_EXTRA: CUDA
+    new_env_keys:
+    - MLC_TENSORRT_VERSION
+  tflite:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tflite
+    new_env_keys:
+    - MLC_TFLITE_VERSION
+  tflite-runtime:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tflite-runtime
+    new_env_keys:
+    - MLC_TFLITE_RUNTIME_VERSION
+  tokenization:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tokenization
+    new_env_keys:
+    - MLC_TOKENIZATION_VERSION
+  toml:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: toml
+    new_env_keys:
+    - MLC_TOML_VERSION
+  torch:
+    deps:
+    - enable_if_env:
+        MLC_PYTHON_MINOR_VERSION:
+        - '7'
+        - '8'
+      tags: get,generic-python-lib,_package.networkx
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torch
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
+    new_env_keys:
+    - MLC_TORCH_VERSION*
+  torch,cxx11-abi:
+    env:
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/nightly/cpu-cxx11-abi
+  torch,pre:
+    default_env:
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: torch
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torch
+      MLC_GENERIC_PYTHON_PIP_EXTRA: ' --pre'
+      MLC_GENERIC_PYTHON_PIP_INDEX_URL: https://download.pytorch.org/whl/nightly/cpu
+    new_env_keys:
+    - MLC_TORCH_VERSION*
+  torch,rocm:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torch
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: ''
+      MLC_GENERIC_PYTHON_PIP_INDEX_URL: https://download.pytorch.org/whl/nightly/rocm6.2
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: torch
+    new_env_keys:
+    - MLC_TORCH_VERSION*
+    post_deps:
+    - tags: get,generic-python-lib,_torchvision,_rocm
+    - tags: get,generic-python-lib,_torchaudio,_rocm
+  torch_cuda:
+    default_env: {}
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torch
+      MLC_TORCH_VERSION_EXTRA: CUDA
+    new_env_keys:
+    - MLC_TORCH_VERSION*
+  torch_cuda,pre:
+    default_env:
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: torch_cuda
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    - tags: get,generic-python-lib,_numpy
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torch
+      MLC_GENERIC_PYTHON_PIP_EXTRA: ' --pre'
+      MLC_GENERIC_PYTHON_PIP_INDEX_URL: https://download.pytorch.org/whl/<<<MLC_CUDA_VERSION_STRING>>>
+      MLC_TORCH_VERSION_EXTRA: CUDA
+    new_env_keys:
+    - MLC_TORCH_VERSION*
+  torch_tensorrt:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torch-tensorrt
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/<<<MLC_CUDA_VERSION_STRING>>>
+      MLC_TORCH_VERSION_EXTRA: CUDA
+    new_env_keys:
+    - MLC_TORCH_TENSORRT_VERSION
+  torchaudio:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torchaudio
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
+    new_env_keys:
+    - MLC_TORCHAUDIO_VERSION*
+  torchaudio,rocm:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torchaudio
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: ''
+      MLC_GENERIC_PYTHON_PIP_INDEX_URL: https://download.pytorch.org/whl/nightly/rocm6.2
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: torchaudio
+    new_env_keys:
+    - MLC_TORCHAUDIO_VERSION*
+  torchaudio_cuda:
+    default_env:
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: torchaudio
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torchaudio
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL1: https://download.pytorch.org/whl/<<<MLC_CUDA_VERSION_STRING>>>
+      MLC_TORCHAUDIO_VERSION_EXTRA: CUDA
+    new_env_keys:
+    - MLC_TORCHAUDIO_VERSION*
+  torchvision:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torchvision
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: https://download.pytorch.org/whl/cpu
+    new_env_keys:
+    - MLC_TORCHVISION_VERSION*
+  torchvision,rocm:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torchvision
+      MLC_GENERIC_PYTHON_PIP_EXTRA_INDEX_URL: ''
+      MLC_GENERIC_PYTHON_PIP_INDEX_URL: https://download.pytorch.org/whl/nightly/rocm6.2
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS: torchvision
+    new_env_keys:
+    - MLC_TORCHVISION_VERSION*
+  torchvision_cuda:
+    default_env:
+      MLC_GENERIC_PYTHON_PIP_UNINSTALL_DEPS1: torchvision
+    deps:
+    - names:
+      - cuda
+      tags: get,cuda
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: torchvision
+      MLC_TORCHVISION_VERSION_EXTRA: CUDA
+    new_env_keys:
+    - MLC_TORCHVISION_VERSION*
+  tornado:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tornado
+    new_env_keys:
+    - MLC_TORNADO_VERSION
+  tqdm:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: tqdm
+    new_env_keys:
+    - MLC_TQDM_VERSION
+  transformers:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: transformers
+    new_env_keys:
+    - MLC_TRANSFORMERS_VERSION
+  typing_extensions:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: typing_extensions
+    new_env_keys:
+    - MLC_TYPING_EXTENSIONS_VERSION
+  ujson:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: ujson
+    new_env_keys:
+    - MLC_UJSON_VERSION
+  unidecode:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: unidecode
+    new_env_keys:
+    - MLC_UNIDECODE_VERSION
+  url.#:
+    env:
+      MLC_GENERIC_PYTHON_PIP_URL: '#'
+      MLC_TMP_PYTHON_PACKAGE_FORCE_INSTALL: 'yes'
+  wandb:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: wandb
+    new_env_keys:
+    - MLC_WANDB_VERSION
+  west:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: west
+    new_env_keys:
+    - MLC_WEST_VERSION
+  whl-url.#:
+    deps:
+    - env:
+        MLC_DOWNLOAD_FINAL_ENV_NAME: MLC_GENERIC_PYTHON_PIP_URL
+      force_cache: 'yes'
+      tags: download,file,_url.#
+    env:
+      MLC_TMP_PYTHON_PACKAGE_FORCE_INSTALL: 'yes'
+  xgboost:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: xgboost
+    new_env_keys:
+    - MLC_XGBOOST_VERSION
+  xlsxwriter:
+    env:
+      MLC_GENERIC_PYTHON_PACKAGE_NAME: xlsxwriter
+    new_env_keys:
+    - MLC_XLSXWRITER_VERSION

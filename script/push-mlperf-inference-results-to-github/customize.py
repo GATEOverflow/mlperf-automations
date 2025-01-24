@@ -1,5 +1,4 @@
-from cmind import utils
-import cmind as cm
+from mlc import utils
 import os
 from giturlparse import parse
 
@@ -11,11 +10,11 @@ def preprocess(i):
     meta = i['meta']
     automation = i['automation']
 
-    repo = env.get('CM_MLPERF_RESULTS_GIT_REPO_URL', '')
+    repo = env.get('MLC_MLPERF_RESULTS_GIT_REPO_URL', '')
     if repo.strip() == '':
         return {'return': 1, 'error': 'Invalid GIT_REPO_URL for MLPERF results'}
 
-    branch = env.get('CM_GIT_BRANCH', '')
+    branch = env.get('MLC_GIT_BRANCH', '')
     if branch:
         extra_tags_string = f",_branch.{branch}"
     else:
@@ -30,15 +29,18 @@ def preprocess(i):
     })
     if r['return'] > 0:
         return r
-    env['CM_MLPERF_RESULTS_REPO_COMMIT_MESSAGE'] = env.get(
-        'CM_MLPERF_RESULTS_REPO_COMMIT_MESSAGE', 'Added new results')
+    env['MLC_MLPERF_RESULTS_REPO_COMMIT_MESSAGE'] = env.get(
+        'MLC_MLPERF_RESULTS_REPO_COMMIT_MESSAGE', 'Added new results')
 
-    p = parse(repo)
-    if env.get('CM_GITHUB_PAT', '') != '':
-        token = env['CM_GITHUB_PAT']
-        env['CM_GIT_PUSH_CMD'] = f"""git push https://x-access-token:{env['CM_GITHUB_PAT']}@{p.host}/{p.owner}/{p.repo}"""
+    if env.get('MLC_GITHUB_PAT', '') != '':
+        p = parse(repo)
+        token = env['MLC_GITHUB_PAT']
+        if token == 'pat':
+            token = "$PAT"
+        env['MLC_GIT_PUSH_CMD'] = f"""git push https://x-access-token:{token}@{p.host}/{p.owner}/{p.repo}"""
     else:
-        env['CM_GIT_PUSH_CMD'] = "git push"
+
+        env['MLC_GIT_PUSH_CMD'] = "git push"
 
     return {'return': 0}
 
