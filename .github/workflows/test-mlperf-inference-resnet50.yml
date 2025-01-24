@@ -3,7 +3,7 @@
 name: MLPerf inference ResNet50
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [ "main", "dev" ]
     paths:
       - '.github/workflows/test-mlperf-inference-resnet50.yml'
@@ -60,18 +60,16 @@ jobs:
       if: matrix.os != 'windows-latest'
       run: |
         cm run script --tags=run-mlperf,inference,_submission,_short --submitter="MLCommons" --pull_changes=yes --pull_inference_changes=yes --hw_name=gh_${{ matrix.os }}_x86 --model=resnet50 --implementation=${{ matrix.implementation }} --backend=${{ matrix.backend }} --device=cpu --scenario=Offline --test_query_count=500 --target_qps=1 -v --quiet 
-    - name: Retrieve secrets from Keeper
-      id: ksecrets
-      uses: Keeper-Security/ksm-action@master
-      with:
-        keeper-secret-config: ${{ secrets.KSM_CONFIG }}
-        secrets: |-
-          ubwkjh-Ii8UJDpG2EoU6GQ/field/Access Token > env:PAT  # Fetch PAT and store in environment variable
     - name: Push Results
       env:
-        PAT: ${{ env.PAT }}
+        PAT1: ${{ secrets.PAT1 }}
       if: github.repository_owner == 'mlcommons'
       run: |
         git config --global user.name mlcommons-bot
         git config --global user.email "mlcommons-bot@users.noreply.github.com"
-        cm run script --tags=push,github,mlperf,inference,submission --env.CM_GITHUB_PAT=$PAT --repo_url=https://github.com/mlcommons/mlperf_inference_test_submissions_v5.0 --repo_branch=auto-update --commit_message="Results from R50 GH action on ${{ matrix.os }}" --quiet
+        git clone -b auto-update https://github.com/gateoverflow/mlperf_inference_test_submissions_v5.0 tmp
+        cd tmp
+        echo "hello" >> README.md
+        git commit -a -m "Test commit"
+        git remote set-url origin https://${PAT1}@github.com/gateoverflow/mlperf_inference_test_submissions_v5.0
+        git push
